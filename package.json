@@ -1,0 +1,35 @@
+{
+  "name": "administrative-cnx-pos",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "generate": "node generator/generate.js"
+  },
+  "dependencies": {
+    "@vueuse/core": "^10.11.0",
+    "axios": "^1.7.2",
+    "generate-template-files": "^3.2.1",
+    "jwt-decode": "^4.0.0",
+    "notiflix": "^3.2.7",
+    "pinia": "^2.1.7",
+    "sweetalert2": "^11.12.2",
+    "url": "^0.11.3",
+    "vue": "^3.4.29",
+    "vue-demi": "^0.14.8",
+    "vue-router": "^4.4.0",
+    "vue3-lottie": "^3.3.0",
+    "vuetify": "^3.6.12",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@mdi/font": "^7.4.47",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vue-tsc": "^2.0.21"
+  }
+}
