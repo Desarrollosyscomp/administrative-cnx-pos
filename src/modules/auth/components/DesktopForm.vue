@@ -51,7 +51,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useAppStore } from "@/stores/app-store";
+import { useAppStore } from "../../../stores/app-store";
 import { ref, reactive } from "vue-demi";
 import { useRouter } from "vue-router";
 import * as Yup from "yup";

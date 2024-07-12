@@ -2,7 +2,11 @@
   <v-card>
     <v-app>
       <h1>Administrative Dashvoard Component Extension</h1>
-      <v-app-bar :elevation="2" color="rgba(132, 24, 17, 1)">
+      <v-app-bar 
+        :elevation="2" 
+        color="rgba(132, 24, 17, 1)"
+        @click.stop="drawer = !drawer"
+      >
         <template v-slot:prepend>
           <v-app-bar-nav-icon>
 
@@ -24,11 +28,30 @@
           <slot></slot>
         </v-container>
       </v-main>
+      <v-navigation-drawer v-model="drawer" temporary>
+        <v-list-item
+          style="padding: 4%"
+          prepend-avatar="https://randomuser.me/api/portraits/men/78.jpg"
+          title="John Leider"
+        ></v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-list density="compact" nav>
+          <v-list-item
+            prepend-icon="mdi-store"
+            title="Almacenes"
+            value="warehouses"
+          ></v-list-item>
+        </v-list>
+      </v-navigation-drawer>
     </v-app>
   </v-card>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+const drawer = ref(false);
 </script>
 
 <style scoped>
