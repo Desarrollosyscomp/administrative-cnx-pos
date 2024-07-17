@@ -6,6 +6,7 @@ import PageLogin from '../modules/auth/page/PageLogin.vue';
 
 import { ProductsRouter } from '../modules/products/routes/products.routes';
 import { LogInRoute } from "../modules/auth/route/router";
+import { UsersRouter } from '../modules/users/routes/users.routes';
 
 const routes = [
   {
@@ -31,6 +32,7 @@ const router = createRouter({
     ...routes,
     ...ProductsRouter,
     ...LogInRoute,
+    ...UsersRouter
   ],
 });
 
