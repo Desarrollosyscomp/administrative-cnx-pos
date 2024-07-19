@@ -36,5 +36,24 @@ const router = createRouter({
   ],
 });
 
+// router.beforeEach((to, from, next) => {
+//   from;
+//   const authStore = useAuthStore();
+//   const toPathSegments = to.path.split("/");
+//   let { redirect } = verifyRouteAccess(authStore, toPathSegments);
+//   if (redirect == "next") {
+//     next();
+//     return;
+//   }
+//   if (redirect == "out") {
+//     next("/login");
+//     return;
+//   }
+//   if (redirect == "forbidden") {
+//     next("/unauthorized");
+//     return;
+//   }
+// });
+
 export default router;
  

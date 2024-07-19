@@ -172,7 +172,7 @@ let validationSchema = Yup.object(validations);
 const setForm = () => {
   if (usersStore.moduleMode !== "edit") return;
   formData.username = usersStore.selectedItem.username;
-  formData.password = usersStore.selectedItem.password;
+  formData.password = formData.password;
   formData.role_id = usersStore.selectedItem.role_id;
 };
 

@@ -1,5 +1,6 @@
-import { Http as axios } from "@/utils/http/http";
-const URL_API = import.meta.env.VITE_NEST_API_URL;
+import { Http as axios } from "../../../utils/http/http";
+// const URL_API = import.meta.env.VITE_NEST_API_URL;
+const URL_API = 'http://localhost:3000';
 
 export const loginService = {
   logIn: async (data: any) => {

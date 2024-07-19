@@ -5,19 +5,19 @@
       <thead>
         <tr>
           <th class="text-left font-weight-black">NOMBRE</th>
-          <th class="text-center font-weight-black">DESCRIPCION</th>
-          <th class="text-right font-weight-black">ESTADO</th>
+          <!-- <th class="text-center font-weight-black">DESCRIPCION</th> -->
+          <th class="text-center font-weight-black">ESTADO</th>
           <th class="text-right font-weight-black">ACCIONES</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in usersStore.list" :key="index">
           <td class="text-left text-truncate" style="max-width: 20px">
-            {{ item.name }}
+            {{ item.username }}
           </td>
-          <td class="text-center text-truncate" style="max-width: 20px">
+          <!-- <td class="text-center text-truncate" style="max-width: 20px">
             {{ item.description }}
-          </td>
+          </td> -->
           <td class="text-right">
             <v-badge
               :color="item.is_active ? 'success' : '#841811ff'"

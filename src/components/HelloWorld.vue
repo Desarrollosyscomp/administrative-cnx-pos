@@ -7,7 +7,7 @@ const count = ref(0)
 
 <template>
   <Layout>
-    <h1>Hello Wordl</h1>
+    <h1>Hello World</h1>
   
     <div class="card">
       <button type="button" @click="count++">count is {{ count }}</button>

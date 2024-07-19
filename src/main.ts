@@ -15,7 +15,9 @@ import * as directives from 'vuetify/directives'
 //-- Vuetify --//
 
 import "sweetalert2/dist/sweetalert2.min.css";
+
 import Layout from "./components/Layout.vue";
+import Paginator from "./components/Paginator.vue";
 
 const vuetify = createVuetify({
     icons: {
@@ -29,6 +31,7 @@ const pinia = createPinia()
 const app = createApp(App);
 
 app.component("Layout", Layout);
+app.component("Paginator", Paginator);
 
 app.use(router);
 app.use(vuetify);
