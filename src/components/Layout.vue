@@ -4,7 +4,7 @@
       <h1>Administrative Dashvoard Component Extension</h1>
       <v-app-bar 
         :elevation="2" 
-        color="rgba(132, 24, 17, 1)"
+        color="#4d4d4dff"
         @click.stop="drawer = !drawer"
       >
         <template v-slot:prepend>

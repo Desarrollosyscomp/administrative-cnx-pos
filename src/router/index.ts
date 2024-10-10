@@ -4,8 +4,9 @@ import HelloWorld from "../components/HelloWorld.vue";
 import Layout from "../components/Layout.vue";
 import PageLogin from '../modules/auth/page/PageLogin.vue';
 
-import { ProductsRouter } from '../modules/products/routes/products.routes';
+import { CustomersRouter } from '../modules/customers/routes/customers.routes';
 import { LogInRoute } from "../modules/auth/route/router";
+import { ProductsRouter } from '../modules/products/routes/products.routes';
 import { UsersRouter } from '../modules/users/routes/users.routes';
 
 const routes = [
@@ -30,9 +31,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     ...routes,
-    ...ProductsRouter,
+    ...CustomersRouter,
     ...LogInRoute,
-    ...UsersRouter
+    ...ProductsRouter,
+    ...UsersRouter,
   ],
 });
 
