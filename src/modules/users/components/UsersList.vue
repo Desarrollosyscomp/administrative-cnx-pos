@@ -1,6 +1,6 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <UsersTable @onEdit="goToEdit" @onDeactivate="unableItem" />
+  <UsersTable @onEdit="goToEdit" @onDeactivate="unableItem" @onAddEnterprise="onAddEnterprise"  />
   <UsersCards @onEdit="goToEdit" @onDeactivate="unableItem" />
   <div align="center" class="mt-4">
     <Paginator
@@ -30,7 +30,14 @@ import UsersCards from "./UsersCards.vue";
 import UsersTable from "./UsersTable.vue";
 
 const usersStore = useUsersStore();
-const emit = defineEmits(["onEdit", "onDeactivate"]);
+const emit = defineEmits(["onEdit", "onDeactivate", "onAddEnterprise"]);
+
+const onAddEnterprise = (emitted: EmitInterface) => {
+  emit("onAddEnterprise", {
+    name: "UsersList.onAddEnterprise" + emitted.name,
+    data: emitted.data,
+  });
+}
 
 const goToEdit = (emitted: EmitInterface) => {
   emit("onEdit", {

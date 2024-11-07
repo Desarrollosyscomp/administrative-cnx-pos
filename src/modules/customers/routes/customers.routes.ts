@@ -8,11 +8,11 @@ export const CustomersRouter = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/customers/table",
-    name: "customers-table",
+    path: "/customers/form",
+    name: "customers-form",
     isAuth: false,
     //@ts-ignore
-    component: () => import("../components/CustomersTable.vue"),
+    component: () => import("../components/CustomersForm.vue"),
     meta: { requiresAuth: true },
   },
   {

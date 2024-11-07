@@ -14,18 +14,31 @@
       <v-form @submit.prevent="submit" class="mt-4">
         <v-row>
           <v-col  cols="12"  sm="6">
-            <v-switch
-            :label="
-              formData.is_natural
-                ? 'Registrar persona'
-                : 'Registrar empresa'
-            "
+            <v-select
+              v-model="formData.identification_type_id"
+              :rules="identification_type_idRules"
+              :items="identification_type_id"
+              item-title="name"
+              item-value="id"
               color="#841811ff"
+              density="compact"
+              variant="outlined"
+              label="Tipo de documento"
             >
-            </v-switch>
+            </v-select>
+          </v-col>
+          <v-col cols="12" sm="6">
+            <v-text-field
+              v-model="formData.name"
+              :rules="nameRules"
+              color="#841811ff"
+              density="compact"
+              variant="outlined"
+              label="Número de documento"
+            ></v-text-field>
           </v-col>
         </v-row>
-        <v-row>   
+        <v-row v-if="!!is_natural">   
           <v-col cols="12" sm="6">
             <v-text-field
               v-model="formData.name"
@@ -66,28 +79,7 @@
               label="Segundo Apellido"
             ></v-text-field>
           </v-col>
-          <!-- v-model="formdata.identification_type_id"
-          :rules="identification_type_idRules"
-          :items="identification_type_id" -->
-          <!-- item-title="name"
-          item-value="id" -->
-          <v-select
-            color="#841811ff"
-            density="compact"
-            variant="outlined"
-            label="Tipo de documento"
-          >
-          </v-select>
-          <v-col cols="12" sm="6">
-            <v-text-field
-              v-model="formData.name"
-              :rules="nameRules"
-              color="#841811ff"
-              density="compact"
-              variant="outlined"
-              label="Número de documento"
-            ></v-text-field>
-          </v-col>
+         
         </v-row>
         <div class="d-flex justify-end mt-4">
           <v-btn
@@ -146,8 +138,11 @@ const emit = defineEmits(["onAddSuccess", "onClose"]);
 
 const customersStore = useCustomersStore();
 
+let is_natural = ref(false);
+let identification_type_id = ref([]);
+
 let formData = reactive({
-  is_natural: true,
+  identification_type_id: 0,
   name: "",
   secondName: "",
   sureName: "",
@@ -175,7 +170,7 @@ const nameRules = ref([
 const descriptionRules = ref([
   async (value: any) => {
     try {
-      await validations.description.validate(value);
+      await validations.secondName.validate(value);
       return true;
     } catch (e: any) {
       return "Error de validación en la descripción";
@@ -255,13 +250,11 @@ const submit = async () => {
     });
   }
 };
-// const getCompany = async () => {
-//   const response = await customersStore.getCompanies();
-//   companies.value = response;
-// };
 
-onMounted(() => {
-  //getCompany();
+
+
+onMounted( async () => {
+  identification_type_id.value = await customersStore.getIdentificationsType();  
   setForm();
 });
 </script>

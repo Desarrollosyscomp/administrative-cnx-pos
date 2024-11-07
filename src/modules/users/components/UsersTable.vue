@@ -31,19 +31,19 @@
             </v-badge>
           </td>
           <td class="text-right">
-            <!-- <v-tooltip text="Deatlles" location="bottom">
+            <v-tooltip text="Empresas" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-bind="props"
                   class="ma-2"
                   variant="text"
-                  icon="mdi-eye"
-                  color="blue-lighten-2"
-                  @click="showRecord(item)"
+                  icon="mdi-factory"
+                  color="green"
+                  @click="addEnterprise(item)"
                 >
                 </v-btn>
               </template>
-            </v-tooltip> -->
+            </v-tooltip>
             <v-tooltip v-if="item.is_active" text="Editar" location="top">
               <template v-slot:activator="{ props }">
                 <v-btn
@@ -87,7 +87,14 @@ import { useUsersStore } from "../stores/users.store";
 import { UsersInterface } from "../interfaces/users.interface";
 
 const usersStore = useUsersStore();
-const emit = defineEmits(["onEdit", "onDeactivate"]);
+const emit = defineEmits(["onEdit", "onDeactivate", "onAddEnterprise"]);
+
+const addEnterprise = (item: UsersInterface) => {
+  emit("onAddEnterprise", {
+    name: "UsersTable.addEnterprise",
+    data: { item },
+  });
+}
 
 const goToEdit = (users: UsersInterface) => {
   emit("onEdit", {

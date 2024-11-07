@@ -147,5 +147,120 @@ export const useCustomersStore: any = defineStore({
         throw "Stop";
       }
     },
+    async getIdentificationsType() {
+      let identificationTypes = [
+        {
+            "id": 1,
+            "name": "Registro Civil",
+            "code": "11",
+            "acronym": "R.C.",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 2,
+            "name": "Tarjeta de Identidad",
+            "code": "12",
+            "acronym": "T.I.",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 3,
+            "name": "Cédula de Ciudadanía",
+            "code": "13",
+            "acronym": "C.C",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 4,
+            "name": "Permiso de Protección Temporal",
+            "code": "PPT",
+            "acronym": "PPT",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 5,
+            "name": "Tarjeta de Extranjería",
+            "code": "21",
+            "acronym": "T.E.",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 6,
+            "name": "Cédula de Extranjería",
+            "code": "22",
+            "acronym": "C.E",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 7,
+            "name": "Número de Identificación Tributaria",
+            "code": "31",
+            "acronym": "N.I.T",
+            "type": 2,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 8,
+            "name": "Pasaporte",
+            "code": "41",
+            "acronym": "PA",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 9,
+            "name": "Documento de Identificación Extranjero",
+            "code": "41",
+            "acronym": "D.I.E",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 10,
+            "name": "N.I.T de Otro País",
+            "code": "50",
+            "acronym": "N.I.T.O.P",
+            "type": 2,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        },
+        {
+            "id": 11,
+            "name": "Número Único de Identificación Personal",
+            "code": "50",
+            "acronym": "N.U.I.P",
+            "type": 1,
+            "is_active": true,
+            "created_at": "2024-10-09T20:29:55.534Z",
+            "updated_at": null
+        }
+      ]
+      return identificationTypes;
+    }
   },
 });

@@ -197,7 +197,7 @@ import CustomersForm from "../components/CustomersForm.vue";
 import CustomersList from "../components/CustomersList.vue";
 import CustomersSearcher from "../components/CustomersSearcher.vue";
 
-import EmptyLottie from "../../../assets/lottie-files/search.json";
+// import EmptyLottie from "../../../assets/lottie-files/search.json";
 
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 

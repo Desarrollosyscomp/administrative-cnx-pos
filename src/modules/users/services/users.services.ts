@@ -60,34 +60,6 @@ export const UsersService = {
       }
     });
   },
-  // With Express 
-  // getPaginated: async (
-  //   limit: number,
-  //   page: number,
-  //   search: string,
-  //   isActive: boolean,
-  //   initDate: string,
-  //   endDate: string
-  // ) => {
-  //   return axios.post(
-  //     `${URL_API}/page/users`,
-  //     {
-  //       where: search,
-  //       isActive: isActive ? "active" : "inactive",
-  //       size: limit,
-  //       page: page,
-  //       initDate: initDate,
-  //       endDate: endDate,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${user.token}`,
-  //       },
-  //     }
-  //   );
-  // },
-  
-  // Whit Nest 
   getPaginated: async (
     limit: number,
     page: number,
@@ -113,10 +85,10 @@ export const UsersService = {
       },
     });
   },
-  // Temporal method 
-  getCompanies: async () => {
-    return axios.get({
+  addEnterprisesToUser: async (data: object) => {
+    return axios.post({
       url:`${URL_API}/companys`,
+      data,
       config:{
       headers: {
         Authorization: `Bearer ${user.token}`,

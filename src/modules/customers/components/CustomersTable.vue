@@ -69,7 +69,7 @@
         <v-sheet>
           <v-card>
             <v-card-title>
-              <span>Aquí va un componente </span>
+              <span>Aquí van los componentes ba</span>
             </v-card-title>
           </v-card>
           <!-- <ThirdPartiesForm
@@ -91,7 +91,7 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
-import { useCustomersStore } from "../stores/customers.store";
+// import { useCustomersStore } from "../stores/customers.store";
 // import { CustomersInterface } from "../interfaces/customers.interface";
 import { ref } from "vue";
 
@@ -118,8 +118,6 @@ const openOption = (index: number) => {
   dialog.value = true;
   console.log("Option selected", index);
 }
-
-
 
 </script>
 <!-- ******************** CSS ******************** -->

@@ -167,21 +167,29 @@
           <!-- pop-over -->
         </div>
 
-        <UsersList @onEdit="onEdit" @onDeactivate="unableItem" />
+        <UsersList @onEdit="onEdit" @onDeactivate="unableItem" @onAddEnterprise="onAddEnterprise" />
         <!--
           @onShowRecord="onShowRecord" 
         -->
       </v-card-text>
       <v-dialog v-model="dialog" @update:modelValue="changeValue" width="568">
         <v-sheet>
-          <UsersForm @onClose="onClose"
-          @onAddSuccess="onAddSuccess" v-if="
-          usersStore.moduleMode === 'add' ||
-          usersStore.moduleMode === 'edit' " />
+          <UsersForm 
+            @onClose="onClose"
+            @onAddSuccess="onAddSuccess" v-if="
+            usersStore.moduleMode === 'add' ||
+            usersStore.moduleMode === 'edit' "
+            
+          />
           <!-- <UsersDetails v-if="usersStore.moduleMode === 'details'" /> -->
           <UsersSearcher
-          v-if="usersStore.moduleMode === 'advancedSearch'"
-          @onSearch="performSearch" @onClose="onClose" />
+            v-if="usersStore.moduleMode === 'advancedSearch'"
+            @onSearch="performSearch" 
+            @onClose="onClose" 
+          />
+          <UserEnterpriseForm 
+            v-if="usersStore.moduleMode === 'enterprise'"
+          />
         </v-sheet>
       </v-dialog>
     </v-card>
@@ -193,6 +201,7 @@
 import { inject, ref, onMounted, onUnmounted, computed, watch } from "vue-demi";
 // Components
 // import UsersDetails from "../components/";
+import UserEnterpriseForm from "../components/UsersEnterpriseForm.vue";
 import UsersForm from "../components/UsersForm.vue";
 import UsersList from "../components/UsersList.vue";
 import UsersSearcher from "../components/UsersSearcher.vue";
@@ -266,6 +275,13 @@ const onAddSuccess = () => {
   usersStore.moduleMode = "";
   dialog.value = false;
 };
+
+const onAddEnterprise = (emmited: EmitInterface) => {
+  usersStore.moduleMode = "enterprise";
+  dialog.value = true;
+  console.log(emmited);
+};
+
 const onEdit = (emitted: EmitInterface) => {
   usersStore.moduleMode = "edit";
   usersStore.selectedItem = emitted.data.users;
