@@ -90,6 +90,7 @@ const usersStore = useUsersStore();
 const emit = defineEmits(["onEdit", "onDeactivate", "onAddEnterprise"]);
 
 const addEnterprise = (item: UsersInterface) => {
+  usersStore.selectedItem = item;
   emit("onAddEnterprise", {
     name: "UsersTable.addEnterprise",
     data: { item },

@@ -67,11 +67,7 @@
     <v-dialog v-model="dialog" width="768">
       <!-- @update:modelValue="changeValue" -->
         <v-sheet>
-          <v-card>
-            <v-card-title>
-              <span>Aquí van los componentes ba</span>
-            </v-card-title>
-          </v-card>
+          <CustomersEnterpriseForm v-if="customersStore.moduleMode === 'enterpriseHandle'" />
           <!-- <ThirdPartiesForm
             @onClose="onClose"
             @onAddSuccess="onAddSuccess"
@@ -94,6 +90,10 @@
 // import { useCustomersStore } from "../stores/customers.store";
 // import { CustomersInterface } from "../interfaces/customers.interface";
 import { ref } from "vue";
+import CustomersEnterpriseForm from "./CustomersEnterpriseForm.vue";
+import { useCustomersStore } from "../stores/customers.store";
+
+const customersStore = useCustomersStore();
 
 let list = ref([
   { id: 1, client: "John Doe", registerDate: Date(),status: "activo"},
@@ -111,11 +111,13 @@ const opitonsItems = ref([
 
 let dialog = ref(false);
 
-// const customersStore = useCustomersStore();
 const emit = defineEmits(["onEdit", "onDeactivate"]);
 
 const openOption = (index: number) => {
   dialog.value = true;
+  if (index === 2) {
+    customersStore.moduleMode = "enterpriseHandle"
+  }
   console.log("Option selected", index);
 }
 

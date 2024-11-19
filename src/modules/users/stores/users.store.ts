@@ -125,11 +125,11 @@ export const useUsersStore: any = defineStore({
     //   }
     // },
     // Temporal method
-    async getCompanies() {
+    async addEnterprisesToUser(data: object) {
       try {
-        let response = await UsersService.getCompanies();
+        let response = await UsersService.addEnterprisesToUser(data);
         if (response.status == 200) {
-          return response.data.response.companies;
+          return response.data.response;
         } else {
           return [];
         }

@@ -201,7 +201,7 @@
 import { inject, ref, onMounted, onUnmounted, computed, watch } from "vue-demi";
 // Components
 // import UsersDetails from "../components/";
-import UserEnterpriseForm from "../components/UsersEnterpriseForm.vue";
+import UserEnterpriseForm from "../../customers/components/CustomersEnterpriseForm.vue";
 import UsersForm from "../components/UsersForm.vue";
 import UsersList from "../components/UsersList.vue";
 import UsersSearcher from "../components/UsersSearcher.vue";

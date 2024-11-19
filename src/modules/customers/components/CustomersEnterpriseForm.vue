@@ -4,22 +4,23 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
-            Gestión de empresas
+            <h2>Gestión de empresas</h2>
           </v-card-title>
-          <v-card-sutitle class="d-flex">
-              Empresas
+          <v-card-subtitle class="d-flex mt-2">
+              <h3 class="ml-4">Empresas</h3>
               <v-spacer></v-spacer>
               <v-btn 
+                class="mr-4"
                 color="#841811ff"
                 variant="outlined"
-                size="small"
+                size="x-small"
                 @click="activateForm = !activateForm"
               >
                   Agregar empresa
               </v-btn>
-          </v-card-sutitle>
-          <v-card-body>
-              <v-card v-if="activateForm">
+          </v-card-subtitle>
+          <v-card-text>
+              <v-card v-if="activateForm" class="my-4">
                 <v-card-text>
                     <v-form @submit.prevent="submit">
                         <v-text-field
@@ -41,20 +42,28 @@
                     </v-form>
                 </v-card-text>
                 <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    class="mr-4 d-none d-sm-flex"
-                    size="small"
-                    color="#841811ff"
-                    variant="outlined"
-                    @click="close"
-                >
-                    Cancelar
-                </v-btn>
-                <v-btn color="primary">Guardar</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                        class="mr-4 d-none d-sm-flex"
+                        size="small"
+                        color="#841811ff"
+                        variant="outlined"
+                        @click="close"
+                    >
+                        Cancelar
+                    </v-btn>
+                    <v-btn
+                        class="mr-4 d-none d-sm-flex"
+                        size="small"
+                        color="green"
+                        variant="outlined"
+                        @click="submit"
+                    >
+                        Guardar
+                    </v-btn>
                 </v-card-actions>
               </v-card>
-              <v-table>
+              <v-table class="mt-6">
                   <thead>
                       <tr>
                       <th class="text-left font-weight-black">EMPRESA</th>
@@ -64,13 +73,13 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr v-for="(item, index) in usersStore.list" :key="index">
+                      <tr v-for="(item, index) in fakeData" :key="index">
                       <td class="text-left text-truncate" style="max-width: 20px">
-                          {{ item.username }}
+                          {{ item.tradeName }}
                       </td>
-                      <!-- <td class="text-center text-truncate" style="max-width: 20px">
-                          {{ item.description }}
-                      </td> -->
+                      <td class="text-center text-truncate" style="max-width: 20px">
+                          {{ item.register }}
+                      </td>
                       <td class="text-right">
                           <v-badge
                           :color="item.is_active ? 'success' : '#841811ff'"
@@ -84,20 +93,20 @@
                           </v-badge>
                       </td>
                       <td class="text-right">
-                          <v-tooltip text="Empresas" location="bottom">
-                          <template v-slot:activator="{ props }">
-                              <v-btn
-                              v-bind="props"
-                              class="ma-2"
-                              variant="text"
-                              icon="mdi-factory"
-                              color="green"
-                              >
-                              <!-- @click="addEnterprise(item)" -->
-                              </v-btn>
-                          </template>
+                          <v-tooltip text="Opciones" location="bottom">
+                            <template v-slot:activator="{ props }">
+                                <v-btn
+                                v-bind="props"
+                                class="ma-2"
+                                variant="text"
+                                icon="mdi-eye"
+                                color="primary"
+                                @click="showEnterprise()"
+                                >
+                                </v-btn>
+                            </template>
                           </v-tooltip>
-                          <v-tooltip v-if="item.is_active" text="Editar" location="top">
+                          <!-- <v-tooltip v-if="item.is_active" text="Editar" location="top">
                           <template v-slot:activator="{ props }">
                               <v-btn
                               v-bind="props"
@@ -107,7 +116,7 @@
                               size="small"
                               color="blue-lighten-2"
                               >
-                              <!-- @click="goToEdit(item)" -->
+                              <!-- @click="goToEdit(item)" 
                               </v-btn>
                           </template>
                           </v-tooltip>
@@ -124,15 +133,15 @@
                               :icon="item.is_active ? 'mdi-delete' : 'mdi-restore'"
                               :color="item.is_active ? 'red-lighten-2' : 'blue-lighten-2'"
                               >
-                              <!-- @click="unableItem(item)" -->
+                              <!-- @click="unableItem(item)" 
                               </v-btn>
                           </template>
-                          </v-tooltip>
+                          </v-tooltip> -->
                       </td>
                       </tr>
                   </tbody>
               </v-table>
-          </v-card-body>
+          </v-card-text>
         </v-card>
       </v-col>
       <v-col cols="12">
@@ -144,18 +153,51 @@
   
 <script lang="ts" setup>
 import { inject, reactive, ref } from 'vue';
-import { useUsersStore } from '../stores/users.store';
+import { useUsersStore } from '../../users/stores/users.store';
 import * as Yup from "yup";
 
-const swal: any = inject("$swal");
+// const swal: any = inject("$swal");
 
 const usersStore = useUsersStore();
 
 let activateForm = ref(false);
+
 let formData = reactive({
   tradeName: "",
   companyName: ""
 });
+
+let fakeData = ref([
+  {
+    id: 1,
+    tradeName: "TradeName 1",
+    register: '08/11/20204',
+    companyName: "Company Name 1",
+    is_active: true,
+  },
+  {
+    id: 2,
+    tradeName: "TradeName 2",
+    register: '08/11/20204',
+    companyName: "Company Name 2",
+    is_active: false,
+  },
+  {
+    id: 3,
+    tradeName: "TradeName 3",
+    register: '08/11/20204',
+    companyName: "Company Name 3",
+    is_active: true,
+  }
+])
+
+let newEnterprise = reactive({
+    id: 0,
+    tradeName: 'New',
+    register: new Date(),
+    companyName: 'New',
+    is_active: true
+})
 
 let userId = ref(0);
 
@@ -186,6 +228,10 @@ const companyNameRules = ref([
   },
 ]);
 
+const showEnterprise = () => {
+  console.log('Show options for enterprise');  
+}
+
 const close = () => {
   activateForm.value = false;
 };
@@ -196,8 +242,9 @@ const submit = async () => {
   
   await validationSchema.validate(formData);
   userId.value = usersStore.selectedItem.id;
-  
 
+  console.log(userId.value);
+  console.log(formData);
 //   try {
 //     const addMode = usersStore.moduleMode === "add";
 //     let response;

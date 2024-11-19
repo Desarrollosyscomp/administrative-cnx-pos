@@ -10,6 +10,8 @@ import { Http as axios } from "../../../utils/http/http";
 const URL_API = 'http://localhost:3000';
 const { user } = useAuthStore();
 
+
+
 export const UsersService = {
   add: async (data: object) => {
     return axios.post({
