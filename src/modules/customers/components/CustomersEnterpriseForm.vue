@@ -153,18 +153,19 @@
   
 <script lang="ts" setup>
 import { inject, reactive, ref } from 'vue';
-import { useUsersStore } from '../../users/stores/users.store';
 import * as Yup from "yup";
+import { useCustomersStore } from '../stores/customers.store';
 
 // const swal: any = inject("$swal");
 
-const usersStore = useUsersStore();
+const customersStore = useCustomersStore();
 
 let activateForm = ref(false);
 
 let formData = reactive({
   tradeName: "",
-  companyName: ""
+  companyName: "",
+  userId: 0
 });
 
 let fakeData = ref([
@@ -191,19 +192,10 @@ let fakeData = ref([
   }
 ])
 
-let newEnterprise = reactive({
-    id: 0,
-    tradeName: 'New',
-    register: new Date(),
-    companyName: 'New',
-    is_active: true
-})
-
-let userId = ref(0);
 
 const validations = {
-    tradeName: Yup.string().required("La razón social es requerido").trim(),
-    companyName: Yup.string().required("El nombre comercial es requerido").trim(),
+  tradeName: Yup.string().required("La razón social es requerido").trim(),
+  companyName: Yup.string().required("El nombre comercial es requerido").trim(),
 };
 
 const tradeNameRules = ref([
@@ -241,10 +233,12 @@ let validationSchema = Yup.object(validations);
 const submit = async () => {
   
   await validationSchema.validate(formData);
-  userId.value = usersStore.selectedItem.id;
+  formData.userId = customersStore.selectedItem.id;
 
-  console.log(userId.value);
-  console.log(formData);
+  console.log('Submit form with data:', formData );
+ 
+
+
 //   try {
 //     const addMode = usersStore.moduleMode === "add";
 //     let response;

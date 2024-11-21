@@ -50,10 +50,10 @@
                   </v-btn>
                 </template>
                 <v-list>
-                  <v-list-item v-for="(item, index) in opitonsItems" :key="index">
+                  <v-list-item v-for="(optionsItem, optionIndex) in opitonsItems" :key="index">
                     <v-list-item-title>
-                        <a type="button" @click="openOption(index)">
-                        {{ item.title }}
+                        <a type="button" @click="openOption(item.id, optionIndex)">
+                        {{ optionsItem.title }}
                       </a>
                     </v-list-item-title>
                   </v-list-item>
@@ -113,12 +113,12 @@ let dialog = ref(false);
 
 const emit = defineEmits(["onEdit", "onDeactivate"]);
 
-const openOption = (index: number) => {
+const openOption = (thirdId: number, optionIndex: number) => {
   dialog.value = true;
-  if (index === 2) {
+  if (optionIndex === 2) {
     customersStore.moduleMode = "enterpriseHandle"
+    customersStore.selectedItem.id = thirdId;
   }
-  console.log("Option selected", index);
 }
 
 </script>
