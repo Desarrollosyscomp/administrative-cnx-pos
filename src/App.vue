@@ -1,5 +1,7 @@
 <script setup lang="ts">
-
+import Swal from "sweetalert2";
+import { provide } from "vue";
+provide("$swal", Swal);
 </script>
 
 <template>

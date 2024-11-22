@@ -1,9 +1,6 @@
-import { useAuthStore } from "@/modules/auth/store/useStoreAuth";
-import { Http as axios } from "@/utils/http/http";
-//import axios from "axios";
-//import { URL_API } from "@/main";
+import { useAuthStore } from "../../../modules/auth/store/useStoreAuth";
+import { Http as axios } from "../../../utils/http/http";
 
-// const URL_API = import.meta.env.VITE_EXPRESS_API_URL;
 const URL_API = import.meta.env.VITE_NEST_API_URL;
 const { user } = useAuthStore();
 
@@ -19,10 +16,11 @@ export const CustomersService = {
       url:`${URL_API}/customers/${id}`,
       data,
       config:{
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    }});
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    });
   },
   delete: async (id: number, is_active: boolean) => {
     return axios.delete({
@@ -57,34 +55,6 @@ export const CustomersService = {
       }
     });
   },
-  // With Express 
-  // getPaginated: async (
-  //   limit: number,
-  //   page: number,
-  //   search: string,
-  //   isActive: boolean,
-  //   initDate: string,
-  //   endDate: string
-  // ) => {
-  //   return axios.post(
-  //     `${URL_API}/page/customers`,
-  //     {
-  //       where: search,
-  //       isActive: isActive ? "active" : "inactive",
-  //       size: limit,
-  //       page: page,
-  //       initDate: initDate,
-  //       endDate: endDate,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: `Bearer ${user.token}`,
-  //       },
-  //     }
-  //   );
-  // },
-  
-  // Whit Nest 
   getPaginated: async (
     limit: number,
     page: number,
@@ -110,7 +80,7 @@ export const CustomersService = {
       },
     });
   },
-  // Temporal method 
+  // Company methods 
   getCompanies: async () => {
     return axios.get({
       url:`${URL_API}/companys`,
@@ -119,5 +89,16 @@ export const CustomersService = {
         Authorization: `Bearer ${user.token}`,
       },
     }});
+  },
+  addCompany: async (data: object) => {    
+    return axios.post({
+      url: `${URL_API}/companies`,
+      data: data,
+      config:{
+        headers: {
+          Authorization: `Bearer ${user.token}`
+        },
+      },
+    });
   }
 };

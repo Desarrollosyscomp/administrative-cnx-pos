@@ -24,16 +24,16 @@
                 <v-card-text>
                     <v-form @submit.prevent="submit">
                         <v-text-field
-                            v-model="formData.tradeName"
-                            :rules="tradeNameRules"
+                            v-model="formData.name"
+                            :rules="nameRules"
                             color="#841811ff"
                             density="compact"
                             variant="outlined"
                             label="Razón social"
                         ></v-text-field>
                         <v-text-field
-                            v-model="formData.companyName"
-                            :rules="companyNameRules"
+                            v-model="formData.tradename"
+                            :rules="tradeNameRules"
                             color="#841811ff"
                             density="compact"
                             variant="outlined"
@@ -116,7 +116,7 @@
                               size="small"
                               color="blue-lighten-2"
                               >
-                              <!-- @click="goToEdit(item)" 
+                              @click="goToEdit(item)" 
                               </v-btn>
                           </template>
                           </v-tooltip>
@@ -133,7 +133,7 @@
                               :icon="item.is_active ? 'mdi-delete' : 'mdi-restore'"
                               :color="item.is_active ? 'red-lighten-2' : 'blue-lighten-2'"
                               >
-                              <!-- @click="unableItem(item)" 
+                               @click="unableItem(item)" 
                               </v-btn>
                           </template>
                           </v-tooltip> -->
@@ -156,16 +156,16 @@ import { inject, reactive, ref } from 'vue';
 import * as Yup from "yup";
 import { useCustomersStore } from '../stores/customers.store';
 
-// const swal: any = inject("$swal");
+const swal: any = inject("$swal");
 
 const customersStore = useCustomersStore();
 
 let activateForm = ref(false);
 
 let formData = reactive({
-  tradeName: "",
-  companyName: "",
-  userId: 0
+  name: "",
+  tradename: "",
+  client_id: 0
 });
 
 let fakeData = ref([
@@ -192,16 +192,15 @@ let fakeData = ref([
   }
 ])
 
-
 const validations = {
-  tradeName: Yup.string().required("La razón social es requerido").trim(),
-  companyName: Yup.string().required("El nombre comercial es requerido").trim(),
+  name: Yup.string().required("La razón social es requerido").trim(),
+  tradename: Yup.string().required("El nombre comercial es requerido").trim(),
 };
 
-const tradeNameRules = ref([
+const nameRules = ref([
   async (value: any) => {
     try {
-      await validations.tradeName.validate(value);
+      await validations.name.validate(value);
       return true;
     } catch (e: any) {
       return "Error de validación en el nombre";
@@ -209,10 +208,10 @@ const tradeNameRules = ref([
   },
 ]);
 
-const companyNameRules = ref([
+const tradeNameRules = ref([
   async (value: any) => {
     try {
-      await validations.companyName.validate(value);
+      await validations.tradename.validate(value);
       return true;
     } catch (e: any) {
       return "Error de validación en el nombre";
@@ -233,44 +232,26 @@ let validationSchema = Yup.object(validations);
 const submit = async () => {
   
   await validationSchema.validate(formData);
-  formData.userId = customersStore.selectedItem.id;
+  formData.client_id = customersStore.selectedItem.id;
 
-  console.log('Submit form with data:', formData );
- 
-
-
-//   try {
-//     const addMode = usersStore.moduleMode === "add";
-//     let response;
-//     if (addMode) {
-//       response = await usersStore.add(formData);
-//     } else {
-//       const id = usersStore.selectedItem.id;
-//       response = await usersStore.edit(id, formData);
-//     }
-//     if (response.status === 201) {
-//       swal.fire({
-//         icon: "success",
-//         text: addMode ? "Agregado con éxito" : "Actulizado con éxito",
-//         showConfirmButton: false,
-//         timer: 1500,
-//       });
-//     } else {
-//       swal.fire({
-//         icon: "success",
-//         text: "Agregado!!",
-//         showConfirmButton: false,
-//         timer: 1500,
-//       });
-//     }
-//   } catch (error) {
-//     swal.fire({
-//       icon: "warning",
-//       text: "Ocurrió un error",
-//       showConfirmButton: false,
-//       timer: 1500,
-//     });
-//   }
+  const response = await customersStore.addCompany(formData);
+  console.log('Response:', response);
+  customersStore.moduleMode = "";
+  if (response.status === 201) {
+    swal.fire({
+      icon: "success",
+      title: "¡Éxito!",
+      text: "Agregado con éxito",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } else {
+    swal.fire({
+      title: "Error",
+      text: "Ha ocurrido un error al guardar el registro",
+      icon: "error",
+    });
+  }
 };
 
 </script>

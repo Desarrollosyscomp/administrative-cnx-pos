@@ -19,14 +19,9 @@ export const useCustomersStore: any = defineStore({
   }),
   actions: {
     // async getAllCustomers() {
-    //   try {
-    //     let response = await CustomersService.getAll();
-    //     if (response.status == 200) {
-    //       return response.data;
-    //     }
-    //   } catch (e: any) {
-    //     console.log(e.response);
-    //     throw "Stop";
+    //   let response = await CustomersService.getAll();
+    //   if (response.status == 200) {
+    //     return response.data;
     //   }
     // },
     async getPaginatedCustomers() {
@@ -41,7 +36,7 @@ export const useCustomersStore: any = defineStore({
         itemsCount: 80,
         totalPages: Math.ceil(15),
       };
-      // try {
+    
       //   let response = await CustomersService.getPaginated(
       //     this.limit,
       //     this.page,
@@ -70,81 +65,56 @@ export const useCustomersStore: any = defineStore({
       // }
     },
     async add(data: any) {
-      try {
-        let response = await CustomersService.add({
-          //company_id: data.companyId,
-          customers_type_id: data.customersTypeId,
-          //is_active: true,
-          name: data.name,
-          description: data.description,
-        });
-        if (response.status == 201) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
-      }
+      let response = await CustomersService.add({
+        //company_id: data.companyId,
+        customers_type_id: data.customersTypeId,
+        //is_active: true,
+        name: data.name,
+        description: data.description,
+      });
+      if (response.status == 201) {
+        this.loadPaginatedList();
+        return response.data;
+      }      
     },
     async loadPaginatedList() {
-      try {
-        let response: any = await this.getPaginatedCustomers();
-        this.list = response.list;
-        this.itemsCount = response.itemsCount;
-        this.totalPages = response.totalPages;
-        return response;
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
-      }
+      let response: any = await this.getPaginatedCustomers();
+      this.list = response.list;
+      this.itemsCount = response.itemsCount;
+      this.totalPages = response.totalPages;
+      return response;      
     },
     async edit(id: string, data: any) {
-      try {
-        let response = await CustomersService.edit(id, {
-          //company_id: data.companyId,
-          customers_type_id: data.customersTypeId,
-          //is_active: true,
-          name: data.name,
-          description: data.description,
-        });
-        if (response.status == 200) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
+      let response = await CustomersService.edit(id, {
+        //company_id: data.companyId,
+        customers_type_id: data.customersTypeId,
+        //is_active: true,
+        name: data.name,
+        description: data.description,
+      });
+      if (response.status == 200) {
+        this.loadPaginatedList();
+        return response.data;
       }
     },
     async delete() {
       let is_active = !this.selectedItem.is_active;
-      try {
-        let response = await CustomersService.delete(
-          this.selectedItem.id,
-          is_active
-        );
-        if (response.status == 200) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
+      let response = await CustomersService.delete(
+        this.selectedItem.id,
+        is_active
+      );
+      if (response.status == 200) {
+        this.loadPaginatedList();
+        return response.data;
       }
     },
-    // Temporal method
+    // Company method
     async getCompanies() {
-      try {
-        let response = await CustomersService.getCompanies();
-        if (response.status == 200) {
-          return response.data.response.companies;
-        } else {
-          return [];
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
+      let response = await CustomersService.getCompanies();
+      if (response.status == 200) {
+        return response.data.response.companies;
+      } else {
+        return [];
       }
     },
     async getIdentificationsType() {
@@ -261,6 +231,11 @@ export const useCustomersStore: any = defineStore({
         }
       ]
       return identificationTypes;
+    },
+    async addCompany(data: object) {
+      let response = await CustomersService.addCompany(data);
+      console.log(response);
+      return response;
     }
   },
 });
