@@ -28,9 +28,6 @@
         <v-text-field label="Nombre de usuario" prepend-inner-icon="mdi-email" variant="outlined" density="compact"
           v-model="formData.username" :rules="usernameRules">
         </v-text-field>
-        <pre>
-          {{ formData }}
-        </pre>
         <v-btn variant="outlined" color="success" block class="mb-5" type="submit">
           Guardar nombre de usuario
         </v-btn>
@@ -53,7 +50,7 @@
           :append-inner-icon="visible2 ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible2 = !visible2"
           :rules="confirmPasswordRules">
         </v-text-field>
-        <v-btn variant="outlined" color="success" block :disabled="!showSaveButton" type="submit">
+        <v-btn variant="outlined" color="success" block1 type="submit">
           Guardar contraseña
         </v-btn>
       </v-form>
@@ -63,7 +60,7 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
-import { computed, inject, onMounted, reactive, ref } from "vue-demi";
+import { inject, onMounted, reactive, ref } from "vue-demi";
 import * as Yup from "yup";
 
 import { useUsersStore } from "../stores/users.store";
@@ -216,26 +213,25 @@ const submitNewPassword = async () => {
   }
 };
 
-const showSaveButton = computed(() => {
-  let passwordIsValid = true;
+// const showSaveButton = computed(() => {
+//   let passwordIsValid = true;
 
-  if (usersStore.moduleMode == "add" || usersStore.moduleMode == "edit") {
-    passwordIsValid = !!formData.newPassword;
-  }
+//   if (usersStore.moduleMode == "add" || usersStore.moduleMode == "edit") {
+//     passwordIsValid = !!formData.newPassword;
+//   }
 
-  passwordIsValid =
-    passwordIsValid ||
-    (formData.newPassword.length >= 6 && formData.newPassword.length <= 20);
-  return (
-    formData.currentPassword !== "" &&
-    formData.newPassword !== "" &&
-    formData.confirmPassword !== "" &&
-    formData.newPassword === formData.confirmPassword
+//   passwordIsValid =
+//     passwordIsValid ||
+//     (formData.newPassword.length >= 6 && formData.newPassword.length <= 20);
+//   return (
+//     formData.currentPassword !== "" &&
+//     formData.newPassword !== "" &&
+//     formData.confirmPassword !== "" &&
+//     formData.newPassword === formData.confirmPassword
 
-  );
-});
+//   );
+// });
 onMounted(async () => {
-  // identification_type_id.value = await identificationTypeStore.getAllIdentificationTypes();
   setForm();
 });
 </script>
