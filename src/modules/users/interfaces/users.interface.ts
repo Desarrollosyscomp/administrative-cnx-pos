@@ -2,11 +2,10 @@ export interface UsersInterface {
     id:          number;
     username:    string;
     password:    string;
-    role_id:     number;
     // description: null;
-    // is_active:   number;
-    // createdAt:   string;
-    // updatedAt:   string;
+    is_active:   number;
+    createdAt:   string;
+    updatedAt:   string;
     // users_type_id: number;
 }
 

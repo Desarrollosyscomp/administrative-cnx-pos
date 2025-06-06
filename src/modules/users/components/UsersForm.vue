@@ -1,136 +1,91 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <v-card>
-    <v-card-title>
-      <strong>
-        {{
-          usersStore.moduleMode === "add"
-            ? "Agregar usuario"
-            : "Editar usuario"
-        }}
-      </strong>
-    </v-card-title>
-    <v-card-text>
-      <v-form @submit.prevent="submit" class="mt-4">
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-model="formData.username"
-              :rules="usernameRules"
-              color="#841811ff"
-              density="compact"
-              variant="outlined"
-              label="Nombre"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-text-field
-              v-model="formData.password"
-              :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-              :rules="passwordRules"
-              color="#841811ff"
-              density="compact"
-              variant="outlined"
-              :type="visible ? 'text' : 'password'"
-              prepend-inner-icon="mdi-lock-outline"
-              label="password"
-              @click:append-inner="visible = !visible"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12">
-            <v-select
-              v-model="formData.role_id"
-              :items="roles"
-              :rules="roleRules"
-              item-title="name"
-              item-value="id"
-              color="#841811ff"
-              density="compact"
-              variant="outlined"
-              label="Role"
-            >
-            </v-select>
-          </v-col>
-        </v-row>
-        <div class="d-flex justify-end mt-4">
-          <v-btn
-            class="mr-4 d-none d-sm-flex"
-            size="small"
-            color="#841811ff"
-            variant="outlined"
-            @click="close"
-          >
-            Cancelar
-          </v-btn>
-          <v-btn
-            class="mr-4 d-flex d-sm-none"
-            size="small"
-            color="#841811ff"
-            variant="outlined"
-            @click="close"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <br />
-          <v-btn
-            class="d-none d-sm-flex"
-            size="small"
-            :color="usersStore.moduleMode === 'add' ? 'success' : 'primary'"
-            variant="outlined"
-            type="submit"
-          >
-            {{ usersStore.moduleMode === "add" ? "Agregar" : "Editar" }}
-          </v-btn>
-          <v-btn
-            class="d-flex d-sm-none"
-            size="small"
-            :color="usersStore.moduleMode === 'add' ? 'success' : 'primary'"
-            variant="outlined"
-            type="submit"
-          >
-            <v-icon>{{
-              usersStore.moduleMode === "add" ? "mdi-plus" : "mdi-pencil"
-            }}</v-icon>
-          </v-btn>
+  <v-container>
+    <v-row>
+      <v-col>
+        <div class="mb-5">
+          <p class="text-h5 text-left">
+            <b>
+              {{
+                usersStore.moduleMode === "add"
+                  ? "Agregar Usuario"
+                  : "Editar Usuario"
+              }}
+            </b>
+          </p>
         </div>
-      </v-form>
-    </v-card-text>
-  </v-card>
+      </v-col>
+      <v-col>
+        <div class="d-flex justify-end">
+          <v-icon color="#841811ff" @click="usersStore.toogleDialog">
+            mdi-close
+          </v-icon>
+        </div>
+      </v-col>
+    </v-row>
+    <div>
+      <v-text-field label="Nombre de usuario" prepend-inner-icon="mdi-email" variant="outlined" density="compact"
+        class="mb-4" v-model="formData.username" :rules="usernameRules">
+      </v-text-field>
+      <v-text-field label="Contraseña" prepend-inner-icon="mdi-lock" variant="outlined" density="compact" class="mb-4"
+        :type="visible ? 'text' : 'password'" v-model="formData.password"
+        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible = !visible"
+        :rules="passwordRules">
+      </v-text-field>
+      <v-text-field label="Confirmar contraseña" prepend-inner-icon="mdi-lock" variant="outlined" density="compact"
+        class="mb-4" :type="visible1 ? 'text' : 'password'" v-model="formData.confirmPassword"
+        :append-inner-icon="visible1 ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible1 = !visible1"
+        :rules="confirmPasswordRules">
+      </v-text-field>
+      <v-btn variant="outlined" color="success" block @click="submit" :isDisabled="!showSaveButton">
+        Guardar
+      </v-btn>
+    </div>
+  </v-container>
 </template>
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
-import { inject, onMounted, reactive, ref } from "vue-demi";
-import { useUsersStore } from "../stores/users.store";
+import { computed, inject, onMounted, reactive, ref } from "vue-demi";
 import * as Yup from "yup";
+import { useUsersStore } from "../stores/users.store";
 
-const swal: any = inject("$swal");
-const emit = defineEmits(["onAddSuccess", "onClose"]);
-
+const emit = defineEmits(["onAddUser", "onClose"]);
 const usersStore = useUsersStore();
+const swal: any = inject("swal");
 
-let visible = ref(true);
-
-let roles = ref([
-  { id: 1, name: "Administrador" },
-  { id: 2, name: "Usuario" },
-]);
+let visible = ref(false);
+let visible1 = ref(false);
+let showValidationErrors = ref(false);
+let thirdId = ref(0);
 
 let formData = reactive({
   username: "",
   password: "",
-  role_id: ""
+  confirmPassword: "",
 });
 
 const validations = {
-  username: Yup.string().required("El nombre es requerido").trim(),
-  password: Yup.string().required("Se necesita un password").trim(),
-  role_id: Yup.number().required(
-    "Seleccione un role para el usuario por favor"
+  username: Yup.string().required("El nombre de usuario es requerido").trim(),
+  confirmPassword: Yup.string().required("La confirmación de contraseña es requerida").trim().test(
+    "is-valid-confirm-password",
+    "Las contraseñas no coinciden",
+    function (value) {
+      if (!value || value.length === 0) {
+        return true; // No valida si está vacío
+      }
+      return value === this.parent.password; // Compara con la contraseña ingresada
+    }
+  ),
+  password: Yup.string().trim().test(
+    "is-valid-password",
+    "La contraseña debe tener entre 6 y 20 caracteres",
+    function (value) {
+      if (!value || value.length === 0) {
+        return true; // No valida si está vacío
+      }
+      return value.length >= 6 && value.length <= 20;
+    }
   ),
 };
 
@@ -140,7 +95,7 @@ const usernameRules = ref([
       await validations.username.validate(value);
       return true;
     } catch (e: any) {
-      return "Error de validación en el nombre";
+      return e.message;
     }
   },
 ]);
@@ -148,83 +103,89 @@ const usernameRules = ref([
 const passwordRules = ref([
   async (value: any) => {
     try {
+      if (usersStore.moduleMode == "add")
+        validations.password = validations.password.required(
+          "La contraseña es requerida"
+        );
       await validations.password.validate(value);
       return true;
     } catch (e: any) {
-      return "Error de validación en el password";
+      return e.message;
     }
   },
 ]);
 
-const roleRules = ref([
-  async (value: any) => {
-    try {
-      await validations.role_id.validate(value);
-      return true;
-    } catch (e: any) {
-      return "Error de validación en el role";
-    }
+const confirmPasswordRules = ref([
+  async () => {
+    if (formData.password == formData.confirmPassword) return true;
+    return "Las contraseñas no coinciden";
   },
 ]);
 
 let validationSchema = Yup.object(validations);
 
+// const getOne = () => {
+//   if (usersStore.moduleMode !== "edit") return;
+//   usersStore
+//     .getOne(usersStore.selectedItem.id)
+//     .then((user:any) => {
+//       formData.username = user.username;
+//       formData.password = user.password;
+//       formData.confirmPassword = user.password;
+//       thirdId.value = user.thirdPartyId || 0;
+//     })
+//     .catch((error:any) => {
+//       console.error("Error al obtener el usuario:", error);
+//     });
+// };
+
 const setForm = () => {
   if (usersStore.moduleMode !== "edit") return;
+  console.log("usersStore.selectedItem", usersStore.selectedItem);
   formData.username = usersStore.selectedItem.username;
-  formData.password = formData.password;
-  formData.role_id = usersStore.selectedItem.role_id;
-};
-
-const close = () => {
-  emit("onClose");
+  // formData.password = usersStore.selectedItem.password;
 };
 
 const submit = async () => {
-  console.log(formData.username);
-  
-  await validationSchema.validate(formData);
   try {
-    const addMode = usersStore.moduleMode === "add";
-    let response;
-    if (addMode) {
-      response = await usersStore.add(formData);
-    } else {
-      const id = usersStore.selectedItem.id;
-      response = await usersStore.edit(id, formData);
-    }
-    emit("onAddSuccess");
-    if (response.status === 201) {
-      swal.fire({
+    await validationSchema.validate(formData);
+    const newUser = await usersStore.add(formData);
+    if (newUser) {
+      usersStore.toogleDialog();
+      await swal.fire({
         icon: "success",
-        text: addMode ? "Agregado con éxito" : "Actulizado con éxito",
+        text: "Usuario agregado con éxito",
         showConfirmButton: false,
-        timer: 1500,
-      });
-    } else {
-      swal.fire({
-        icon: "success",
-        text: "Agregado!!",
-        showConfirmButton: false,
-        timer: 1500,
+        timer: 1000,
       });
     }
-  } catch (error) {
-    swal.fire({
-      icon: "warning",
-      text: "Ocurrió un error",
-      showConfirmButton: false,
-      timer: 1500,
-    });
+
+  } catch (e) {
+    console.log("Error de validación:", e);
+    showValidationErrors.value = true;
   }
 };
-// const getCompany = async () => {
-//   const response = await usersStore.getCompanies();
-//   companies.value = response;
-// };
 
-onMounted(() => {
-  //getCompany();
+const showSaveButton = computed(() => {
+  let passwordIsValid = true;
+  let thirdPartyIdIsValid = thirdId.value != 0;
+
+  if (usersStore.moduleMode == "add") {
+    passwordIsValid = !!formData.password;
+  }
+
+  passwordIsValid =
+    passwordIsValid ||
+    (formData.password.length >= 6 && formData.password.length <= 20);
+  return (
+    formData.username &&
+    passwordIsValid &&
+    thirdPartyIdIsValid &&
+    formData.password == formData.confirmPassword
+  );
+});
+onMounted(async () => {
+  // identification_type_id.value = await identificationTypeStore.getAllIdentificationTypes();
   setForm();
 });
 </script>

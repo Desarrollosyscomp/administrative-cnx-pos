@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from "./router";
 import Vue3Lottie from "vue3-lottie";
+import "./style.css"
 //-- Project --//
 
 //-- Vuetify --//
@@ -16,7 +17,7 @@ import * as directives from 'vuetify/directives'
 
 import "sweetalert2/dist/sweetalert2.min.css";
 
-import Layout from "./components/Layout.vue";
+import Layout from "./Layouts/LayoutOne.vue";
 import Paginator from "./components/Paginator.vue";
 
 const vuetify = createVuetify({

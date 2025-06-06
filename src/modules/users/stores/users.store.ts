@@ -5,10 +5,10 @@ export const useUsersStore: any = defineStore({
   id: "users-store",
   state: () => ({
     moduleMode: "",
-    limit: 10,
+    limit: 5,
     page: 1,
     search: "",
-    isActive: true,
+    is_active: true,
     initDate: "",
     endDate: "",
     itemsCount: 0,
@@ -16,35 +16,53 @@ export const useUsersStore: any = defineStore({
     advancedSearchActive: false,
     list: [] as Array<UsersInterface>,
     selectedItem: {} as UsersInterface,
+    openDialog: false,
   }),
   actions: {
-    // async getAllUsers() {
-    //   try {
-    //     let response = await UsersService.getAll();
-    //     if (response.status == 200) {
-    //       return response.data;
-    //     }
-    //   } catch (e: any) {
-    //     console.log(e.response);
-    //     throw "Stop";
-    //   }
-    // },
+    async toogleDialog() {
+      this.openDialog = !this.openDialog;
+    },
+    
+    async getOneUser(id: string) {
+      let response = await UsersService.getOne(id);
+      if (response.status == 200) {
+        console.log(response.data);
+      }
+    },
+
+    async add(data: any) {
+      try {
+        let response = await UsersService.add({
+          username: data.username,
+          password: data.password,
+          confirm_password: data.confirmPassword,
+        });
+        if (response.status == 201) {
+          this.loadPaginatedList();
+          return response.data;
+        }
+      } catch (e: any) {
+        console.log(e.response);
+        throw "Stop";
+      }
+    },
+
     async getPaginatedUsers() {
       try {
         let response = await UsersService.getPaginated(
           this.limit,
           this.page,
           this.search,
-          this.isActive == null ? undefined : this.isActive,
-          this.initDate,
-          this.endDate
+          this.is_active == null ? undefined : this.is_active
         );
         if (response.status == 200) {
           const _response = response.data.response;
+          console.log(_response);
           return {
             list: _response.list,
             itemsCount: _response.count,
             totalPages: Math.ceil(_response.totalPages),
+            
           };
         }
       } catch (e: any) {
@@ -58,26 +76,7 @@ export const useUsersStore: any = defineStore({
         }
       }
     },
-    async add(data: any) {
-      try {
-        let response = await UsersService.add({
-          //company_id: data.companyId,
-          // users_type_id: data.usersTypeId,
-          //is_active: true,
-          username: data.username,
-          password: data.password,
-          role_id: data.role_id,
-          // description: data.description,
-        });
-        if (response.status == 201) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
-      }
-    },
+
     async loadPaginatedList() {
       try {
         let response: any = await this.getPaginatedUsers();
@@ -90,15 +89,14 @@ export const useUsersStore: any = defineStore({
         throw "Stop";
       }
     },
-    async edit(id: string, data: any) {
+    
+    async delete() {
+      let is_active = !this.selectedItem.is_active;
       try {
-        let response = await UsersService.edit(id, {
-          //company_id: data.companyId,
-          users_type_id: data.usersTypeId,
-          //is_active: true,
-          name: data.name,
-          description: data.description,
-        });
+        let response = await UsersService.delete(
+          this.selectedItem.id,
+          is_active
+        );
         if (response.status == 200) {
           this.loadPaginatedList();
           return response.data;
@@ -108,30 +106,33 @@ export const useUsersStore: any = defineStore({
         throw "Stop";
       }
     },
-    // async delete() {
-    //   let is_active = !this.selectedItem.is_active;
-    //   try {
-    //     let response = await UsersService.delete(
-    //       this.selectedItem.id,
-    //       // is_active
-    //     );
-    //     if (response.status == 200) {
-    //       this.loadPaginatedList();
-    //       return response.data;
-    //     }
-    //   } catch (e: any) {
-    //     console.log(e.response);
-    //     throw "Stop";
-    //   }
-    // },
-    // Temporal method
-    async addEnterprisesToUser(data: object) {
+
+    async updateUsername(id: string, data: any) {
       try {
-        let response = await UsersService.addEnterprisesToUser(data);
+        let response = await UsersService.editUsername(id, {
+          username: data.username,
+        });
+        console.log(response);
         if (response.status == 200) {
-          return response.data.response;
-        } else {
-          return [];
+          this.loadPaginatedList();
+          return response.data;
+        }
+      } catch (e: any) {
+        console.log(e.response);
+        throw "Stop";
+      }
+    },
+
+    async updatePassword(id: string, data: any) {
+      try {
+        let response = await UsersService.editPassword(id, {
+          current_password: data.currentPassword,
+          new_password: data.newPassword,
+          confirm_password: data.confirmPassword,
+        });
+        if (response.status == 200) {
+          this.loadPaginatedList();
+          return response.data;
         }
       } catch (e: any) {
         console.log(e.response);

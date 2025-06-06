@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { loginService } from "../services/Auth.services";
 import { jwtDecode } from "jwt-decode";
+import { loginType } from "../interfaces/login.type";
 export interface Item {
   token: String;
   isLogged: boolean;
@@ -33,27 +34,25 @@ export const useAuthStore: any = defineStore({
       };
       window.location.assign("/login");
     },
-    async login(user: string, password: string) {
-      try {
+
+    async login(data: loginType) {
         const response = await loginService.logIn({
-          username: user,
-          password: password,
+          username: data.user,
+          password: data.password,
         });
-        let decoded: any = jwtDecode(response.data);
-        console.log(decoded);
-        this.user = {
-          token: response.data,
-          isLogged: true,
-          typeUser: "",
-          exp: decoded.exp,
-        };
-        return { isLogged: true };
-        // this.authCheck();
-      } catch (error) {
-        console.error(error);
-        return { isLogged: false };
-      }
+        console.log(response.data.response.token);
+        if (response.status == 200) {
+          let decoded: any = jwtDecode(response.data.response.token);
+          this.user = {
+            token: response.data.response.token,
+            isLogged: true,
+            typeUser: decoded.tokenObject.username,
+            exp: decoded.tokenObject.exp,
+          }
+          return { isLogged: true };
+        }
     },
+
     authCheck() {
       if (this.user.token.length > 1) {
         var current_time = new Date().getTime() / 1000;
@@ -66,7 +65,7 @@ export const useAuthStore: any = defineStore({
           };
           window.location.assign("/login");
         } else {
-          window.location.assign("/home");
+          window.location.assign("/");
         }
       } else {
         this.user = {
@@ -77,10 +76,10 @@ export const useAuthStore: any = defineStore({
         };
       }
     },
-    async loadPermissions() {
-      const response = await loginService.loadPermissions(this.user.token);
-      this.permissions.actions = response.data.response.permissions;
-      this.permissions.moduleAccesses = response.data.response.moduleAccesses;
-    },
+    // async loadPermissions() {
+    //   const response = await loginService.loadPermissions(this.user.token);
+    //   this.permissions.actions = response.data.response.permissions;
+    //   this.permissions.moduleAccesses = response.data.response.moduleAccesses;
+    // },
   },
 });

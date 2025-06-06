@@ -1,6 +1,6 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <UsersTable @onEdit="goToEdit" @onDeactivate="unableItem" @onAddEnterprise="onAddEnterprise"  />
+  <UsersTable @onEdit="goToEdit" @onDeactivate="unableItem"  />
   <UsersCards @onEdit="goToEdit" @onDeactivate="unableItem" />
   <div align="center" class="mt-4">
     <Paginator
@@ -13,31 +13,27 @@
       @on-change-page="onChangePage"
     />
   </div>
-  <div class="ma-4" v-if="usersStore.list.length < 1">
-    <Vue3Lottie :animationData="EmptyLottie" :height="200" :width="200" />
+    <div class="ma-4" v-if="usersStore.list.length < 1">
+    <Vue3Lottie :animationData="EmptyLottie" :height="300" :width="300" />
     <h3 class="text-center">No se encontraron resultados</h3>
   </div>
+
 </template>
 <!-- ******************** JS ******************** -->
 <script setup lang="ts">
-import { EmitInterface } from "@/interfaces/Emit.interface";
+import EmptyLottie from "../../../assets/lotties/empty.json";
 
-import EmptyLottie from "@/assets/lottie-files/empty.json";
-
+import { EmitInterface } from "../../../interfaces/Emit.interface";
 import { useUsersStore } from "../stores/users.store";
 
 import UsersCards from "./UsersCards.vue";
 import UsersTable from "./UsersTable.vue";
 
+import { onMounted } from "vue-demi";
+
 const usersStore = useUsersStore();
 const emit = defineEmits(["onEdit", "onDeactivate", "onAddEnterprise"]);
 
-const onAddEnterprise = (emitted: EmitInterface) => {
-  emit("onAddEnterprise", {
-    name: "UsersList.onAddEnterprise" + emitted.name,
-    data: emitted.data,
-  });
-}
 
 const goToEdit = (emitted: EmitInterface) => {
   emit("onEdit", {
@@ -55,6 +51,10 @@ const onChangePage = (emitted: EmitInterface) => {
   usersStore.page = emitted.data.page;
   usersStore.loadPaginatedList();
 };
+
+onMounted(async () => {
+  usersStore.loadPaginatedList();
+});
 </script>
 <!-- ******************** CSS ******************** -->
 <style scoped></style>

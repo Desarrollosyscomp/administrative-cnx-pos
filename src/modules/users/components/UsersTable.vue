@@ -5,8 +5,7 @@
       <thead>
         <tr>
           <th class="text-left font-weight-black">NOMBRE</th>
-          <!-- <th class="text-center font-weight-black">DESCRIPCION</th> -->
-          <th class="text-center font-weight-black">ESTADO</th>
+          <th class="text-right font-weight-black">ESTADO</th>
           <th class="text-right font-weight-black">ACCIONES</th>
         </tr>
       </thead>
@@ -15,14 +14,8 @@
           <td class="text-left text-truncate" style="max-width: 20px">
             {{ item.username }}
           </td>
-          <!-- <td class="text-center text-truncate" style="max-width: 20px">
-            {{ item.description }}
-          </td> -->
           <td class="text-right">
-            <v-badge
-              :color="item.is_active ? 'success' : '#841811ff'"
-              class="mr-12 mb-1"
-            >
+            <v-badge :color="item.is_active ? 'success' : '#841811ff'" class="mr-12 mb-1">
               <template v-slot:badge>
                 <span class="pa-2">{{
                   item.is_active ? "Activo" : "Inactivo"
@@ -31,20 +24,20 @@
             </v-badge>
           </td>
           <td class="text-right">
-            <v-tooltip text="Empresas" location="bottom">
+            <!-- <v-tooltip text="Deatlles" location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-bind="props"
                   class="ma-2"
                   variant="text"
-                  icon="mdi-factory"
-                  color="green"
-                  @click="addEnterprise(item)"
+                  icon="mdi-eye"
+                  color="blue-lighten-2"
+                  @click="showRecord(item)"
                 >
                 </v-btn>
               </template>
-            </v-tooltip>
-            <v-tooltip v-if="item.is_active" text="Editar" location="top">
+            </v-tooltip> -->
+           <v-tooltip v-if="item.is_active" text="Editar" location="top">
               <template v-slot:activator="{ props }">
                 <v-btn
                   v-bind="props"
@@ -87,17 +80,9 @@ import { useUsersStore } from "../stores/users.store";
 import { UsersInterface } from "../interfaces/users.interface";
 
 const usersStore = useUsersStore();
-const emit = defineEmits(["onEdit", "onDeactivate", "onAddEnterprise"]);
-
-const addEnterprise = (item: UsersInterface) => {
-  usersStore.selectedItem = item;
-  emit("onAddEnterprise", {
-    name: "UsersTable.addEnterprise",
-    data: { item },
-  });
-}
-
+const emit = defineEmits(["onEdit", "onDeactivate", "onManagePermissions"]);
 const goToEdit = (users: UsersInterface) => {
+  console.log("users", usersStore.list);
   emit("onEdit", {
     name: "UsersTable.goToEdit",
     data: { users },
@@ -109,6 +94,12 @@ const unableItem = async (item: UsersInterface) => {
     data: { item },
   });
 };
+// const managePermissions = async (item: UsersInterface) => {
+//   emit("onManagePermissions", {
+//     name: "UsersTable.onManagePermissions",
+//     data: { item },
+//   });
+// };
 </script>
 <!-- ******************** CSS ******************** -->
 <style scoped></style>

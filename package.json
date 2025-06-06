@@ -22,7 +22,7 @@
     "vue-demi": "^0.14.8",
     "vue-router": "^4.4.0",
     "vue3-lottie": "^3.3.0",
-    "vuetify": "^3.6.12",
+    "vuetify": "^3.8.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {
