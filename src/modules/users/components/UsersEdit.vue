@@ -25,16 +25,22 @@
     </v-row>
     <div>
       <v-form @submit.prevent="submitNewUsername">
+        <v-alert v-if="message" class="mb-4" type="error" variant="outlined" density="compact">
+          {{ message }}
+        </v-alert>
         <v-text-field label="Nombre de usuario" prepend-inner-icon="mdi-email" variant="outlined" density="compact"
           v-model="formData.username" :rules="usernameRules">
         </v-text-field>
-        <v-btn variant="outlined" color="success" block class="mb-5" type="submit">
+        <v-btn variant="outlined" color="success" block class="mb-5 mt-n2" type="submit">
           Guardar nombre de usuario
         </v-btn>
       </v-form>
     </div>
     <div>
       <v-form @submit.prevent="submitNewPassword">
+        <v-alert v-if="messageCurrentPassword" class="mb-4" type="error" variant="outlined" density="compact">
+          {{ messageCurrentPassword }}
+        </v-alert>
         <v-text-field label="Contraseña actual " prepend-inner-icon="mdi-lock" variant="outlined" density="compact"
           class="mb-2" :type="visible ? 'text' : 'password'" v-model="formData.currentPassword"
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible = !visible"
@@ -50,7 +56,7 @@
           :append-inner-icon="visible2 ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible2 = !visible2"
           :rules="confirmPasswordRules">
         </v-text-field>
-        <v-btn variant="outlined" color="success" block1 type="submit">
+        <v-btn variant="outlined" color="success" block type="submit">
           Guardar contraseña
         </v-btn>
       </v-form>
@@ -72,6 +78,8 @@ const usersStore = useUsersStore();
 let visible = ref(false);
 let visible1 = ref(false);
 let visible2 = ref(false);
+let message = ref("");
+let messageCurrentPassword = ref("");
 
 let formData = reactive({
   username: "",
@@ -166,10 +174,16 @@ const submitNewUsername = async () => {
   try {
     await validationUsernameSchema.validate({ username: formData.username });
     const id = usersStore.selectedItem.id;
-    const newUsername = await usersStore.updateUsername(
+    const { error, data } = await usersStore.updateUsername(
       id, { username: formData.username }
     );
-    if (newUsername) {
+
+    if (error) {
+      console.log(data)
+      message.value = data;
+      return;
+    }
+    if (data) {
       usersStore.toogleDialog();
       await swal.fire({
         icon: "success",
@@ -183,33 +197,33 @@ const submitNewUsername = async () => {
     console.log("Error de validación:", e);
   }
 };
-
 const submitNewPassword = async () => {
-  const { currentPassword, newPassword, confirmPassword } = formData;
-  const id = usersStore.selectedItem.id;
-
   try {
+    const { currentPassword, newPassword, confirmPassword } = formData;
     await validationSchema.validate({ currentPassword, newPassword, confirmPassword });
-  } catch (validationError) {
-    console.error("Error de validación:", validationError);
-    return;
-  }
+    const id = usersStore.selectedItem.id;
 
-  try {
-    const success = await usersStore.updatePassword(id,
-      { currentPassword, newPassword, confirmPassword }
+    const { error, data } = await usersStore.updatePassword(
+      id, { currentPassword, newPassword, confirmPassword }
     );
-    if (!success) return;
-    usersStore.toogleDialog();
-    await swal.fire({
-      icon: "success",
-      title: "Éxito",
-      text: "La contraseña ha sido actualizada correctamente",
-      showConfirmButton: false,
-      timer: 2000,
-    });
-  } catch (error) {
-    console.error("Error al actualizar la contraseña:", error);
+
+    if (error) {
+      console.log(data)
+      messageCurrentPassword.value = data;
+      return;
+    }
+    if (data) {
+      usersStore.toogleDialog();
+      await swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: "La contraseña ha sido actualizada correctamente",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }
+  } catch (e) {
+    console.log("Error de validación:", e);
   }
 };
 

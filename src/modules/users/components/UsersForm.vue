@@ -24,22 +24,24 @@
       </v-col>
     </v-row>
     <div>
-      <v-text-field label="Nombre de usuario" prepend-inner-icon="mdi-email" variant="outlined" density="compact"
-        class="mb-4" v-model="formData.username" :rules="usernameRules">
-      </v-text-field>
-      <v-text-field label="Contraseña" prepend-inner-icon="mdi-lock" variant="outlined" density="compact" class="mb-4"
-        :type="visible ? 'text' : 'password'" v-model="formData.password"
-        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible = !visible"
-        :rules="passwordRules">
-      </v-text-field>
-      <v-text-field label="Confirmar contraseña" prepend-inner-icon="mdi-lock" variant="outlined" density="compact"
-        class="mb-4" :type="visible1 ? 'text' : 'password'" v-model="formData.confirmPassword"
-        :append-inner-icon="visible1 ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible1 = !visible1"
-        :rules="confirmPasswordRules">
-      </v-text-field>
-      <v-btn variant="outlined" color="success" block @click="submit" :isDisabled="!showSaveButton">
-        Guardar
-      </v-btn>
+      <v-form @submit.prevent="submit">
+        <v-text-field label="Nombre de usuario" prepend-inner-icon="mdi-email" variant="outlined" density="compact"
+          class="mb-2" v-model="formData.username" :rules="usernameRules">
+        </v-text-field>
+        <v-text-field label="Contraseña" prepend-inner-icon="mdi-lock" variant="outlined" density="compact" class="mb-2"
+          :type="visible ? 'text' : 'password'" v-model="formData.password"
+          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible = !visible"
+          :rules="passwordRules">
+        </v-text-field>
+        <v-text-field label="Confirmar contraseña" prepend-inner-icon="mdi-lock" variant="outlined" density="compact"
+          class="mb-2" :type="visible1 ? 'text' : 'password'" v-model="formData.confirmPassword"
+          :append-inner-icon="visible1 ? 'mdi-eye-off' : 'mdi-eye'" @click:append-inner="visible1 = !visible1"
+          :rules="confirmPasswordRules">
+        </v-text-field>
+        <v-btn variant="outlined" color="success" block type="submit" :isDisabled="!showSaveButton">
+          Guardar
+        </v-btn>
+      </v-form>
     </div>
   </v-container>
 </template>

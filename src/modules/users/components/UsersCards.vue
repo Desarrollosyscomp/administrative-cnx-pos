@@ -30,7 +30,7 @@
           </v-col>
         </v-row>
       </v-card-title>
-      <v-card-text class="mb-1 text-black">{{ item.description }}</v-card-text>
+      <v-card-text class="mb-1 text-black">{{ item.username }}</v-card-text>
       <v-divider color="#000"></v-divider>
       <v-card-actions class="pa-0">
         <div align="right" style="width: 100%">

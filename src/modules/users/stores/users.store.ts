@@ -22,7 +22,7 @@ export const useUsersStore: any = defineStore({
     async toogleDialog() {
       this.openDialog = !this.openDialog;
     },
-    
+
     async getOneUser(id: string) {
       let response = await UsersService.getOne(id);
       if (response.status == 200) {
@@ -62,7 +62,6 @@ export const useUsersStore: any = defineStore({
             list: _response.list,
             itemsCount: _response.count,
             totalPages: Math.ceil(_response.totalPages),
-            
           };
         }
       } catch (e: any) {
@@ -89,7 +88,7 @@ export const useUsersStore: any = defineStore({
         throw "Stop";
       }
     },
-    
+
     async delete() {
       let is_active = !this.selectedItem.is_active;
       try {
@@ -108,35 +107,42 @@ export const useUsersStore: any = defineStore({
     },
 
     async updateUsername(id: string, data: any) {
-      try {
-        let response = await UsersService.editUsername(id, {
-          username: data.username,
-        });
-        console.log(response);
-        if (response.status == 200) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
+      let response = await UsersService.editUsername(id, {
+        username: data.username,
+      });
+      console.log(response);
+      if (response.status == 200) {
+        this.loadPaginatedList();
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else if (response.data.response.validationError) {
+        return {
+          error: true,
+          data: response.data.response.validationError.message,
+        };
       }
     },
 
     async updatePassword(id: string, data: any) {
-      try {
-        let response = await UsersService.editPassword(id, {
-          current_password: data.currentPassword,
-          new_password: data.newPassword,
-          confirm_password: data.confirmPassword,
-        });
-        if (response.status == 200) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
+      let response = await UsersService.editPassword(id, {
+        current_password: data.currentPassword,
+        new_password: data.newPassword,
+        confirm_password: data.confirmPassword,
+      });
+      console.log(response);
+      if (response.status == 200) {
+        this.loadPaginatedList();
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else if (response.data.response.validationError) {
+        return {
+          error: true,
+          data: response.data.response.validationError.message,
+        };
       }
     },
   },
