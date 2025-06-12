@@ -11,13 +11,24 @@
       </span>
       <v-divider></v-divider>
 
+      <v-divider></v-divider>
       <span class="custom-font-size">
-        <b> Tipo de  documento: </b>
+        <b> Numero documento: </b>
         {{ clientsStore.form.identification_number }}</span
       >
       <v-divider></v-divider>
       <span class="custom-font-size">
-        <b> Numero documento: </b>
+        <b> Razón social: </b>
+        {{ clientsStore.form.identification_number }}</span
+      >
+      <v-divider></v-divider>
+      <span class="custom-font-size">
+        <b> Nombre comercial: </b>
+        {{ clientsStore.form.identification_number }}</span
+      >
+      <v-divider></v-divider>
+      <span class="custom-font-size">
+        <b> Regimen: </b>
         {{ clientsStore.form.identification_number }}</span
       >
       <v-divider></v-divider>

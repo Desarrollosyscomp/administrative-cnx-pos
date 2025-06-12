@@ -25,6 +25,9 @@
     </v-row>
     <div>
       <v-form @submit.prevent="submit">
+        <v-alert v-if="message" class="mb-4" type="error" variant="outlined" density="compact">
+          {{ message }}
+        </v-alert>
         <v-text-field label="Nombre de usuario" prepend-inner-icon="mdi-email" variant="outlined" density="compact"
           class="mb-2" v-model="formData.username" :rules="usernameRules">
         </v-text-field>
@@ -60,6 +63,7 @@ let visible = ref(false);
 let visible1 = ref(false);
 let showValidationErrors = ref(false);
 let thirdId = ref(0);
+let message = ref("");
 
 let formData = reactive({
   username: "",
@@ -151,8 +155,13 @@ const setForm = () => {
 const submit = async () => {
   try {
     await validationSchema.validate(formData);
-    const newUser = await usersStore.add(formData);
-    if (newUser) {
+    const { error, data } = await usersStore.add(formData);
+    if (error) {
+      console.log(data)
+      message.value = data;
+      return;
+    }
+    if (data) {
       usersStore.toogleDialog();
       await swal.fire({
         icon: "success",

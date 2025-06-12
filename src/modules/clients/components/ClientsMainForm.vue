@@ -47,7 +47,7 @@
             <MainInfo />
           </v-col>
           <v-col cols="12" md="6">
-            <CompanyInfo />
+            <AddressInfo />
           </v-col>
         </v-row>
         <v-row>
@@ -55,7 +55,7 @@
             <FiscalInfo />
           </v-col>
           <v-col cols="12" md="6">
-            <AddressContactInfo />
+            <ContactInfo />
           </v-col>
         </v-row>
       </v-col>
@@ -77,11 +77,11 @@
           <div v-if="clientsStore.mode == 'fiscal-info'">
             <p><b>Informacion fiscal</b></p>
           </div>
-          <div v-if="clientsStore.mode == 'addressContact-info'">
-            <p><b>Direccion y contacto</b></p>
+          <div v-if="clientsStore.mode == 'address-info'">
+            <p><b>Información residencial</b></p>
           </div>
-          <div v-if="clientsStore.mode == 'company-info'">
-            <p><b>Informacion compañia</b></p>
+          <div v-if="clientsStore.mode == 'contact-info'">
+            <p><b>Información de contacto</b></p>
           </div>
 
         </v-card-title>
@@ -92,13 +92,11 @@
           <div v-if="clientsStore.mode == 'fiscal-info'">
             <FormFiscalInfo />
           </div>
-          <div v-if="clientsStore.mode == 'addressContact-info'">
-            <FormAddressInfo
-              v-if="clientsStore.mode == 'addressContact-info'"
-            />
+          <div v-if="clientsStore.mode == 'address-info'">
+            <FormAddressInfo />
           </div>
-          <div v-if="clientsStore.mode == 'company-info'">
-            <FormCompanyInfo />
+          <div v-if="clientsStore.mode == 'contact-info'">
+            <FormContactInfo />
           </div>
         </v-card-text>
       </v-card>
@@ -110,7 +108,6 @@
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import FiscalInfo from "./forms/FiscalInfo.vue";
 import MainInfo from "./forms/MainInfo.vue";
-import AddressContactInfo from "./forms/AddressContactInfo.vue";
 import FormMainInfo from "./forms/FormMainInfo.vue";
 import FormFiscalInfo from "./forms/FormFiscalInfo.vue";
 import FormAddressInfo from "./forms/FormAddressInfo.vue";
@@ -120,9 +117,10 @@ import { useRouter } from "vue-router";
 // import * as Yup from "yup";
 // import { useAppStore } from "../../../stores/app-store";
 import { useClientsStore } from "../store/useClientsStore";
-import CompanyInfo from "./forms/CompanyInfo.vue";
 import ClientCommercialActivities from "./ClientCommercialActivities.vue";
-import FormCompanyInfo from "./forms/FormCompanyInfo.vue";
+import FormContactInfo from "./forms/FormContactInfo.vue";
+import AddressInfo from "./forms/AddressInfo.vue"; 
+import ContactInfo from "./forms/ContactInfo.vue";
 // import {
 //   validationFiscalInfoExport,
 //   validationMainInfoExport,

@@ -29,14 +29,20 @@
           <v-list-item
             @click="goTo('users-list')"
             prepend-icon="mdi-account"
-            title="Crear usuario"
+            title="Usuarios"
             value="users-list"
           ></v-list-item>
           <v-list-item
             @click="goTo('client-list')"
             prepend-icon="mdi-account-group"
-            title="Crear cliente"
+            title="Clientes"
             value="client-list"
+          ></v-list-item>
+          <v-list-item
+            @click="goTo('permissions-list')"
+            prepend-icon="mdi-fingerprint"
+            title="Permisos usuarios"
+            value="permissions-list"
           ></v-list-item>
           <v-list-item
             @click="logOut"

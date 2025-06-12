@@ -2,7 +2,7 @@
 <template>
   <Layout>
     <div align="center">
-      <h1> Bienvenido administrador</h1>
+      <h1></h1>
     </div>
   </Layout>
 </template>

@@ -1,8 +1,8 @@
 <template>
   <v-form >
     <v-row>
-      <v-col cols="12">
-        <LocationsComponent />
+      <v-col cols="12" class="mt-n6">
+        <SyncThirdPartiesContact />
       </v-col>
     </v-row>
     <v-row>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import LocationsComponent from '../../../../components/location-component/LocationsComponent.vue';
+import SyncThirdPartiesContact from '../SyncThirdPartiesContact.vue';
 
 </script>
 

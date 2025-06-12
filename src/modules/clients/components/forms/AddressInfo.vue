@@ -1,22 +1,36 @@
 <template>
     <v-card class="full-height-card" :class="[clientsStore.isValidFormMainInfo && 'style-card-error']">
         <v-card-text>
-            <p><b>Informacion de empresa</b></p>
+            <p><b>Información residencial</b></p>
 
             <br />
             <span class="custom-font-size">
-                <b> Razon social: </b>
+                <b> País: </b>
+                {{ clientsStore.form.first_name }}
+                <br />
+            </span>
+            <v-divider></v-divider>
+            <span class="custom-font-size">
+                <b> Departamento: </b>
+                {{ clientsStore.form.first_name }}
+                <br />
+            </span>
+            <v-divider></v-divider>
+            <span class="custom-font-size">
+                <b> Municipio: </b>
+                {{ clientsStore.form.first_name }}
+                <br />
+            </span>
+            <v-divider></v-divider>
+            <span class="custom-font-size">
+                <b> Barrio: </b>
                 {{ clientsStore.form.first_name }}
                 <br />
             </span>
             <v-divider></v-divider>
 
             <span class="custom-font-size">
-                <b> Nombre comercial: </b>
-                {{ clientsStore.form.identification_number }}</span>
-            <v-divider></v-divider>
-            <span class="custom-font-size">
-                <b> Regimen: </b>
+                <b> Dirección: </b>
                 {{ clientsStore.form.identification_number }}</span>
             <v-divider></v-divider>
 
@@ -33,7 +47,7 @@ import { useClientsStore } from "../../store/useClientsStore";
 const clientsStore = useClientsStore();
 const openMainInfoForm = () => {
   clientsStore.toogleDialog();
-  clientsStore.mode = "company-info";
+  clientsStore.mode = "address-info";
   clientsStore.isOpenDialog = true;
 };
 

@@ -5,7 +5,7 @@ export const useUsersStore: any = defineStore({
   id: "users-store",
   state: () => ({
     moduleMode: "",
-    limit: 5,
+    limit: 4,
     page: 1,
     search: "",
     is_active: true,
@@ -31,7 +31,6 @@ export const useUsersStore: any = defineStore({
     },
 
     async add(data: any) {
-      try {
         let response = await UsersService.add({
           username: data.username,
           password: data.password,
@@ -39,12 +38,17 @@ export const useUsersStore: any = defineStore({
         });
         if (response.status == 201) {
           this.loadPaginatedList();
-          return response.data;
+          return { 
+            error: false, 
+            data: response.data 
+          };
         }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
-      }
+        else if (response.data.response.validationError) {
+          return { 
+            error: true, 
+            data: response.data.response.validationError.message 
+          };
+        }
     },
 
     async getPaginatedUsers() {

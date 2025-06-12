@@ -11,6 +11,7 @@ import { ClientsRouter } from "../modules/clients/route/router";
 import NotFound from "../components/NotFound.vue";
 import { useAuthStore } from "../modules/auth/store/useStoreAuth";
 import { verifyRouteAccess } from "./helpers";
+import { PermissionsRouter } from "../modules/permissions/routes/permissions.routes";
 
 const routes = [
   {
@@ -35,6 +36,7 @@ const router = createRouter({
     ...ProductsRouter,
     ...UsersRouter,
     ...ClientsRouter,
+    ...PermissionsRouter,
   ],
 });
 

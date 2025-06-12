@@ -27,7 +27,36 @@
             </v-badge>
           </td>
           <td class="text-right">
-            hola
+            <v-menu location="start">
+              <template v-slot:activator="{ props }">
+                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" >
+                  Opciones
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item value="1">
+                  <v-list-item-title>
+                   <v-icon color="blue-lighten-2" size="small">mdi-pencil</v-icon> Editar cliente
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item value="2">
+                  <v-list-item-title>
+                    <v-icon size="small" :color="item.is_active ? 'red-lighten-2' : 'blue-lighten-2'">
+                      {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
+                    </v-icon>
+                    {{
+                      item.is_active ? "Inactivar" : "Restaurar"
+                    }}
+                    cliente
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item value="3">
+                  <v-list-item-title>
+                   <v-icon size="small" >mdi-fingerprint</v-icon> Permisos
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </td>
         </tr>
       </tbody>

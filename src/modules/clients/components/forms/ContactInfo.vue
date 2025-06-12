@@ -1,18 +1,8 @@
 <template>
   <v-card class="full-height-card" :class="[clientsStore.isValidFormAddressContactInfo && 'style-card-error']">
     <v-card-text>
-      <p><b>Direccion y contacto</b></p>
+      <p><b>Información de contacto</b></p>
       <br />
-      <span class="custom-font-size">
-        <b> Ubicacion:</b> {{ clientsStore.country_id}}</span
-      >
-      <v-divider></v-divider>
-
-      <span class="custom-font-size"
-        ><b>Direccion:</b> {{ clientsStore.form.address }}</span
-      >
-      <v-divider></v-divider>
-
       <span class="custom-font-size align-components"
         ><b>Telefonos:</b> {{ firstPhone }}</span
       >
@@ -92,14 +82,15 @@
       </div>
 
       <v-divider></v-divider>
-
-      <br />
+      <br>
+      <br>
       <v-btn
         block
         text="Abrir formulario"
         variant="outlined"
         color="#841911"
         size="small"
+        class="mt-5"
         @click="openMainInfoForm"
       ></v-btn>
     </v-card-text>
@@ -113,7 +104,7 @@ const clientsStore = useClientsStore();
 
 const openMainInfoForm = () => {
   clientsStore.toogleDialog();
-  clientsStore.mode = "addressContact-info";
+  clientsStore.mode = "contact-info";
 };
 
 const firstEmail = computed(() => {
