@@ -14,15 +14,14 @@
     />
   </div>
   <div class="ma-4" v-if="locationsStore.list.length < 1">
-    <Vue3Lottie :animationData="EmptyLottie" :height="200" :width="200" />
+    <!-- <Vue3Lottie :animationData="EmptyLottie" :height="200" :width="200" /> -->
     <h3 class="text-center">No se encontraron resultados</h3>
   </div>
 </template>
 <!-- ******************** JS ******************** -->
 <script setup lang="ts">
-import { EmitInterface } from "@/interfaces/Emit.interface";
+import { EmitInterface } from "../../../interfaces/Emit.interface";
 
-import EmptyLottie from "@/assets/lottie-files/empty.json";
 
 import { useLocationsStore } from "../stores/locations.store";
 

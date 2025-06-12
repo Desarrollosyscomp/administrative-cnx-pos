@@ -69,7 +69,7 @@ import { onMounted, reactive, ref, watch } from "vue-demi";
 
 import LocationsSelect from "../components/LocationsSelect.vue";
 import { useLocationsStore } from "../stores/locations.store";
-import { EmitInterface } from "@/interfaces/Emit.interface";
+import { EmitInterface } from "../../../interfaces/Emit.interface";
 
 const locationsStore = useLocationsStore();
 

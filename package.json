@@ -10,6 +10,7 @@
     "generate": "node generator/generate.js"
   },
   "dependencies": {
+    "@types/node": "^24.0.1",
     "@vueuse/core": "^10.11.0",
     "axios": "^1.7.2",
     "generate-template-files": "^3.2.1",

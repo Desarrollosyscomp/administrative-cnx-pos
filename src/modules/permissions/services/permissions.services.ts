@@ -1,5 +1,5 @@
-import { useAuthStore } from "@/modules/auth/store/useStoreAuth";
-import { Http as axios } from "@/utils/http/http";
+import { useAuthStore } from "../../../modules/auth/store/useStoreAuth";
+import { Http as axios } from "../../../utils/http/http";
 //import axios from "axios";
 //import { URL_API } from "@/main";
 

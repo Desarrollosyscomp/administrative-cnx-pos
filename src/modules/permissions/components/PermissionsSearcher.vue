@@ -99,7 +99,7 @@
 import { reactive, ref } from "vue-demi";
 import { usePermissionsStore } from "../stores/permissions.store";
 // import * as Yup from "yup";
-import { useAppStore } from "@/stores/app-store";
+import { useAppStore } from "../../../stores/app-store";
 
 const appStore = useAppStore();
 const permissionsStore = usePermissionsStore();
