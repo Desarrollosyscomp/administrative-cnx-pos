@@ -18,6 +18,7 @@ import "./style.css"
 import "sweetalert2/dist/sweetalert2.min.css";
 
 import Layout from "./Layouts/LayoutOne.vue";
+
 import Paginator from "./components/Paginator.vue";
 
 const vuetify = createVuetify({

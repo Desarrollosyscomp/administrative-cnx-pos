@@ -139,7 +139,7 @@ const emit = defineEmits(["onAddSuccess", "onClose"]);
 const customersStore = useCustomersStore();
 
 let is_natural = ref(false);
-let identification_type_id = ref([]);
+let identification_type_id = ref([] as any);
 
 let formData = reactive({
   identification_type_id: 0,

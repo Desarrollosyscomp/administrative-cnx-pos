@@ -18,6 +18,7 @@ export const useAppStore: any = defineStore({
       // return response.data.response;
     },
     async getPermissionsByUserId(userId: number) {
+      userId;
       // const response = await PermissionsService.getPermissionsByUserId(userId);
       // return response.data.response;
     },

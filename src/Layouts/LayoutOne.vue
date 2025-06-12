@@ -68,19 +68,19 @@ const goTo = (routeName: string) => {
   router.push({ name: routeName });
 };
 
-const showOption = (module: string): boolean => {
-  let hasAccess = false;
+// const showOption = (module: string): boolean => {
+//   let hasAccess = false;
 
-  for (let i = 0; i < authStore.permissions.moduleAccesses.length; i++) {
-    const moduleAccess = authStore.permissions.moduleAccesses[i];
-    if (moduleAccess.module.name === module) {
-      hasAccess = true;
-      break;
-    }
-  }
+//   for (let i = 0; i < authStore.permissions.moduleAccesses.length; i++) {
+//     const moduleAccess = authStore.permissions.moduleAccesses[i];
+//     if (moduleAccess.module.name === module) {
+//       hasAccess = true;
+//       break;
+//     }
+//   }
 
-  return hasAccess;
-};
+//   return hasAccess;
+// };
 
 const logOut = () => {
   authStore.logout();

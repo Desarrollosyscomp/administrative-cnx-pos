@@ -152,7 +152,7 @@
 </template>
   
 <script lang="ts" setup>
-import { inject, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import * as Yup from "yup";
 import { useCustomersStore } from '../stores/customers.store';
 

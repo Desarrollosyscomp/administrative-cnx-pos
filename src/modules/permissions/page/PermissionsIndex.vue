@@ -2,7 +2,7 @@
 <template>
   <LayoutOne>
     <v-breadcrumbs :items="['Permisos', 'Listar']"></v-breadcrumbs>
-    <v-container>
+    
       <div class="d-flex flex-column flex-sm-row">
         <v-row>
           <v-col cols="12" md="9">
@@ -22,7 +22,7 @@
       </div>
       <PermissionsList />
 
-    </v-container>
+    
   </LayoutOne>
 </template>
 
