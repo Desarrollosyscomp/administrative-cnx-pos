@@ -1,10 +1,9 @@
 <!-- ******************** HTML ******************** -->
 <template>
-
   <div class="show d-none d-sm-block">
     <v-row>
-      <v-col cols="12" md="4" v-for="(permission, i) in arrayTest" :key="i">
-        <v-card elevation="3" link>
+      <v-col cols="12" md="3" v-for="(permission, i) in arrayTest" :key="i">
+        <v-card link elevation="2" class="border-color full-height-card" >
           <v-card-text>
             <p>
               <b>
@@ -35,4 +34,12 @@ const arrayTest = [
 ]
 </script>
 <!-- ******************** CSS ******************** -->
-<style scoped></style>
+<style scoped>
+.border-color {
+  border-color: lightblue !important;
+}
+
+.full-height-card {
+    height: 100%;
+}
+</style>

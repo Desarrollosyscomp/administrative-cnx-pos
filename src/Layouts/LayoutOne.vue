@@ -1,6 +1,6 @@
 <template>
-  <v-card>
-    <v-app>
+  <v-card >
+    <v-app id="v-app">
       <v-app-bar color="#4d4d4dff">
         <template v-slot:prepend>
           <v-app-bar-nav-icon @click.stop="drawer = !drawer" color="white">
@@ -85,6 +85,11 @@ const showOption = (module: string): boolean => {
 const logOut = () => {
   authStore.logout();
 };
+
 </script>
 
-<style scoped></style>
+<style scoped>
+#v-app{
+  background: rgb(248, 248, 248) !important;
+}
+</style>

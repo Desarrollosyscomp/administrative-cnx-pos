@@ -4,8 +4,6 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from "./router";
 import Vue3Lottie from "vue3-lottie";
-import "./style.css"
-//-- Project --//
 
 //-- Vuetify --//
 import 'vuetify/styles'
@@ -14,6 +12,8 @@ import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 //-- Vuetify --//
+import "./style.css"
+//-- Project --//
 
 import "sweetalert2/dist/sweetalert2.min.css";
 

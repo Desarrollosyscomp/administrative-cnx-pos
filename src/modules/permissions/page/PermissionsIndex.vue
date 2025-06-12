@@ -1,26 +1,28 @@
 <!-- ******************** HTML ******************** -->
 <template>
-   <LayoutOne>
+  <LayoutOne>
     <v-breadcrumbs :items="['Permisos', 'Listar']"></v-breadcrumbs>
-    <v-card class="ma-2 px-3 full-height-card" elevation="5">
-      <v-card-title class="mr-1 mt-4 mb-n7">
-        <div class="d-flex flex-column flex-sm-row">
-          <v-text-field class="ma-2 w-100 " color="#841811ff" density="compact" variant="outlined" label="Buscar"
-            append-inner-icon="mdi-magnify">
-          </v-text-field>
-          <v-btn class="mt-2 ml-2" variant="outlined" color="success" @click="openAddForm">
-            <span> AÑADIR</span>
-          </v-btn>
-        </div>
-      </v-card-title>
-      <v-card-text class="mb-1">
+    <v-container>
+      <div class="d-flex flex-column flex-sm-row">
+        <v-row>
+          <v-col cols="12" md="9">
+            <v-text-field class="w-50 " color="#841811ff" density="compact" variant="outlined" label="Buscar"
+              append-inner-icon="mdi-magnify">
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" md="3">
+            <div align="end">
 
-        <PermissionsList />
-      </v-card-text>
+              <v-btn class="mt-2 ml-2" variant="outlined" color="success" @click="openAddForm">
+                <span> AÑADIR</span>
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+      <PermissionsList />
 
-
-    </v-card>
-
+    </v-container>
   </LayoutOne>
 </template>
 

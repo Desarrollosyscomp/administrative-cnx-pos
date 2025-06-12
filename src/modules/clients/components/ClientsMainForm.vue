@@ -6,8 +6,8 @@
           <v-card>
             <div style="width: 50%; display: inline-block">
               <v-card-text>
-                <b
-                  ><p style="font-size: medium">
+                <b>
+                  <p style="font-size: medium">
                     {{
                       clientsStore.moduleMode === "add"
                         ? "Formulario de creacion de un cliente"
