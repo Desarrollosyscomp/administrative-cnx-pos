@@ -114,12 +114,10 @@ export const useClientsStore: any = defineStore({
 
     getFullIdentification() {
       const identificationIsSetted = this.form.identification_type_code;
-      console.log(identificationIsSetted);
       if (!identificationIsSetted) return "hola";
 
       const identificationType = this.identificationTypes.find(
-        (_identificationType: any) =>
-          _identificationType.code === this.form.identification_type_code
+        (_identificationType: any) =>  _identificationType.dian_id === this.form.identification_type_code
       );
       return `${identificationType?.acronym} ${this.form.identification_number}`;
     },
@@ -173,11 +171,12 @@ export const useClientsStore: any = defineStore({
         country_id: country_dian_id,
         department_id: department_dian_id,
         municipality_id: municipality_dian_id,
-        neighborhood_id: neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
-        emails: data.emails, 
-        phones: data.phones, 
+        neighborhood_id:
+          neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
+        emails: data.emails,
+        phones: data.phones,
       });
-            if (response.status == 201) {
+      if (response.status == 201) {
         return {
           error: false,
           data: response.data.response,
@@ -185,7 +184,7 @@ export const useClientsStore: any = defineStore({
       } else {
         return {
           error: true,
-          data: {}
+          data: {},
         };
       }
     },
