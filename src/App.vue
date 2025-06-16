@@ -1,10 +1,15 @@
 <template>
+    <SplashScreen v-if="appStore.showSplashScreen" />
+  <LoadingScreen v-if="appStore.showLoadingScreen" />
   <router-view />
 </template>
 <script setup lang="ts">
 import Swal from "sweetalert2";
 import { provide } from "vue";
-
+import { useAppStore } from "./stores/app-store";
+import SplashScreen from "./components/SplashScreen.vue";
+import LoadingScreen from "./components/LoadingScreen.vue";
+const appStore = useAppStore()
 provide("swal", Swal);
 </script>
 

@@ -60,7 +60,7 @@
                     usuario
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="3">
+                <v-list-item value="3" @click="managePermissions(item)">
                   <v-list-item-title>
                    <v-icon size="small" >mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
@@ -124,12 +124,12 @@ const unableItem = async (item: UsersInterface) => {
     data: { item },
   });
 };
-// const managePermissions = async (item: UsersInterface) => {
-//   emit("onManagePermissions", {
-//     name: "UsersTable.onManagePermissions",
-//     data: { item },
-//   });
-// };
+const managePermissions = async (item: UsersInterface) => {
+  emit("onManagePermissions", {
+    name: "UsersTable.onManagePermissions",
+    data: { item },
+  });
+};
 </script>
 <!-- ******************** CSS ******************** -->
 <style scoped></style>

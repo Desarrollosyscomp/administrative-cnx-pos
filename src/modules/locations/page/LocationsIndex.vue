@@ -179,6 +179,7 @@ watch(
 );
 onMounted(() => {
   locationsStore.getCountries();
+
 });
 </script>
 <!-- ******************** CSS ******************** -->

@@ -6,6 +6,7 @@
           density="compact"
           label="Esquema de impuestos"
           variant="outlined"
+          :items="parsedTaxSchema"
           item-value="customValue"
           item-title="customTitle"
           v-model="formData.tax_schema"
@@ -17,6 +18,7 @@
           density="compact"
           label="Obligacion fiscal"
           variant="outlined"
+          :items="parsedFiscalObligation"
           item-value="customValue"
           item-title="customTitle"
           v-model="formData.fiscal_obligation"
@@ -46,10 +48,10 @@
 <script setup lang="ts">
 // import { validationFiscalInfoExport } from "@/modules/sync/validations/extraValidations";
 // import { fiscalValidations } from "@/modules/sync/validations/validations";
-import {  inject,  reactive, } from "vue";
+import {  computed, inject,  onMounted,  reactive, ref, } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
 
-const swal: any = inject("$swal");
+const swal: any = inject("swal");
 const clientsStore = useClientsStore();
 
 type formDataType = {
@@ -119,68 +121,69 @@ const submitForm = async () => {
   }
 };
 
-// let taxSchemas = ref([] as any);
-// const setTaxSchema = async () => {
-//   const tax = await clientsStore.getTaxSchema();
-//   taxSchemas.value = tax;
-// };
+let taxSchemas = ref([] as any);
+const setTaxSchema = async () => {
+  const tax = await clientsStore.taxSchemas;
+  taxSchemas.value = tax;
+};
 
-// const parseTaxSchemaValue = (taxSchema: any) => {
-//   return taxSchema.dian_id + "," + taxSchema.name;
-// };
+const parseTaxSchemaValue = (taxSchema: any) => {
+  return taxSchema.dian_id + "," + taxSchema.name;
+};
 
-// const parsedTaxSchema = computed(() => {
-//   if (!taxSchemas.value) return [];
-//   return taxSchemas.value.map((taxSchema: any) => {
-//     return {
-//       ...taxSchema,
-//       customTitle: taxSchema.dian_id + " - " + taxSchema.description,
-//       customValue: parseTaxSchemaValue(taxSchema),
-//     };
-//   });
-// });
+const parsedTaxSchema = computed(() => {
+  if (!taxSchemas.value) return [];
+  return taxSchemas.value.map((taxSchema: any) => {
+    return {
+      ...taxSchema,
+      customTitle: taxSchema.dian_id + " - " + taxSchema.description,
+      customValue: parseTaxSchemaValue(taxSchema),
+    };
+  });
+});
 
-// let fiscals = ref([] as any);
-// const setFiscalObligations = async () => {
-//   const obligations = await clientsStore._getFicalObligations();
-//   fiscals.value = obligations;
-// };
+let fiscals = ref([] as any);
+const setFiscalObligations = async () => {
+  const obligations = await clientsStore.fiscalObligations;
+  fiscals.value = obligations;
+};
 
-// const parseFiscalObligationValue = (fiscal: any) => {
-//   return fiscal.dian_id + "," + fiscal.name;
-// };
+const parseFiscalObligationValue = (fiscal: any) => {
+  return fiscal.dian_id + "," + fiscal.name;
+};
 
-// const parsedFiscalObligation = computed(() => {
-//   if (fiscals.value.lenght == 0) return [];
-//   return fiscals.value.map((fiscal: any) => {
-//     return {
-//       ...fiscal,
-//       customTitle: fiscal.name,
-//       customValue: parseFiscalObligationValue(fiscal),
-//     };
-//   });
-// });
+const parsedFiscalObligation = computed(() => {
+  if (fiscals.value.lenght == 0) return [];
+  return fiscals.value.map((fiscal: any) => {
+    return {
+      ...fiscal,
+      customTitle: fiscal.name,
+      customValue: parseFiscalObligationValue(fiscal),
+    };
+  });
+});
 
-// const setForm = () => {
-//   let res = taxSchemas.value.find(
-//     (taxSchema: any) =>
-//       taxSchema.dian_id == clientsStore.form.tax_schema_dian_id
-//   );
-//   let res2 = fiscals.value.find((fiscal: any) => {
-//     return (
-//       fiscal.dian_id == clientsStore.form.fiscal_obligation_dian_id
-//     );
-//   });
-//   if (!res) return;
-//   formData.tax_schema = parseTaxSchemaValue(res);
-//   formData.fiscal_obligation = parseFiscalObligationValue(res2);
-// };
+const setForm = () => {
+  let res = taxSchemas.value.find(
+    (taxSchema: any) =>
+      taxSchema.dian_id == clientsStore.form.tax_schema_dian_id
+  );
+  let res2 = fiscals.value.find((fiscal: any) => {
+    return (
+      fiscal.dian_id == clientsStore.form.fiscal_obligation_dian_id
+    );
+  });
+  if (!res) return;
+  formData.tax_schema = parseTaxSchemaValue(res);
+  formData.fiscal_obligation = parseFiscalObligationValue(res2);
+};
 
-// onMounted(async () => {
-//   await setTaxSchema();
-//   await setFiscalObligations();
-//   setForm();
-// });
+onMounted(async () => {
+  await setTaxSchema();
+  await setFiscalObligations();
+  setForm();
+});
+
 </script>
 
 <style scoped></style>

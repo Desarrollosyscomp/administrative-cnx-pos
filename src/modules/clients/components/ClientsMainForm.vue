@@ -111,16 +111,18 @@ import MainInfo from "./forms/MainInfo.vue";
 import FormMainInfo from "./forms/FormMainInfo.vue";
 import FormFiscalInfo from "./forms/FormFiscalInfo.vue";
 import FormAddressInfo from "./forms/FormAddressInfo.vue";
-import { inject, onBeforeMount } from "vue";
-import { useRouter } from "vue-router";
+import { inject, onBeforeMount, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 // import validations from "../validations/validations";
 // import * as Yup from "yup";
-// import { useAppStore } from "../../../stores/app-store";
+import { useAppStore } from "../../../stores/app-store";
 import { useClientsStore } from "../store/useClientsStore";
 import ClientCommercialActivities from "./ClientCommercialActivities.vue";
 import FormContactInfo from "./forms/FormContactInfo.vue";
 import AddressInfo from "./forms/AddressInfo.vue"; 
 import ContactInfo from "./forms/ContactInfo.vue";
+import { parseClientsToForm } from "../utils/parse-clients-to-form";
+import { parseLocation } from "../utils/parse-location";
 // import {
 //   validationFiscalInfoExport,
 //   validationMainInfoExport,
@@ -129,41 +131,36 @@ import ContactInfo from "./forms/ContactInfo.vue";
 //   validationComercialActivitiesInfoExport,
 //} from "../validations/extraValidations";
 
-// const appStore = useAppStore();
-const swal: any = inject("$swal");
+const appStore = useAppStore();
+const swal: any = inject("swal");
 const emit = defineEmits(["onClose"]);
-// const route = useRoute();
+const route = useRoute();
 const router = useRouter();
 const clientsStore = useClientsStore()
 // let validationSchema = Yup.object(validations);
 
-// const loadThirdParty = async () => {
-//   let id = route.params.id;
-//   if (!id) return;
-//   clientsStore.moduleMode = "edit";
-//   const response = await clientsStore.getOne(id);
-//   console.log(response.data);
-//   const thirdParty = response.data;
+const loadThirdParty = async () => {
+  let id = route.params.id;
+  if (!id) return;
+  clientsStore.moduleMode = "edit";
+  const response = await clientsStore.getOne(id);
+  console.log(response.data);
+  const thirdParty = response.data;
 
-//   clientsStore.selectedItem = thirdParty;
-//   const location = parseLocation(thirdParty);
-//   clientsStore.selectedCountry = location?.country;
-//   clientsStore.selectedMunicipality = location?.municipality;
-//   clientsStore.selectedDepartment = location?.department;
-//   clientsStore.selectedNeighborhood = location?.neighborhood;
-//   const form = parseThirdPartyToForm(thirdParty);
-//   clientsStore.form = parseThirdPartyToForm(thirdParty);
-//   // clientsStore.selectedFinancialActivities = form.financial_activities;
-//   // console.log(clientsStore.selectedFinancialActivities)
-//   setTimeout(() => {
-//     clientsStore.form.use_points = form.use_points;
-//     clientsStore.form.has_coupons = form.has_coupons;
-//     clientsStore.form.apply_promotions = form.apply_promotions;
-//     clientsStore.form.has_price_list = form.has_price_list;
-//     clientsStore.form.price_list_id = form.price_list_id;
-//     clientsStore.form.neighborhood_id = form.neighborhood_id;
-//   }, 50);
-// };
+  clientsStore.selectedItem = thirdParty;
+  const location = parseLocation(thirdParty);
+  clientsStore.selectedCountry = location?.country;
+  clientsStore.selectedMunicipality = location?.municipality;
+  clientsStore.selectedDepartment = location?.department;
+  clientsStore.selectedNeighborhood = location?.neighborhood;
+  const form = parseClientsToForm(thirdParty);
+  clientsStore.form = parseClientsToForm(thirdParty);
+  // clientsStore.selectedFinancialActivities = form.financial_activities;
+  // console.log(clientsStore.selectedFinancialActivities)
+  setTimeout(() => {
+    clientsStore.form.neighborhood_id = form.neighborhood_id;
+  }, 50);
+};
 
 const submitTotalForm = async () => {
   try {
@@ -194,7 +191,7 @@ const submitTotalForm = async () => {
     let response;
     let addMode = clientsStore.moduleMode == "add";
     if (clientsStore.moduleMode == "add") {
-      response = await clientsStore.add(clientsStore.form);
+      response = await clientsStore.addClient(clientsStore.form);
       console.log(response);
     } else if (clientsStore.moduleMode == "edit") {
       const id = clientsStore.selectedItem.id;
@@ -219,7 +216,7 @@ const submitTotalForm = async () => {
         timer: 1500,
       });
       router.push({
-        name: "sync-third-parties-list",
+        name: "clients-list",
       });
     }
   } catch (error) {
@@ -239,14 +236,14 @@ const onCloseDialog = () => {
 onBeforeMount(() => {
   clientsStore.initialiceForm();
 });
-// const loadInitialData = async () => {
-//   await loadThirdParty();
-//   await clientsStore.loadInitialData();
-// };
-// onMounted(async () => {
-//   await appStore.afterLoading(loadInitialData);
-//   // loadThirdParty();
-// });
+const loadInitialData = async () => {
+  await loadThirdParty();
+  await clientsStore.loadInitialData();
+};
+onMounted(async () => {
+  await appStore.afterLoading(loadInitialData);
+  await loadInitialData()
+});
 </script>
 <style>
 .full-height-card {

@@ -1,8 +1,14 @@
 <template>
-  <v-form >
+  <v-form @submit.prevent="onsubmit">
     <v-row>
       <v-col cols="12">
-        <LocationsComponent />
+        <LocationsComponent :default-selected="{
+          country: clientsStore.selectedCountry,
+          department: clientsStore.selectedDepartment,
+          municipality: clientsStore.selectedMunicipality,
+          neighborhood: clientsStore.selectedNeighborhood,
+          address: clientsStore.form.address
+        }" @onUpdate="onUpdateLocation" @on-update-address="onUpdateAddress" />
       </v-col>
     </v-row>
     <v-row>
@@ -15,7 +21,56 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue';
 import LocationsComponent from '../../../../components/location-component/LocationsComponent.vue';
+import { EmitInterface } from '../../../../interfaces/Emit.interface';
+import { useClientsStore } from '../../store/useClientsStore';
+const clientsStore = useClientsStore()
+
+let location = reactive({
+  country: {},
+  municipality: {},
+  department: {},
+  neighborhood: {},
+});
+
+const onUpdateLocation = (emitted: EmitInterface) => {
+
+  clientsStore.form.country_id =
+    emitted.data.country?.id ?? clientsStore.form.country_id;
+  clientsStore.form.department_id =
+    emitted.data.department?.id ?? clientsStore.form.department_id;
+  clientsStore.form.municipality_id =
+    emitted.data.municipality?.id ?? clientsStore.form.municipality_id;
+  clientsStore.form.neighborhood_id =
+    emitted.data.neighborhood?.id ?? clientsStore.form.neighborhood_id;
+
+
+  location.country = emitted.data.country ?? {};
+  location.department = emitted.data.department ?? {};
+  location.municipality = emitted.data.municipality ?? {};
+  location.neighborhood = emitted.data.neighborhood ?? {};
+};
+
+const onUpdateAddress = (emitted: EmitInterface) => {
+  clientsStore.form.address = emitted.data.address;
+  console.log(clientsStore.form.address);
+};
+
+const onsubmit = () => {
+  // isSubmitting.value = true;
+  // Verifica que todas las validaciones estén completas
+  // if (!locationValidations.value || !contactValidations.value) return;
+  clientsStore.selectedCountry = location.country;
+  clientsStore.selectedDepartment = location.department;
+  clientsStore.selectedMunicipality = location.municipality;
+  clientsStore.selectedNeighborhood = location.neighborhood;
+  clientsStore.toogleDialog();
+  clientsStore.isValidFormAddressContactInfo = false;
+  console.log(clientsStore.form.phones);
+  console.log(clientsStore.form.emails);
+};
+
 
 </script>
 

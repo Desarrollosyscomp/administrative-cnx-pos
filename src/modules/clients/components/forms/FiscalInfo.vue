@@ -5,13 +5,13 @@
       <br />
       <span class="custom-font-size">
         <b> Esquema de impuestos:</b>
-        {{ clientsStore.form.tax_schema_dian_id }}</span
+        {{ clientsStore.parsedTaxSchema() }}</span
       >
       <v-divider></v-divider>
 
       <span class="custom-font-size">
         <b>Obligacion fiscal:</b>
-        {{ clientsStore.form.fiscal_obligation_dian_id }}
+        {{ clientsStore.parsedFiscalObligation() }}
       </span>
       <v-divider></v-divider>
       <br />

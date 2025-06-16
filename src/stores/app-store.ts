@@ -10,7 +10,7 @@ export const useAppStore: any = defineStore({
   actions: {
     async afterLoading(f: Function) {
       this.showLoadingScreen = true;
-      await f();
+      await f;
       this.showLoadingScreen = false;
     },
     async getAllPermissions() {

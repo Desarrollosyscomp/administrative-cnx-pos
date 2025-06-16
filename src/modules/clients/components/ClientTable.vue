@@ -22,21 +22,21 @@
               <template v-slot:badge>
                 <span class="pa-2">{{
                   item.is_active ? "Activo" : "Inactivo"
-                }}</span>
+                  }}</span>
               </template>
             </v-badge>
           </td>
           <td class="text-right">
             <v-menu location="start">
               <template v-slot:activator="{ props }">
-                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" >
+                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props">
                   Opciones
                 </v-btn>
               </template>
               <v-list>
                 <v-list-item value="1">
-                  <v-list-item-title>
-                   <v-icon color="blue-lighten-2" size="small">mdi-pencil</v-icon> Editar cliente
+                  <v-list-item-title @click="openEditForm">
+                    <v-icon color="blue-lighten-2" size="small">mdi-pencil</v-icon> Editar cliente
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item value="2">
@@ -51,8 +51,8 @@
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item value="3">
-                  <v-list-item-title>
-                   <v-icon size="small" >mdi-fingerprint</v-icon> Permisos
+                  <v-list-item-title @click="onPermissions">
+                    <v-icon size="small">mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
                 </v-list-item>
               </v-list>
@@ -62,9 +62,30 @@
       </tbody>
     </v-table>
   </div>
+  <v-dialog width="540" v-model="clientsStore.openDialog">
+    <div>
+      <v-card>
+        <v-card-text>
+          <ClientsPermissions v-if="clientsStore.moduleMode === 'permissions'" />
+        </v-card-text>
+      </v-card>
+    </div>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
+import router from '../../../router';
+import { useClientsStore } from '../store/useClientsStore';
+import ClientsPermissions from './ClientsPermissions.vue';
+const clientsStore = useClientsStore()
+const openEditForm = () => {
+  clientsStore.moduleMode = "edit";
+  router.push("/client/form");
+};
+const onPermissions = () => {
+  clientsStore.moduleMode = "permissions";
+  clientsStore.toogleDialog();
+};
 
 </script>
 

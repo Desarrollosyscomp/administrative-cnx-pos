@@ -36,19 +36,6 @@ export const useLocationsComponentStore: any = defineStore({
         return response.data.response.departments;
       }
     },
-    async addDepartment(data: any) {
-      let response = await LocationsService.addDepartment(data);
-      if (response.status == 201) {
-        return response.data.response.department;
-      }
-    },
-    async updateDepartment(id: number, data: any) {
-      let response = await LocationsService.updateDepartment(id, data);
-      if (response.status == 200) {
-        return response.data.response.department;
-        // return response.data;
-      }
-    },
     // ********************* MUNICIPALITIES ********************* \\
     async getMunicipalities(department_id: number) {
       let response = await LocationsService.getMunicipalitiesByDepartment(
@@ -59,18 +46,6 @@ export const useLocationsComponentStore: any = defineStore({
         return response.data.response.municipalities;
       }
     },
-    async addMunicipality(data: any) {
-      let response = await LocationsService.addMunicipality(data);
-      if (response.status == 201) {
-        return response.data.response.municipality;
-      }
-    },
-    async updateMunicipality(id: number, data: any) {
-      let response = await LocationsService.updateMunicipality(id, data);
-      if (response.status == 200) {
-        return response.data.response.department;
-      }
-    },
     // ********************* NEIGHBORHOODS ********************* \\
     async getNeighborhoods(municipality_id: number) {
       let response = await LocationsService.getNeighborhoodsByMunicipality(
@@ -79,19 +54,6 @@ export const useLocationsComponentStore: any = defineStore({
       if (response.status == 200) {
         this.neighborhoods = response.data.response.neighborhoods;
         return response.data.response.neighborhoods;
-      }
-    },
-    async addNeighborhood(data: any) {
-      let response = await LocationsService.addNeighborhood(data);
-      if (response.status == 201) {
-        return response.data.response.neighborhood;
-      }
-    },
-    async updateNeighborhood(id: number, data: any) {
-      let response = await LocationsService.updateNeighborhood(id, data);
-      if (response.status == 200) {
-        //return response.data.response.neighborhoods;
-        return response.data;
       }
     },
   },

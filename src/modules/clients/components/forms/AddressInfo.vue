@@ -1,44 +1,45 @@
 <template>
-    <v-card class="full-height-card" :class="[clientsStore.isValidFormMainInfo && 'style-card-error']">
-        <v-card-text>
-            <p><b>Información residencial</b></p>
+  <v-card class="full-height-card" :class="[clientsStore.isValidFormMainInfo && 'style-card-error']">
+    <v-card-text>
+      <p><b>Información residencial</b></p>
 
-            <br />
-            <span class="custom-font-size">
-                <b> País: </b>
-                {{ clientsStore.form.first_name }}
-                <br />
-            </span>
-            <v-divider></v-divider>
-            <span class="custom-font-size">
-                <b> Departamento: </b>
-                {{ clientsStore.form.first_name }}
-                <br />
-            </span>
-            <v-divider></v-divider>
-            <span class="custom-font-size">
-                <b> Municipio: </b>
-                {{ clientsStore.form.first_name }}
-                <br />
-            </span>
-            <v-divider></v-divider>
-            <span class="custom-font-size">
-                <b> Barrio: </b>
-                {{ clientsStore.form.first_name }}
-                <br />
-            </span>
-            <v-divider></v-divider>
+      <br />
+      <span class="custom-font-size">
+        <b> País: </b>
+        {{ clientsStore.selectedCountry?.name ?? '' }}
+        <br />
+      </span>
+      <v-divider></v-divider>
+      <span class="custom-font-size">
+        <b> Departamento: </b>
+        {{ clientsStore.selectedDepartment?.name ?? '' }}
+        <br />
+      </span>
+      <v-divider></v-divider>
+      <span class="custom-font-size">
+        <b> Municipio: </b>
+        {{ clientsStore.selectedMunicipality?.name ?? '' }}
+        <br />
+      </span>
+      <v-divider></v-divider>
+      <span class="custom-font-size">
+        <b> Barrio: </b>
+        {{ clientsStore.selectedNeighborhood?.name ?? '' }}
+        <br />
+      </span>
+      <v-divider></v-divider>
 
-            <span class="custom-font-size">
-                <b> Dirección: </b>
-                {{ clientsStore.form.identification_number }}</span>
-            <v-divider></v-divider>
-
-            <br />
-            <v-btn block text="Abrir formulario" variant="outlined" color="#841911" size="small"
-                @click="openMainInfoForm"></v-btn>
-        </v-card-text>
-    </v-card>
+      <span class="custom-font-size">
+        <b> Dirección: </b>
+        {{ clientsStore.form.address }}</span>
+      <v-divider></v-divider>
+    </v-card-text>
+    <v-spacer></v-spacer>
+    <v-card-actions>
+      <v-btn block text="Abrir formulario" variant="outlined" color="#841911" size="small" class=""
+        @click="openMainInfoForm"></v-btn>
+    </v-card-actions>
+  </v-card>
 
 </template>
 <script setup lang="ts">

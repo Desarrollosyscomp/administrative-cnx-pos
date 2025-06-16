@@ -35,6 +35,7 @@ import ClientList from "../components/ClientList.vue";
 import { useClientsStore } from "../store/useClientsStore";
 
 const clientsStore = useClientsStore();
+
 const openAddForm = () => {
   clientsStore.moduleMode = "add";
   router.push("/client/form");

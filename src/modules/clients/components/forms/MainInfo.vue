@@ -5,48 +5,46 @@
 
       <br />
       <span class="custom-font-size">
+        <b> Numero documento: </b>
+        {{ clientsStore.getFullIdentification() }}</span>
+      <v-divider></v-divider>
+
+      <span class="custom-font-size">
         <b> Nombres: </b>
-        {{ clientsStore.form.first_name }}
+        {{ clientsStore.getFullName() }}
         <br />
       </span>
       <v-divider></v-divider>
 
       <v-divider></v-divider>
       <span class="custom-font-size">
-        <b> Numero documento: </b>
-        {{ clientsStore.form.identification_number }}</span
-      >
-      <v-divider></v-divider>
-      <span class="custom-font-size">
         <b> Razón social: </b>
-        {{ clientsStore.form.identification_number }}</span
-      >
+        {{ clientsStore.form.name }}</span>
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Nombre comercial: </b>
-        {{ clientsStore.form.identification_number }}</span
-      >
+        {{ clientsStore.form.tradename }}</span>
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Regimen: </b>
-        {{ clientsStore.form.identification_number }}</span
-      >
+        {{ clientsStore.getRegimenName() }}</span>
       <v-divider></v-divider>
-
-      <br />
+    </v-card-text>
+    <v-card-actions>
       <v-btn
         block
         text="Abrir formulario"
         variant="outlined"
         color="#841911"
         size="small"
+        class=""
         @click="openMainInfoForm"
       ></v-btn>
-    </v-card-text>
+    </v-card-actions>
   </v-card>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive,  watch } from "vue";
+import { onMounted, reactive, watch } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
 // import { useIdentificationTypesStore } from "@/modules/identification-types/stores/identification-types.store";
 // import { useRegimesStore } from "@/modules/regimes/stores/regimes.store";

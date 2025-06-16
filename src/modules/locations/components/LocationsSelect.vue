@@ -1,6 +1,5 @@
 <!-- ******************** HTML ******************** -->
 <template>
-
   <v-select
     v-model="selectedLocation"
     :items="items"
@@ -20,7 +19,6 @@
 <script lang="ts" setup>
 
 import { ref, onMounted } from "vue";
-
 const props = defineProps({
   title: {
     type: String,
@@ -74,6 +72,7 @@ const onUpdateLocation = (value: any) => {
 // })
 onMounted(() => {
   setDefault();
+  
 });
 </script>
 <!-- ******************** CSS ******************** -->

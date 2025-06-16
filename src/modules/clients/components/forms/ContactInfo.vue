@@ -80,20 +80,20 @@
           </div>
         </v-menu>
       </div>
-
       <v-divider></v-divider>
-      <br>
-      <br>
+    </v-card-text>
+    <v-spacer></v-spacer>
+    <v-card-actions>
       <v-btn
         block
         text="Abrir formulario"
         variant="outlined"
         color="#841911"
         size="small"
-        class="mt-5"
+        class="mt-6"
         @click="openMainInfoForm"
       ></v-btn>
-    </v-card-text>
+    </v-card-actions>
   </v-card>
 </template>
 <script setup lang="ts">

@@ -1,6 +1,6 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <UsersTable @onEdit="goToEdit" @onDeactivate="unableItem"  />
+  <UsersTable @onEdit="goToEdit" @onDeactivate="unableItem" @onManagePermissions="managePermissions"  />
   <UsersCards @onEdit="goToEdit" @onDeactivate="unableItem" />
   <div align="center" class="mt-4">
     <Paginator
@@ -32,7 +32,7 @@ import UsersTable from "./UsersTable.vue";
 import { onMounted } from "vue-demi";
 
 const usersStore = useUsersStore();
-const emit = defineEmits(["onEdit", "onDeactivate", "onAddEnterprise"]);
+const emit = defineEmits(["onEdit", "onDeactivate", "onManagePermissions"]);
 
 
 const goToEdit = (emitted: EmitInterface) => {
@@ -45,6 +45,12 @@ const unableItem = (emitted: EmitInterface) => {
   emit("onDeactivate", {
     name: "UsersList.onDeactivatet",
     data: emitted.data,
+  });
+};
+const managePermissions = async (emitted: EmitInterface) => {
+  emit("onManagePermissions", {
+    name: "UsersList.onManagePermissions",
+    data: emitted.data 
   });
 };
 const onChangePage = (emitted: EmitInterface) => {
