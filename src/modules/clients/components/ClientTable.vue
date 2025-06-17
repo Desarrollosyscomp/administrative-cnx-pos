@@ -22,7 +22,7 @@
               <template v-slot:badge>
                 <span class="pa-2">{{
                   item.is_active ? "Activo" : "Inactivo"
-                  }}</span>
+                }}</span>
               </template>
             </v-badge>
           </td>
@@ -62,29 +62,18 @@
       </tbody>
     </v-table>
   </div>
-  <v-dialog width="540" v-model="clientsStore.openDialog">
-    <div>
-      <v-card>
-        <v-card-text>
-          <ClientsPermissions v-if="clientsStore.moduleMode === 'permissions'" />
-        </v-card-text>
-      </v-card>
-    </div>
-  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import router from '../../../router';
 import { useClientsStore } from '../store/useClientsStore';
-import ClientsPermissions from './ClientsPermissions.vue';
 const clientsStore = useClientsStore()
 const openEditForm = () => {
   clientsStore.moduleMode = "edit";
   router.push("/client/form");
 };
 const onPermissions = () => {
-  clientsStore.moduleMode = "permissions";
-  clientsStore.toogleDialog();
+  router.push("/client/permissions");
 };
 
 </script>
