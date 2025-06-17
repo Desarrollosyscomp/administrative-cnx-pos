@@ -15,11 +15,16 @@ import { ClientsService } from "../services/clients.service";
 export const useClientsStore: any = defineStore({
   id: "clients",
   state: () => ({
-    ModuleMode: "",
+    moduleMode: "add",
     openDialog: false,
     mode: "",
     form: {} as any,
     selectedItem: {} as any,
+    isValidFormMainInfo: false,
+    isValidFormFiscalInfo: false,
+    isValidFormLocationInfo:false,
+    isValidFormContactInfo: false,
+
     financialActivitiesListTest: [
       {
         name: "Actividad 1",
@@ -114,7 +119,7 @@ export const useClientsStore: any = defineStore({
 
     getFullIdentification() {
       const identificationIsSetted = this.form.identification_type_code;
-      if (!identificationIsSetted) return "hola";
+      if (!identificationIsSetted) return "";
 
       const identificationType = this.identificationTypes.find(
         (_identificationType: any) =>  _identificationType.dian_id === this.form.identification_type_code
@@ -187,6 +192,44 @@ export const useClientsStore: any = defineStore({
           data: {},
         };
       }
+    },
+
+    getFiscalInfoForm() {
+      return {
+        tax_schema: this.form.tax_schema_dian_id,
+        fiscal_obligation: this.form.fiscal_obligation_dian_id,
+      };
+    },
+    getMainInfoForm() {
+      return {
+        firstName: this.form.first_name,
+        secondName: this.form.second_name,
+        surename: this.form.sure_name,
+        second_surename: this.form.second_sure_name,
+        tradename: this.form.tradename,
+        name: this.form.name,
+        documentType: this.form.identification_type_code,
+        documentNumber: this.form.identification_number,
+        regimen: this.form.regime_dian_id,
+      };
+    },
+    getLocationInfoForm() {
+      return {
+        country_id: this.form.country_id,
+        department_id: this.form.department_id,
+        municipality_id: this.form.municipality_id,
+      };
+    },
+    getContactInfoForm() {
+      return {
+        phones: this.form.phones,
+        emails: this.form.emails,
+      };
+    },
+    getFinancialActivitiesForm() {
+      return {
+        financial_activities: this.form.financial_activities,
+       };
     },
   },
 });

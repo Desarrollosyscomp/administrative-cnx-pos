@@ -9,8 +9,12 @@
           neighborhood: clientsStore.selectedNeighborhood,
           address: clientsStore.form.address
         }" @onUpdate="onUpdateLocation" @on-update-address="onUpdateAddress" />
+        <div align="center" v-if="show_error_message">
+          <span class="text-red">Debe ingresarse un país, departamento y municipio válidos</span>
+        </div>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col md="12">
         <v-btn rounded="xs" size="large" block color="#841811ff" variant="outlined" class="mt-n3" density="compact"
@@ -21,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import LocationsComponent from '../../../../components/location-component/LocationsComponent.vue';
 import { EmitInterface } from '../../../../interfaces/Emit.interface';
 import { useClientsStore } from '../../store/useClientsStore';
@@ -32,6 +36,15 @@ let location = reactive({
   municipality: {},
   department: {},
   neighborhood: {},
+});
+
+
+const locationValidations = computed(() => {
+  return (
+    clientsStore.form.country_id &&
+    clientsStore.form.department_id &&
+    clientsStore.form.municipality_id
+  );
 });
 
 const onUpdateLocation = (emitted: EmitInterface) => {
@@ -57,10 +70,15 @@ const onUpdateAddress = (emitted: EmitInterface) => {
   console.log(clientsStore.form.address);
 };
 
+let show_error_message = ref(false)
+
 const onsubmit = () => {
   // isSubmitting.value = true;
   // Verifica que todas las validaciones estén completas
-  // if (!locationValidations.value || !contactValidations.value) return;
+  if (!locationValidations.value) {
+    show_error_message.value = true
+    return
+  };
   clientsStore.selectedCountry = location.country;
   clientsStore.selectedDepartment = location.department;
   clientsStore.selectedMunicipality = location.municipality;

@@ -10,6 +10,7 @@
           item-value="customValue"
           item-title="customTitle"
           v-model="formData.tax_schema"
+          :rules="taxSchemaRules"
         >
         </v-select>
       </v-col>
@@ -22,6 +23,7 @@
           item-value="customValue"
           item-title="customTitle"
           v-model="formData.fiscal_obligation"
+          :rules="fiscalObligationRules"
         >
         </v-select>
       </v-col>
@@ -46,10 +48,10 @@
 </template>
 
 <script setup lang="ts">
-// import { validationFiscalInfoExport } from "@/modules/sync/validations/extraValidations";
-// import { fiscalValidations } from "@/modules/sync/validations/validations";
+import { fiscalValidations } from "../../validations/validations";
 import {  computed, inject,  onMounted,  reactive, ref, } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
+import { validationFiscalInfoExport } from "../../validations/extraValidations";
 
 const swal: any = inject("swal");
 const clientsStore = useClientsStore();
@@ -65,31 +67,31 @@ let formData = reactive<formDataType>({
 });
 
 
-// const taxSchemaRules = ref([
-//   async (value: any) => {
-//     try {
-//       await fiscalValidations.tax_schema.validate(value);
-//       return true;
-//     } catch (e: any) {
-//       return "El esquema de impuestos es requerido";
-//     }
-//   },
-// ]);
-// const fiscalObligationRules = ref([
-//   async (value: any) => {
-//     try {
-//       await fiscalValidations.fiscal_obligation.validate(value);
-//       return true;
-//     } catch (e: any) {
-//       return "La obligacion fiscal es requerida";
-//     }
-//   },
-// ]);
+const taxSchemaRules = ref([
+  async (value: any) => {
+    try {
+      await fiscalValidations.tax_schema.validate(value);
+      return true;
+    } catch (e: any) {
+      return "El esquema de impuestos es requerido";
+    }
+  },
+]);
+const fiscalObligationRules = ref([
+  async (value: any) => {
+    try {
+      await fiscalValidations.fiscal_obligation.validate(value);
+      return true;
+    } catch (e: any) {
+      return "La obligacion fiscal es requerida";
+    }
+  },
+]);
 
 
 const submitForm = async () => {
-  // await validationFiscalInfoExport(formData)
   try {
+    await validationFiscalInfoExport(formData)
     if (typeof formData.tax_schema == "string") {
       clientsStore.form.tax_schema_dian_id =
         formData.tax_schema.split(",")[0];
@@ -111,13 +113,8 @@ const submitForm = async () => {
       showConfirmButton: false,
       timer: 1500,
     });
-  } catch {
-    swal.fire({
-      icon: "warning",
-      text: "Debe llenar los campos!!",
-      showConfirmButton: false,
-      timer: 1500,
-    });
+  } catch (e:any){
+    console.log(e.message)   
   }
 };
 

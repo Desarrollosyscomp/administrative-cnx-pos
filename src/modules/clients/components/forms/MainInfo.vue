@@ -11,7 +11,7 @@
 
       <span class="custom-font-size">
         <b> Nombres: </b>
-        {{ clientsStore.getFullName() }}
+        {{ isCompany ? 'N/A' : clientsStore.getFullName() }}
         <br />
       </span>
       <v-divider></v-divider>
@@ -19,11 +19,11 @@
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Razón social: </b>
-        {{ clientsStore.form.name }}</span>
+        {{ isCompany ? clientsStore.form.name : 'N/A' }}</span>
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Nombre comercial: </b>
-        {{ clientsStore.form.tradename }}</span>
+        {{ isCompany ? clientsStore.form.tradename : 'N/A' }}</span>
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Regimen: </b>
@@ -44,8 +44,10 @@
   </v-card>
 </template>
 <script setup lang="ts">
-import { onMounted, reactive, watch } from "vue";
+import { computed, onMounted, reactive, watch } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
+import { COMPANY_DIAN_IDS } from "../../validations/validations";
+
 // import { useIdentificationTypesStore } from "@/modules/identification-types/stores/identification-types.store";
 // import { useRegimesStore } from "@/modules/regimes/stores/regimes.store";
 
@@ -112,6 +114,10 @@ watch(
 //   menu.value = false;
 //   console.log(clientsStore.form.barcode);
 // };
+
+const isCompany = computed(()=>{
+  return COMPANY_DIAN_IDS.includes(clientsStore.form.identification_type_code)
+})
 
 onMounted(() => {
   // setIdentification();

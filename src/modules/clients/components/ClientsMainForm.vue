@@ -13,21 +13,12 @@
                         ? "Formulario de creacion de un cliente"
                         : "Formulario de edicion de un cliente"
                     }}
-                  </p></b
-                >
+                  </p>
+                </b>
               </v-card-text>
             </div>
-            <div
-              align="end"
-              style="width: 50%; display: inline-block"
-              class="ma-n2"
-            >
-              <v-btn
-                color="success"
-                variant="outlined"
-                size="small"
-                type="submit"
-              >
+            <div align="end" style="width: 50%; display: inline-block" class="ma-n2">
+              <v-btn color="success" variant="outlined" size="small" type="submit">
                 {{
                   clientsStore.moduleMode === "add"
                     ? "Crear"
@@ -64,11 +55,7 @@
       </v-col>
     </v-row>
 
-    <v-dialog
-      max-width="700"
-      v-model="clientsStore.openDialog"
-      @afterLeave="onCloseDialog"
-    >
+    <v-dialog max-width="700" v-model="clientsStore.openDialog" @afterLeave="onCloseDialog">
       <v-card>
         <v-card-title>
           <div v-if="clientsStore.mode == 'main-info'">
@@ -119,17 +106,17 @@ import { useAppStore } from "../../../stores/app-store";
 import { useClientsStore } from "../store/useClientsStore";
 import ClientCommercialActivities from "./ClientCommercialActivities.vue";
 import FormContactInfo from "./forms/FormContactInfo.vue";
-import AddressInfo from "./forms/AddressInfo.vue"; 
+import AddressInfo from "./forms/AddressInfo.vue";
 import ContactInfo from "./forms/ContactInfo.vue";
 import { parseClientsToForm } from "../utils/parse-clients-to-form";
 import { parseLocation } from "../utils/parse-location";
-// import {
-//   validationFiscalInfoExport,
-//   validationMainInfoExport,
-//   validationFinancialInfoExport,
-//   validationLocationContactInfoExport,
-//   validationComercialActivitiesInfoExport,
-//} from "../validations/extraValidations";
+import {
+  validationFiscalInfoExport,
+  validationMainInfoExport,
+  validationContactInfoExport,
+  validationLocationInfoExport,
+  validationComercialActivitiesInfoExport,
+} from "../validations/extraValidations";
 
 const appStore = useAppStore();
 const swal: any = inject("swal");
@@ -164,61 +151,61 @@ const loadThirdParty = async () => {
 
 const submitTotalForm = async () => {
   try {
-    // clientsStore.isSubmitTotalForm = true;
-    // clientsStore.isValidFormMainInfo = true;
-    // await validationMainInfoExport(clientsStore.getMainInfoForm()),
-    //   (clientsStore.isValidFormMainInfo = false);
-    // clientsStore.isValidFormFiscalInfo = true;
-    // await validationFiscalInfoExport(clientsStore.getFiscalInfoForm()),
-    //   (clientsStore.isValidFormFiscalInfo = false);
-    // clientsStore.isValidFormAddressContactInfo = true;
-    // await validationLocationContactInfoExport(
-    //   clientsStore.getLocationContactInfoForm()
-    // ),
-    //   (clientsStore.isValidFormAddressContactInfo = false);
+    clientsStore.isValidFormMainInfo = true;
+    await validationMainInfoExport(clientsStore.getMainInfoForm());
+    clientsStore.isValidFormMainInfo = false;
+    clientsStore.isValidFormFiscalInfo = true;
+    await validationFiscalInfoExport(clientsStore.getFiscalInfoForm());
+    clientsStore.isValidFormFiscalInfo = false;
+    clientsStore.isValidFormLocationInfo = true;
+    await validationLocationInfoExport(
+       clientsStore.getLocationInfoForm()
+    );
+    clientsStore.isValidFormLocationInfo = false;
+    clientsStore.isValidFormContactInfo = true;
+    await validationContactInfoExport(
+       clientsStore.getContactInfoForm()
+    )
+    clientsStore.isValidFormContactInfo = false;
+    clientsStore.isValidFormComercialActivities = true;
+    await validationComercialActivitiesInfoExport(
+      clientsStore.getFinancialActivitiesForm()
+    )
+    clientsStore.isValidFormComercialActivities = false;
 
-    // clientsStore.isValidFormFinancialInfo = true;
-    // await validationFinancialInfoExport(
-    //   clientsStore.getFinancialInfoForm()
-    // ),
-    //   (clientsStore.isValidFormFinancialInfo = false);
-    // clientsStore.isValidFormComercialActivities = true;
-    // await validationComercialActivitiesInfoExport(
-    //   clientsStore.getFinancialActivitiesForm()
-    // ),
-    //   (clientsStore.isValidFormComercialActivities = false);
+    alert('Enviar')
 
-    let response;
-    let addMode = clientsStore.moduleMode == "add";
-    if (clientsStore.moduleMode == "add") {
-      response = await clientsStore.addClient(clientsStore.form);
-      console.log(response);
-    } else if (clientsStore.moduleMode == "edit") {
-      const id = clientsStore.selectedItem.id;
-      response = await clientsStore.edit(
-        id,
-        clientsStore.form
-      );
-      console.log(response);
-    }
-    if (response.status === 200) {
-      await swal.fire({
-        icon: "success",
-        text: "Agregado con éxito",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } else {
-      swal.fire({
-        icon: "success",
-        text: addMode ? "Agregado con éxito" : "Actualizado con éxito",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      router.push({
-        name: "clients-list",
-      });
-    }
+    // let response;
+    // let addMode = clientsStore.moduleMode == "add";
+    // if (clientsStore.moduleMode == "add") {
+    //   response = await clientsStore.addClient(clientsStore.form);
+    //   console.log(response);
+    // } else if (clientsStore.moduleMode == "edit") {
+    //   const id = clientsStore.selectedItem.id;
+    //   response = await clientsStore.edit(
+    //     id,
+    //     clientsStore.form
+    //   );
+    //   console.log(response);
+    // }
+    // if (response.status === 200) {
+    //   await swal.fire({
+    //     icon: "success",
+    //     text: "Agregado con éxito",
+    //     showConfirmButton: false,
+    //     timer: 1500,
+    //   });
+    // } else {
+    //   swal.fire({
+    //     icon: "success",
+    //     text: addMode ? "Agregado con éxito" : "Actualizado con éxito",
+    //     showConfirmButton: false,
+    //     timer: 1500,
+    //   });
+    //   router.push({
+    //     name: "clients-list",
+    //   });
+    // }
   } catch (error) {
     console.log(error);
     swal.fire({

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="full-height-card" :class="[clientsStore.isValidFormMainInfo && 'style-card-error']">
+  <v-card class="full-height-card" :class="[clientsStore.isValidFormLocationInfo && 'style-card-error']">
     <v-card-text>
       <p><b>Información residencial</b></p>
 

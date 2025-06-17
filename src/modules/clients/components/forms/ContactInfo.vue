@@ -1,5 +1,5 @@
 <template>
-  <v-card class="full-height-card" :class="[clientsStore.isValidFormAddressContactInfo && 'style-card-error']">
+  <v-card class="full-height-card" :class="[clientsStore.isValidFormContactInfo && 'style-card-error']">
     <v-card-text>
       <p><b>Información de contacto</b></p>
       <br />
