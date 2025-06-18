@@ -38,12 +38,12 @@
             title="Clientes"
             value="client-list"
           ></v-list-item>
-          <v-list-item
+          <!-- <v-list-item
             @click="goTo('permissions-list')"
             prepend-icon="mdi-fingerprint"
             title="Permisos usuarios"
             value="permissions-list"
-          ></v-list-item>
+          ></v-list-item> -->
           <v-list-item
             @click="logOut"
             prepend-icon="mdi-logout"

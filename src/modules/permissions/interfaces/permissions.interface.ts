@@ -1,12 +1,6 @@
 export interface PermissionsInterface {
-    id:          number;
-    //company_id:  number;
-    name:        string;
-    description: null;
-    is_active:   number;
-    createdAt:   string;
-    updatedAt:   string;
-    permissions_type_id: number;
+    module_id: number,
+    action_id: number
 }
 
 export interface CompanyInterface {

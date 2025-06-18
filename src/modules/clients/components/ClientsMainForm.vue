@@ -99,7 +99,7 @@ import FormMainInfo from "./forms/FormMainInfo.vue";
 import FormFiscalInfo from "./forms/FormFiscalInfo.vue";
 import FormAddressInfo from "./forms/FormAddressInfo.vue";
 import { inject, onBeforeMount, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 // import validations from "../validations/validations";
 // import * as Yup from "yup";
 import { useAppStore } from "../../../stores/app-store";
@@ -122,7 +122,6 @@ const appStore = useAppStore();
 const swal: any = inject("swal");
 const emit = defineEmits(["onClose"]);
 const route = useRoute();
-const router = useRouter();
 const clientsStore = useClientsStore()
 // let validationSchema = Yup.object(validations);
 

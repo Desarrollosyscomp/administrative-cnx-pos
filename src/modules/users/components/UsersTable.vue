@@ -60,11 +60,11 @@
                     usuario
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="3" @click="managePermissions(item)">
+                <!-- <v-list-item value="3" @click="managePermissions(item)">
                   <v-list-item-title>
                    <v-icon size="small" >mdi-fingerprint</v-icon> Permisos
-                  </v-list-item-title>
-                </v-list-item>
+                  </v-list-item-title> 
+                </v-list-item> --> 
               </v-list>
             </v-menu>
            <!-- <v-tooltip v-if="item.is_active" text="Editar" location="top">
