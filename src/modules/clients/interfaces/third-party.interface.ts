@@ -1,6 +1,7 @@
-import { AddressInterface } from "../../../interfaces/address.interface";
+import { TEmail } from "../../../interfaces/email.interface";
 import { Identification} from "../../../interfaces/identification-types.interface";
 import { PersonInterface } from "../../../interfaces/people.interface";
+import { TPhone } from "../../../interfaces/phone.interface";
 import { TFinancialActivities } from "./financial-activity.type";
 
 export interface Company {
@@ -9,16 +10,18 @@ export interface Company {
   legal_representative_id: number;
   identification: Identification;
   name: string;
-  address: AddressInterface;
+  // address: AddressInterface;
   created_at: string;
   updated_at: string;
+  emails: Array<TEmail>;
+  phones: Array<TPhone>;
 }
 
 export interface TThirdParty {
   id: number;
   resolution_type_id: number;
   tradename: string;
-  third_type: string;
+  clientable_type: string;
   price_list_id: number;
   third_id: number;
   tax_schema_dian_id: string;

@@ -14,6 +14,14 @@ export const ClientsRouter = [
     meta: { requiresAuth: true },
   },
   {
+    path: "/client/form/:id",
+    name: "client-form",
+    isAuth: false,
+    //@ts-ignore
+    component: () => import("../components/ClientsMainForm.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
     path: "/client/permissions",
     name: "client-permissions",
     isAuth: false,

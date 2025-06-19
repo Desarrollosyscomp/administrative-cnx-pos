@@ -1,7 +1,5 @@
 import { TRegime } from "../modules/clients/interfaces/regime.type";
-import { TEmail } from "./email.interface";
-import { TPhone } from "./phone.interface";
-
+import { CountryInterface, DepartmentInterface, MunicipalityInterface, NeighborhoodInterface } from "../modules/locations/interfaces/locations.interface";
 
 // export type TIdentificationType = {
 //     id: number;
@@ -15,8 +13,8 @@ import { TPhone } from "./phone.interface";
 // }
 
 export interface Identification {
-  identification_type_id: number;
-  identification_number: number;
+  document_type_dian_id: number;
+  document_number: number;
   digit: number;
   identification_type: string;
   identification_id: number;
@@ -24,10 +22,13 @@ export interface Identification {
   created_at: Date;
   updated_at: null;
   identificationType: IdentificationTypeInterface;
-  emails: Array<TEmail>; 
-  phones: Array<TPhone>;
   regime: TRegime;
-  regime_id: string;
+  regime_dian_id: string;
+  address: string
+  country: CountryInterface;
+  department: DepartmentInterface;
+  municipality: MunicipalityInterface;
+  neighborhood: NeighborhoodInterface;
 }
 
 export interface IdentificationTypeInterface {

@@ -227,10 +227,10 @@ const emitAddress = () => {
 };
 
 const setForm = () => {
-  defaultCountryId.value = props.defaultSelected.country.id ?? 0;
-  defaultDepartmentId.value = props.defaultSelected.department.id ?? 0;
-  defaultMunicipalityId.value = props.defaultSelected.municipality.id ?? 0;
-  defaultNeighborhoodId.value = props.defaultSelected.neighborhood.id ?? 0;
+  defaultCountryId.value = props.defaultSelected.country?.id ?? 0;
+  defaultDepartmentId.value = props.defaultSelected.department?.id ?? 0;
+  defaultMunicipalityId.value = props.defaultSelected.municipality?.id ?? 0;
+  defaultNeighborhoodId.value = props.defaultSelected.neighborhood?.id ?? 0;
   formData.country = props.defaultSelected.country;
   formData.department = props.defaultSelected.department;
   formData.municipality = props.defaultSelected.municipality;

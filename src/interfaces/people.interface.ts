@@ -1,5 +1,7 @@
-import { AddressInterface } from "./address.interface";
+// import { AddressInterface } from "./address.interface";
+import { TEmail } from "./email.interface";
 import { Identification } from "./identification-types.interface";
+import { TPhone } from "./phone.interface";
 
 export interface PersonInterface {
   id: number;
@@ -13,5 +15,7 @@ export interface PersonInterface {
   updatedAt: string;
   people_type_id: number;
   identification: Identification;
-  address: AddressInterface;
+  // address: AddressInterface;
+  emails: Array<TEmail>;
+  phones: Array<TPhone>;
 }

@@ -16,7 +16,10 @@
       </v-card-title>
       <v-card-text>
         <div class="ml-2 mb-n2">
-          <v-switch v-model="usersStore.is_active" color="#841811ff" :label="usersStore.is_active ?
+          <v-switch 
+          v-model="usersStore.is_active" 
+          color="#841811ff" 
+          :label="usersStore.is_active ?
             'Activos' : 'Inactivos'
             "></v-switch>
         </div>
@@ -65,17 +68,17 @@ import UsersList from "../components/UsersList.vue";
 import { useUsersStore } from "../stores/users.store";
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 import UsersEdit from "../components/UsersEdit.vue";
-import { useAppStore } from "../../../stores/app-store";
+// import { useAppStore } from "../../../stores/app-store";
 import UsersPermissions from "../components/UsersPermissions.vue";
 // import { useAppStore } from "@/stores/app-store";
 // import { useAppStore } from "../../../stores/app-store";
 
 const usersStore = useUsersStore();
-const appStore = useAppStore();
+// const appStore = useAppStore();
 
 const swal: any = inject("swal");
 
-let switchValue = ref(false);
+let switchValue = ref(true);
 
 const openModalCreateUser = () => {
   usersStore.toogleDialog()
@@ -132,7 +135,7 @@ const unableItem = (emitted: EmitInterface) => {
           });
         } else {
           await swal.fire({
-            icon: "danger",
+            icon: "warning",
             text: "Ocurrio un error ",
             showConfirmButton: false,
             timer: 1000,
@@ -142,15 +145,13 @@ const unableItem = (emitted: EmitInterface) => {
     });
 };
 
-const simpleSearch = () => {
-  appStore.afterLoading(async () => {
+const simpleSearch = async() => {
     usersStore.page = 1;
     usersStore.is_active = switchValue.value;
     usersStore.advancedSearchActive = false;
     usersStore.search = usersStore.search.trim();
     await usersStore.loadPaginatedList();
-  });
-  //console.log(search.value.trim());
+
 };
 
 

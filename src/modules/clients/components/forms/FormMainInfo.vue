@@ -176,10 +176,10 @@ let mainForm = reactive<MainFormType>({
   surename: "",
   second_surename: "",
   tradename: "",
-  name: "asdg",
-  documentType: "50",
-  documentNumber: "123124",
-  regimen: '48',
+  name: "",
+  documentType: null,
+  documentNumber: "",
+  regimen: null,
 });
 
 const firstNameRules = ref([
@@ -346,8 +346,8 @@ const submitForm = async () => {
 };
 
 const setForm = () => {
-  mainForm.regimen = clientsStore.form.regime_dian_id;
   mainForm.documentType = clientsStore.form.identification_type_code;
+  mainForm.regimen = clientsStore.form.regime_dian_id;
   mainForm.firstName = clientsStore.form.first_name;
   mainForm.secondName = clientsStore.form.second_name;
   mainForm.surename = clientsStore.form.sure_name;
@@ -356,7 +356,6 @@ const setForm = () => {
   mainForm.documentNumber = clientsStore.form.identification_number;
   mainForm.tradename = clientsStore.form.tradename;
 };
-setForm
 //computed function to determinate if document type is company
 const isCompany = computed(() => {
   if(mainForm.documentType)
@@ -366,7 +365,7 @@ const isCompany = computed(() => {
 });
 
 onMounted(() => {
-  //setForm();
+  setForm();
 });
 </script>
 

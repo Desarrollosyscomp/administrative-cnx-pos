@@ -8,7 +8,7 @@ export const usePermissionsStore: any = defineStore({
     limit: 10,
     page: 1,
     search: "",
-    isActive: true,
+    is_active: true,
     initDate: "",
     endDate: "",
     itemsCount: 0,
@@ -35,7 +35,7 @@ export const usePermissionsStore: any = defineStore({
           this.limit,
           this.page,
           this.search,
-          this.isActive == null ? undefined : this.isActive,
+          this.is_active == null ? undefined : this.is_active,
           this.initDate,
           this.endDate
         );
@@ -106,22 +106,22 @@ export const usePermissionsStore: any = defineStore({
         throw "Stop";
       }
     },
-    async delete() {
-      let is_active = !this.selectedItem.is_active;
-      try {
-        let response = await PermissionsService.delete(
-          this.selectedItem.id,
-          is_active
-        );
-        if (response.status == 200) {
-          this.loadPaginatedList();
-          return response.data;
-        }
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
-      }
-    },
+    // async delete() {
+    //   let is_active = !this.selectedItem.is_active;
+    //   try {
+    //     let response = await PermissionsService.delete(
+    //       this.selectedItem.id,
+    //       is_active
+    //     );
+    //     if (response.status == 200) {
+    //       this.loadPaginatedList();
+    //       return response.data;
+    //     }
+    //   } catch (e: any) {
+    //     console.log(e.response);
+    //     throw "Stop";
+    //   }
+    // },
     // Temporal method
     async getCompanies() {
       try {

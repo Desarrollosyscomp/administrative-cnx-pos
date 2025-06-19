@@ -13,15 +13,14 @@
         </div>
       </v-card-title>
       <v-card-text class="mb-1">
-        <div class="ml-2 mb-n2">
-          <v-switch @click="switchActiveList" v-model="clientsStore.is_active" color="#841811ff" :label="clientsStore.is_active == null
+        <div class="ml-2 mb-n2 mt-3">
+          <v-switch v-model="clientsStore.is_active" color="#841811ff" :label="clientsStore.is_active
             ? 'Activos'
             : 'Inactivos'
             "></v-switch>
         </div>
-        <ClientList />
+        <ClientList @onEdit="onEdit" @onDeactivate="unableItem" />
       </v-card-text>
-
 
     </v-card>
 
@@ -29,21 +28,70 @@
 </template>
 
 <script setup lang="ts">
+// import { EmitInterface } from "../../../interfaces/Emit.interface";
+import { inject, watch } from "vue";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import router from "../../../router";
 import ClientList from "../components/ClientList.vue";
 import { useClientsStore } from "../store/useClientsStore";
+import { EmitInterface } from "../../../interfaces/Emit.interface";
 
 const clientsStore = useClientsStore();
+const swal: any = inject("swal");
 
 const openAddForm = () => {
   clientsStore.moduleMode = "add";
   router.push("/client/form");
 };
 
-const switchActiveList = () => {
-  clientsStore.advancedSearchActive = false;
-  clientsStore.is_active = !clientsStore.is_active;
-  // pagination();
+const onEdit = (emitted: EmitInterface) => {
+  clientsStore.moduleMode = "edit";
+  clientsStore.selectedItem = emitted.data;
 };
+
+const unableItem = (emitted: EmitInterface) => {
+  const action = !emitted.data.item.is_active ? "Restaurar" : "Desactivar";
+  const successMessage = !emitted.data.item.is_active
+    ? "Restaurado con éxito"
+    : "Desactivado con éxito";
+  swal.fire({
+    title: `${action}`,
+    text: `¿Está seguro que desea ${action.toLowerCase()} este usuario?`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#4CAF50",
+    cancelButtonColor: "#d33",
+    confirmButtonText: '<span style="color: white;">Sí</span>',
+    cancelButtonText: '<span style="color: white;">Cancelar</span>',
+  })
+    .then(async (result: any) => {
+      if (result.isConfirmed) {
+        clientsStore.selectedItem = emitted.data.item;
+        const response = await clientsStore.delete();
+        clientsStore.selectedItem = {};
+        if (response.status == 200) {
+          await swal.fire({
+            icon: "success",
+            text: successMessage,
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        } else {
+          await swal.fire({
+            icon: "warning",
+            text: "Ocurrio un error ",
+            showConfirmButton: false,
+            timer: 1000,
+          });
+        }
+      }
+    });
+};
+watch(
+  () => clientsStore.is_active,
+  () => {
+    console.log(clientsStore.is_active);
+    clientsStore.loadPaginatedList();
+  }
+);
 </script>

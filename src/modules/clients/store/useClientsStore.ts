@@ -11,41 +11,31 @@ import {
 } from "../../locations/interfaces/locations.interface";
 import { TInitialData } from "../interfaces/initial-data.type";
 import { ClientsService } from "../services/clients.service";
+import { TFinancialActivities } from "../interfaces/financial-activity.type";
+import { TThirdParty } from "../interfaces/third-party.interface";
 
 export const useClientsStore: any = defineStore({
   id: "clients",
   state: () => ({
     moduleMode: "add",
+    page: 1,
+    limit: 4,
+    search: "",
+    is_active: true,
     openDialog: false,
     mode: "",
+    itemsCount: 0,
+    totalPages: 0,
+    list: [] as Array<TThirdParty>, //revisar en el pos
+
     form: {} as any,
     selectedItem: {} as any,
     isValidFormMainInfo: false,
     isValidFormFiscalInfo: false,
-    isValidFormLocationInfo:false,
+    isValidFormLocationInfo: false,
     isValidFormContactInfo: false,
-
-    financialActivitiesListTest: [
-      {
-        name: "Actividad 1",
-        code: "123456",
-      },
-      {
-        name: "Actividad 2",
-        code: "45678",
-      },
-      {
-        name: "Actividad 3",
-        code: "444445",
-      },
-      {
-        name: "Actividad 4",
-        code: "744411",
-      },
-    ],
-    selectedFinancialActivities: [] as any,
-    // selectedFinancialActivities: [] as Array<TFinancialActivities>,
     taxSchemas: [] as Array<TTaxSchema>,
+
     fiscalObligations: [] as Array<TFiscalObligation>,
     identificationTypes: [] as Array<IdentificationTypeInterface>,
     regimes: [] as Array<TRegime>,
@@ -53,6 +43,9 @@ export const useClientsStore: any = defineStore({
     selectedDepartment: {} as DepartmentInterface,
     selectedMunicipality: {} as MunicipalityInterface,
     selectedNeighborhood: {} as NeighborhoodInterface,
+
+    selectedFinancialActivities: [] as Array<TFinancialActivities>,
+    financial_activities_list: [] as Array<TFinancialActivities>,
   }),
 
   actions: {
@@ -122,7 +115,8 @@ export const useClientsStore: any = defineStore({
       if (!identificationIsSetted) return "";
 
       const identificationType = this.identificationTypes.find(
-        (_identificationType: any) =>  _identificationType.dian_id === this.form.identification_type_code
+        (_identificationType: any) =>
+          _identificationType.dian_id === this.form.identification_type_code
       );
       return `${identificationType?.acronym} ${this.form.identification_number}`;
     },
@@ -180,6 +174,7 @@ export const useClientsStore: any = defineStore({
           neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
         emails: data.emails,
         phones: data.phones,
+        financial_activities: data.financial_activities,
       });
       if (response.status == 201) {
         return {
@@ -200,6 +195,7 @@ export const useClientsStore: any = defineStore({
         fiscal_obligation: this.form.fiscal_obligation_dian_id,
       };
     },
+
     getMainInfoForm() {
       return {
         firstName: this.form.first_name,
@@ -213,6 +209,7 @@ export const useClientsStore: any = defineStore({
         regimen: this.form.regime_dian_id,
       };
     },
+
     getLocationInfoForm() {
       return {
         country_id: this.form.country_id,
@@ -220,16 +217,145 @@ export const useClientsStore: any = defineStore({
         municipality_id: this.form.municipality_id,
       };
     },
+
     getContactInfoForm() {
       return {
         phones: this.form.phones,
         emails: this.form.emails,
       };
     },
+
     getFinancialActivitiesForm() {
       return {
         financial_activities: this.form.financial_activities,
-       };
+      };
+    },
+
+    async getPaginatedSyncFinancialActivities(
+      financial_activities_list: Array<TFinancialActivities>
+    ) {
+      try {
+        const aux = financial_activities_list.map(
+          (financialActivity: TFinancialActivities) => {
+            return financialActivity.dian_id;
+          }
+        );
+        let response = await ClientsService.getPaginateFinancialActivities(
+          this.page,
+          this.limit,
+          aux,
+          this.search
+        );
+        if (response.status == 200) {
+          const _response = response.data.response;
+          return {
+            list: _response.list,
+            itemsCount: _response.count,
+            totalPages: Math.ceil(_response.totalPages),
+          };
+        }
+      } catch (e: any) {
+        if (e.response.status === 404) {
+          return {
+            financialActivities: [],
+            itemsCount: 0,
+            totalPages: 0,
+          };
+        }
+      }
+    },
+
+    async loadPaginatedFinancialActivities(
+      financial_activities_list: Array<TFinancialActivities> = []
+    ) {
+      try {
+        let response: any = await this.getPaginatedSyncFinancialActivities(
+          financial_activities_list
+        );
+        this.financial_activities_list = response.list;
+        this.itemsCount = response.itemsCount;
+        this.totalPages = response.totalPages;
+        return response;
+      } catch (e: any) {
+        throw "Stop";
+      }
+    },
+
+    async getPaginatedClients() {
+      try {
+        let response = await ClientsService.getPaginateClients(
+          this.page,
+          this.limit,
+          this.search,
+          this.is_active == null ? undefined : this.is_active
+        );
+        if (response.status == 200) {
+          const _response = response.data.response;
+          console.log(_response);
+          return {
+            list: _response.list,
+            itemsCount: _response.count,
+            totalPages: Math.ceil(_response.totalPages),
+          };
+        }
+      } catch (e: any) {
+        console.log(e.response);
+        if (e.response.status === 404) {
+          return {
+            list: [],
+            itemsCount: 0,
+            totalPages: 0,
+          };
+        }
+      }
+    },
+
+    async loadPaginatedList() {
+      let response: any = await this.getPaginatedClients();
+      this.list = response.list;
+      this.itemsCount = response.itemsCount;
+      this.totalPages = response.totalPages;
+      return {
+        error: false,
+        data: response,
+      };
+    },
+
+    async getOneClient(id: string) {
+      console.log(id);
+      let response = await ClientsService.getClientById(id);
+      console.log(response.data.response)
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: {},
+        };
+      }
+    },
+
+    async delete() {
+      let is_active = !this.selectedItem.is_active;
+      let response = await ClientsService.deleteClient(
+        this.selectedItem.id,
+        is_active
+      );
+      if (response.status == 200) {
+        this.loadPaginatedList();
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else {
+        return {
+          error: true,
+          data: {},
+        };
+      }
     },
   },
 });

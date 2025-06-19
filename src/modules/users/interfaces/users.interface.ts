@@ -3,7 +3,7 @@ export interface UsersInterface {
     username:    string;
     password:    string;
     // description: null;
-    is_active:   number;
+    is_active:   boolean;
     createdAt:   string;
     updatedAt:   string;
     // users_type_id: number;

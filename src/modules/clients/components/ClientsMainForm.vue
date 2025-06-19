@@ -15,6 +15,10 @@
                     }}
                   </p>
                 </b>
+                <pre>
+                  {{ 
+                    clientsStore.form }}
+                </pre>
               </v-card-text>
             </div>
             <div align="end" style="width: 50%; display: inline-block" class="ma-n2">
@@ -117,6 +121,7 @@ import {
   validationLocationInfoExport,
   validationComercialActivitiesInfoExport,
 } from "../validations/extraValidations";
+import router from "../../../router";
 
 const appStore = useAppStore();
 const swal: any = inject("swal");
@@ -127,11 +132,12 @@ const clientsStore = useClientsStore()
 
 const loadThirdParty = async () => {
   let id = route.params.id;
+  console.log(id)
   if (!id) return;
   clientsStore.moduleMode = "edit";
-  const response = await clientsStore.getOne(id);
+  const response = await clientsStore.getOneClient(id);
   console.log(response.data);
-  const thirdParty = response.data;
+  const thirdParty = response.data.client;
 
   clientsStore.selectedItem = thirdParty;
   const location = parseLocation(thirdParty);
@@ -141,9 +147,9 @@ const loadThirdParty = async () => {
   clientsStore.selectedNeighborhood = location?.neighborhood;
   const form = parseClientsToForm(thirdParty);
   clientsStore.form = parseClientsToForm(thirdParty);
-  // clientsStore.selectedFinancialActivities = form.financial_activities;
-  // console.log(clientsStore.selectedFinancialActivities)
+  console.log(clientsStore.form)
   setTimeout(() => {
+    clientsStore.selectedFinancialActivities = form.financial_activities;
     clientsStore.form.neighborhood_id = form.neighborhood_id;
   }, 50);
 };
@@ -174,37 +180,37 @@ const submitTotalForm = async () => {
 
     alert('Enviar')
 
-    // let response;
-    // let addMode = clientsStore.moduleMode == "add";
-    // if (clientsStore.moduleMode == "add") {
-    //   response = await clientsStore.addClient(clientsStore.form);
-    //   console.log(response);
-    // } else if (clientsStore.moduleMode == "edit") {
-    //   const id = clientsStore.selectedItem.id;
-    //   response = await clientsStore.edit(
-    //     id,
-    //     clientsStore.form
-    //   );
-    //   console.log(response);
-    // }
-    // if (response.status === 200) {
-    //   await swal.fire({
-    //     icon: "success",
-    //     text: "Agregado con éxito",
-    //     showConfirmButton: false,
-    //     timer: 1500,
-    //   });
-    // } else {
-    //   swal.fire({
-    //     icon: "success",
-    //     text: addMode ? "Agregado con éxito" : "Actualizado con éxito",
-    //     showConfirmButton: false,
-    //     timer: 1500,
-    //   });
-    //   router.push({
-    //     name: "clients-list",
-    //   });
-    // }
+    let response;
+    let addMode = clientsStore.moduleMode == "add";
+    if (clientsStore.moduleMode == "add") {
+      response = await clientsStore.addClient(clientsStore.form);
+      console.log(response);
+    } else if (clientsStore.moduleMode == "edit") {
+      const id = clientsStore.selectedItem.id;
+      response = await clientsStore.edit(
+        id,
+        clientsStore.form
+      );
+      console.log(response);
+    }
+    if (response.status === 200) {
+      await swal.fire({
+        icon: "success",
+        text: "Agregado con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } else {
+      swal.fire({
+        icon: "success",
+        text: addMode ? "Agregado con éxito" : "Actualizado con éxito",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      router.push({
+        name: "client-list",
+      });
+    }
   } catch (error) {
     console.log(error);
     swal.fire({
@@ -223,12 +229,14 @@ onBeforeMount(() => {
   clientsStore.initialiceForm();
 });
 const loadInitialData = async () => {
+  console.log( clientsStore.moduleMode)
   await loadThirdParty();
   await clientsStore.loadInitialData();
 };
 onMounted(async () => {
   await appStore.afterLoading(loadInitialData);
   await loadInitialData()
+  console.log('holaaaa')
 });
 </script>
 <style>

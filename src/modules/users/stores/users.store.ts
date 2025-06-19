@@ -9,8 +9,6 @@ export const useUsersStore: any = defineStore({
     page: 1,
     search: "",
     is_active: true,
-    initDate: "",
-    endDate: "",
     itemsCount: 0,
     totalPages: 0,
     advancedSearchActive: false,
@@ -31,24 +29,23 @@ export const useUsersStore: any = defineStore({
     },
 
     async add(data: any) {
-        let response = await UsersService.add({
-          username: data.username,
-          password: data.password,
-          confirm_password: data.confirmPassword,
-        });
-        if (response.status == 201) {
-          this.loadPaginatedList();
-          return { 
-            error: false, 
-            data: response.data 
-          };
-        }
-        else if (response.data.response.validationError) {
-          return { 
-            error: true, 
-            data: response.data.response.validationError.message 
-          };
-        }
+      let response = await UsersService.add({
+        username: data.username,
+        password: data.password,
+        confirm_password: data.confirmPassword,
+      });
+      if (response.status == 201) {
+        this.loadPaginatedList();
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else if (response.data.response.validationError) {
+        return {
+          error: true,
+          data: response.data.response.validationError.message,
+        };
+      }
     },
 
     async getPaginatedUsers() {
@@ -81,16 +78,14 @@ export const useUsersStore: any = defineStore({
     },
 
     async loadPaginatedList() {
-      try {
-        let response: any = await this.getPaginatedUsers();
-        this.list = response.list;
-        this.itemsCount = response.itemsCount;
-        this.totalPages = response.totalPages;
-        return response;
-      } catch (e: any) {
-        console.log(e.response);
-        throw "Stop";
-      }
+      let response: any = await this.getPaginatedUsers();
+      this.list = response.list;
+      this.itemsCount = response.itemsCount;
+      this.totalPages = response.totalPages;
+      return {
+        error: false,
+        data: response,
+      };
     },
 
     async delete() {
@@ -149,5 +144,7 @@ export const useUsersStore: any = defineStore({
         };
       }
     },
+
+
   },
 });
