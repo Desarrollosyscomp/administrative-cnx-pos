@@ -19,17 +19,18 @@ export const useClientsStore: any = defineStore({
   state: () => ({
     moduleMode: "add",
     page: 1,
-    limit: 4,
+    limit: 10,
+    limitFinancialActivities: 4,
     search: "",
     is_active: true,
     openDialog: false,
     mode: "",
     itemsCount: 0,
     totalPages: 0,
-    list: [] as Array<TThirdParty>, //revisar en el pos
+    list: [] as Array<TThirdParty>,
 
     form: {} as any,
-    selectedItem: {} as any,
+    selectedItem: {} as TThirdParty,
     isValidFormMainInfo: false,
     isValidFormFiscalInfo: false,
     isValidFormLocationInfo: false,
@@ -57,8 +58,8 @@ export const useClientsStore: any = defineStore({
       this.form = {
         user_warehouse: "0",
         tradename: "",
-        regime_dian_id: null,
-        identification_type_code: null,
+        regime_dian_id: "",
+        identification_type_code: "",
         identification_number: "",
         emails: [],
         phones: [],
@@ -89,17 +90,17 @@ export const useClientsStore: any = defineStore({
 
     async getInitialData(): Promise<TInitialData> {
       const clientId = this.selectedItem?.id;
-      let response = await ClientsService.getInitialData(clientId);
+      let response = await ClientsService.getInitialData(+clientId);
       if (response.status == 200) {
         return response.data.response;
-      }
+      } 
       {
         return {
-          thirdPartyFinancialActivities: [],
-          taxSchemas: [],
-          fiscalObligations: [],
-          documentTypes: [],
-          regimes: [],
+          thirdPartyFinancialActivities: [] as Array<TFinancialActivities>,
+          taxSchemas: [] as Array<TTaxSchema>,
+          fiscalObligations: [] as Array<TFiscalObligation>,
+          documentTypes: [] as Array<IdentificationTypeInterface>,
+          regimes: [] as Array<TRegime>,
         };
       }
     },
@@ -175,8 +176,12 @@ export const useClientsStore: any = defineStore({
         emails: data.emails,
         phones: data.phones,
         financial_activities: data.financial_activities,
+        regime_dian_id: data.regime_dian_id,
+        tax_schema_dian_id: data.tax_schema_dian_id,
+        fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
       });
-      if (response.status == 201) {
+      console.log(response);
+      if (response.data.status == 201) {
         return {
           error: false,
           data: response.data.response,
@@ -184,7 +189,7 @@ export const useClientsStore: any = defineStore({
       } else {
         return {
           error: true,
-          data: {},
+          data: response.data.message,
         };
       }
     },
@@ -231,7 +236,7 @@ export const useClientsStore: any = defineStore({
       };
     },
 
-    async getPaginatedSyncFinancialActivities(
+    async getPaginatedFinancialActivities(
       financial_activities_list: Array<TFinancialActivities>
     ) {
       try {
@@ -242,7 +247,7 @@ export const useClientsStore: any = defineStore({
         );
         let response = await ClientsService.getPaginateFinancialActivities(
           this.page,
-          this.limit,
+          this.limitFinancialActivities,
           aux,
           this.search
         );
@@ -269,7 +274,7 @@ export const useClientsStore: any = defineStore({
       financial_activities_list: Array<TFinancialActivities> = []
     ) {
       try {
-        let response: any = await this.getPaginatedSyncFinancialActivities(
+        let response: any = await this.getPaginatedFinancialActivities(
           financial_activities_list
         );
         this.financial_activities_list = response.list;
@@ -289,9 +294,9 @@ export const useClientsStore: any = defineStore({
           this.search,
           this.is_active == null ? undefined : this.is_active
         );
+        console.log(response);
         if (response.status == 200) {
           const _response = response.data.response;
-          console.log(_response);
           return {
             list: _response.list,
             itemsCount: _response.count,
@@ -324,7 +329,7 @@ export const useClientsStore: any = defineStore({
     async getOneClient(id: string) {
       console.log(id);
       let response = await ClientsService.getClientById(id);
-      console.log(response.data.response)
+      console.log(response.data.response);
       if (response.status == 200) {
         return {
           error: false,
@@ -354,6 +359,55 @@ export const useClientsStore: any = defineStore({
         return {
           error: true,
           data: {},
+        };
+      }
+    },
+
+    async edit(id: string, data: any) {
+      const financial_activities_dian_ids =
+        this.selectedFinancialActivities.map((financialActivity) => {
+          return financialActivity.dian_id;
+        });
+      const country_dian_id = this.selectedCountry?.dian_id;
+      const department_dian_id = this.selectedDepartment?.dian_id;
+      const municipality_dian_id = this.selectedMunicipality?.dian_id;
+      const neighborhood_dian_id = this.selectedNeighborhood?.dian_id;
+      let response = await ClientsService.editClient(+id, {
+        tradename: data.tradename, barcode: data.barcode,  third_party_classification_ids: data.third_party_classification_ids,
+        regime_dian_id: data.regime_dian_id,
+        document_type: data.identification_type_code,
+        identification_number: data.identification_number,
+        emails: data.emails.map((email: any) => ({
+          email: email.email,
+        })),
+        phones: data.phones.map((phone: any) => ({
+          number: phone.number,
+        })),
+        name: data.name,
+        first_name: data.first_name,
+        second_name: data.second_name,
+        surename: data.sure_name,
+        second_surename: data.second_sure_name,
+        tax_schema_dian_id: data.tax_schema_dian_id,
+        fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
+        financial_activities: financial_activities_dian_ids,
+        address: data.address,
+        country_id: country_dian_id ?? null,
+        department_id: department_dian_id ?? null,
+        municipality_id: municipality_dian_id ?? null,
+        neighborhood_id:
+          neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
+      });
+      console.log(response)
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.message
         };
       }
     },

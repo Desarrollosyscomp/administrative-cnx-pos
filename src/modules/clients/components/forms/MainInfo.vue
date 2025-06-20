@@ -144,4 +144,7 @@ onMounted(() => {
   border-width: 1px;
   border-color: red;
 }
+.full-height-card {
+    height: 100%;
+}
 </style>

@@ -154,7 +154,6 @@ const simpleSearch = async() => {
 
 };
 
-
 watch(
   () => usersStore.is_active,
   () => {

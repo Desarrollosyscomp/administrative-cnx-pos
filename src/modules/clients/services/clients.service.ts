@@ -33,6 +33,18 @@ export const ClientsService = {
     });
   },
 
+  editClient: async (id: number, data: object) => {
+    return axios.put({
+      url: `${URL_API}/clients/${id}`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
   getClientById: async (id: string) => {
     return axios.get({
       url: `${URL_API}/clients/${id}`,

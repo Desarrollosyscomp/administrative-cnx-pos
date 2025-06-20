@@ -10,7 +10,6 @@ export interface Company {
   legal_representative_id: number;
   identification: Identification;
   name: string;
-  // address: AddressInterface;
   created_at: string;
   updated_at: string;
   emails: Array<TEmail>;
@@ -18,7 +17,7 @@ export interface Company {
 }
 
 export interface TThirdParty {
-  id: number;
+  id: string;
   resolution_type_id: number;
   tradename: string;
   clientable_type: string;

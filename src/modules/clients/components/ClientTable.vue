@@ -5,6 +5,7 @@
         <tr>
           <th class="text-left font-weight-black">NOMBRE</th>
           <th class="text-center font-weight-black">DESCRIPCION</th>
+          <th class="text-center font-weight-black">NUMERO DE DOCUMENTO</th>
           <th class="text-right font-weight-black">ESTADO</th>
           <th class="text-right font-weight-black">ACCIONES</th>
         </tr>
@@ -23,6 +24,9 @@
               </template>
             </v-badge>
           </td>
+          <td class="text-center text-truncate" style="max-width: 20px">
+            {{  setIdetification(item)  }}
+          </td>
           <td class="text-right">
             <v-badge :color="item.is_active ? 'success' : '#841811ff'" class="mr-12 mb-1">
               <template v-slot:badge>
@@ -40,7 +44,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item value="1">
+                <v-list-item value="1" v-if="item.is_active == true">
                   <v-list-item-title @click="goToEdit(item)">
                     <v-icon color="blue-lighten-2" size="small">mdi-pencil</v-icon> Editar cliente
                   </v-list-item-title>
@@ -56,7 +60,7 @@
                     cliente
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="3">
+                <v-list-item value="3" v-if="item.is_active == true">
                   <v-list-item-title @click="onPermissions">
                     <v-icon size="small">mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
@@ -97,6 +101,14 @@ const unableItem = async (item: TThirdParty) => {
     data: { item },
   });
 };
+
+const setIdetification = (client: TThirdParty) =>{
+  if (client.clientable_type == 'person'){
+    return client.person?.identification?.document_number ?? 'N/A'
+  } else if (client.clientable_type == 'company'){
+    return client.company?.identification?.document_number ?? 'N/A'
+  }
+}
 
 onMounted(() => {
   clientsStore.loadPaginatedList()

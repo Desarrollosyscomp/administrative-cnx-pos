@@ -15,7 +15,7 @@ export const ClientsRouter = [
   },
   {
     path: "/client/form/:id",
-    name: "client-form",
+    name: "client-form-edit",
     isAuth: false,
     //@ts-ignore
     component: () => import("../components/ClientsMainForm.vue"),

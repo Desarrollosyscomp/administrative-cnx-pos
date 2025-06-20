@@ -15,10 +15,6 @@
                     }}
                   </p>
                 </b>
-                <pre>
-                  {{ 
-                    clientsStore.form }}
-                </pre>
               </v-card-text>
             </div>
             <div align="end" style="width: 50%; display: inline-block" class="ma-n2">
@@ -164,12 +160,12 @@ const submitTotalForm = async () => {
     clientsStore.isValidFormFiscalInfo = false;
     clientsStore.isValidFormLocationInfo = true;
     await validationLocationInfoExport(
-       clientsStore.getLocationInfoForm()
+      clientsStore.getLocationInfoForm()
     );
     clientsStore.isValidFormLocationInfo = false;
     clientsStore.isValidFormContactInfo = true;
     await validationContactInfoExport(
-       clientsStore.getContactInfoForm()
+      clientsStore.getContactInfoForm()
     )
     clientsStore.isValidFormContactInfo = false;
     clientsStore.isValidFormComercialActivities = true;
@@ -177,9 +173,6 @@ const submitTotalForm = async () => {
       clientsStore.getFinancialActivitiesForm()
     )
     clientsStore.isValidFormComercialActivities = false;
-
-    alert('Enviar')
-
     let response;
     let addMode = clientsStore.moduleMode == "add";
     if (clientsStore.moduleMode == "add") {
@@ -191,16 +184,9 @@ const submitTotalForm = async () => {
         id,
         clientsStore.form
       );
-      console.log(response);
     }
-    if (response.status === 200) {
-      await swal.fire({
-        icon: "success",
-        text: "Agregado con éxito",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-    } else {
+    console.log(response);
+    if (!response.error) {
       swal.fire({
         icon: "success",
         text: addMode ? "Agregado con éxito" : "Actualizado con éxito",
@@ -209,6 +195,13 @@ const submitTotalForm = async () => {
       });
       router.push({
         name: "client-list",
+      });
+    } else {
+      swal.fire({
+        icon: "warning",
+        text: 'Ocurrio un error',
+        showConfirmButton: false,
+        timer: 1500,
       });
     }
   } catch (error) {
@@ -229,14 +222,14 @@ onBeforeMount(() => {
   clientsStore.initialiceForm();
 });
 const loadInitialData = async () => {
-  console.log( clientsStore.moduleMode)
+  console.log(clientsStore.moduleMode)
   await loadThirdParty();
   await clientsStore.loadInitialData();
 };
+
 onMounted(async () => {
   await appStore.afterLoading(loadInitialData);
   await loadInitialData()
-  console.log('holaaaa')
 });
 </script>
 <style>

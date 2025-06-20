@@ -5,7 +5,7 @@
       <v-card-title class="mr-1 mt-4 mb-n7">
         <div class="d-flex flex-column flex-sm-row">
           <v-text-field class="ma-2 w-100 " color="#841811ff" density="compact" variant="outlined" label="Buscar"
-            append-inner-icon="mdi-magnify">
+            append-inner-icon="mdi-magnify" v-model="clientsStore.search" @keyup.enter="simpleSearch">
           </v-text-field>
           <v-btn class="mt-2 ml-2" variant="outlined" color="success" @click="openAddForm">
             <span> AÑADIR</span>
@@ -29,14 +29,17 @@
 
 <script setup lang="ts">
 // import { EmitInterface } from "../../../interfaces/Emit.interface";
-import { inject, watch } from "vue";
+import { inject, ref, watch } from "vue";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import router from "../../../router";
 import ClientList from "../components/ClientList.vue";
 import { useClientsStore } from "../store/useClientsStore";
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 
+
 const clientsStore = useClientsStore();
+
+let switchValue = ref(true);
 const swal: any = inject("swal");
 
 const openAddForm = () => {
@@ -69,7 +72,7 @@ const unableItem = (emitted: EmitInterface) => {
         clientsStore.selectedItem = emitted.data.item;
         const response = await clientsStore.delete();
         clientsStore.selectedItem = {};
-        if (response.status == 200) {
+        if (response.data.status == 200) {
           await swal.fire({
             icon: "success",
             text: successMessage,
@@ -87,6 +90,14 @@ const unableItem = (emitted: EmitInterface) => {
       }
     });
 };
+
+const simpleSearch = async() => {
+    clientsStore.page = 1;
+    clientsStore.is_active = switchValue.value;
+    clientsStore.search = clientsStore.search.trim();
+    await clientsStore.loadPaginatedList();
+};
+
 watch(
   () => clientsStore.is_active,
   () => {
@@ -95,3 +106,9 @@ watch(
   }
 );
 </script>
+
+<style scoped>
+.full-height-card {
+  height: 100%;
+}
+</style>
