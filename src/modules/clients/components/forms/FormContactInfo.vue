@@ -1,5 +1,4 @@
 <template>
-  <v-form @submit.prevent="onsubmit" >
     <v-row>
       <v-col cols="12" class="mt-n6">
         <SyncThirdPartiesContact @onUpdatePhones="onUpdatePhones" @onUpdateEmails="onUpdateEmails"
@@ -8,11 +7,10 @@
     </v-row>
     <v-row>
       <v-col md="12">
-        <v-btn rounded="xs" size="large" block color="#841811ff" variant="outlined" class="mt-n3" density="compact"
+        <v-btn @click="onSubmit" rounded="xs" size="large" block color="#841811ff" variant="outlined" class="mt-n3" density="compact"
           type="submit">Cerrar</v-btn>
       </v-col>
     </v-row>
-  </v-form>
 </template>
 
 <script setup lang="ts">
@@ -38,9 +36,7 @@ const onUpdateEmails = (emitted: EmitInterface) => {
 };
 
 
-const onsubmit = () => {
-  clientsStore.form.phones = contact.phones;
-  clientsStore.form.emails = contact.emails;
+const onSubmit = () => {
   clientsStore.toogleDialog()
 };
 </script>

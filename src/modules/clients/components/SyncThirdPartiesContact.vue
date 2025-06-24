@@ -3,8 +3,8 @@
   <v-row class="mt-4">
     <v-col cols="12" md="6">
       <v-text-field color="#841811ff" density="compact" variant="outlined" label="Teléfonos" id="phoneInput" type="text"
-        minlength="7" maxlength="19"  v-model="phone" append-inner-icon="mdi-plus"
-        @click:append-inner="sendPhone" @keyup.enter="sendPhone">
+        minlength="7" maxlength="19" v-model="phone" append-inner-icon="mdi-plus" @click:append-inner="sendPhone"
+        @keyup.enter="sendPhone" :rules="phoneRules">
       </v-text-field>
       <p v-if="validationNoRepeatPhone" class="font-size" style="color: #b00020">
         El telefono ya se encuentra registrado
@@ -58,9 +58,9 @@
       </v-table>
     </v-col>
     <v-col cols="12" md="6">
-      <v-text-field color="#841811ff" density="compact" variant="outlined" label="Emails" id="emailInput" type="text"
-        minlength="5" maxlength="254"  v-model="email" append-inner-icon="mdi-plus"
-        @click:append-inner="sendEmail" @keyup.enter="sendEmail">
+      <v-text-field :rules="emailRules" color="#841811ff" density="compact" variant="outlined" label="Emails" id="emailInput" type="text"
+        minlength="5" maxlength="254" v-model="email" append-inner-icon="mdi-plus" @click:append-inner="sendEmail"
+        @keyup.enter="sendEmail">
       </v-text-field>
       <p v-if="validationNoRepeatEmail" class="font-size" style="color: #b00020">
         El email ya se encuentra registrado
@@ -118,14 +118,13 @@
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-// import * as Yup from "yup";
-// import {
-//   emailRegex,
-//   extraValidationEmail,
-//   extraValidationPhone,
-//   isValidPhoneNumber,
-// } from "../validations/extraValidations";
-// import { contactValidations } from "../validations/validations";
+import {
+  emailRegex,
+  extraValidationEmail,
+  extraValidationPhone,
+  isValidPhoneNumber,
+} from "../validations/extraValidations";
+import { contactValidations } from "../validations/validations";
 
 const emit = defineEmits(["onUpdateEmails", "onUpdatePhones"]);
 
@@ -171,60 +170,52 @@ let emails = ref(props.emails as Array<email>);
 //     .min(1, "La dirección de correo electrónico no debe estar vacía"),
 // };
 
-// const phoneRules = ref([
-//   async (value: any) => {
-//     if (phones.value.length >= 1) {
-//       return true;
-//     }
-//     try {
-//       await contactValidations.phone.validate(value);
-//       if (!isValidPhoneNumber(value)) {
-//         return "El telefono no tiene un formato válido";
-//       }
-//       return true;
-//     } catch (e: any) {
-//       return "Debe ingresar al menos un telefono";
-//     }
-//   },
-// ]);
+const phoneRules = ref([
+  async (value: any) => {
+    try {
+      await contactValidations.phone.validate(value);
+      if (!isValidPhoneNumber(value)) {
+        return "El telefono no tiene un formato válido";
+      }
+      return true;
+    } catch (e: any) {
+      return "El telefono ingresado no es válido";
+    }
+  },
+]);
 
-// const emailRules = ref([
-//   async (value: any) => {
-//     if (emails.value.length >= 1) {
-//       return true;
-//     }
-//     try {
-//       if (!emailRegex(value)) {
-//         return "El email debe contener un '@' y un dominio válido (por ejemplo, .com)";
-//       }
-//       await contactValidations.email.validate(value);
-//       return true;
-//     } catch (e: any) {
-//       return "Debe ingresar al menos un email";
-//     }
-//   },
-// ]);
+const emailRules = ref([
+  async (value: any) => {
+    try {
+      if (!emailRegex(value)) {
+        return "El email debe contener un '@' y un dominio válido (por ejemplo, .com)";
+      }
+      await contactValidations.email.validate(value);
+      return true;
+    } catch (e: any) {
+      return "El email ingresado no es válido";
+    }
+  },
+]);
 
 const sendPhone = () => {
   validationNoRepeatPhone.value = phones.value.some(
     (p: phone) => p.number === phone.value
   );
-  // if (!extraValidationPhone(phone.value)) return;
+  if (!extraValidationPhone(phone.value)) return;
   if (phone.value == "" || validationNoRepeatPhone.value) return;
   phones.value.push({ number: phone.value });
   phone.value = "";
   validationNoRepeatPhone.value = false;
-  console.log(phones.value);
 };
 const sendEmail = () => {
   validationNoRepeatEmail.value = emails.value.some(
     (e: email) => e.email === email.value
   );
-  // if (!extraValidationEmail(email.value)) return;
+  if (!extraValidationEmail(email.value)) return;
   if (email.value == "" || validationNoRepeatEmail.value) return;
   emails.value.push({ email: email.value });
   email.value = "";
-  console.log(emails.value);
 };
 const deletePhone = (index: number) => {
   phones.value.splice(index, 1);
@@ -234,7 +225,6 @@ const deleteEmail = (index: number) => {
 };
 
 watch(phones.value, () => {
-  console.log("holas");
   emit("onUpdatePhones", {
     name: "ThirdPartiesContact.onUpdatePhones",
     data: {
@@ -243,7 +233,6 @@ watch(phones.value, () => {
   });
 });
 watch(emails.value, () => {
-  console.log("hola");
   emit("onUpdateEmails", {
     name: "ThirdPartiesContact.onUpdateEmails",
     data: {
