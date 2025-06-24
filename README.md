@@ -1,1 +1,0 @@
-# administrative-cnx-pos

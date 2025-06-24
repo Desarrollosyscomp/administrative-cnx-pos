@@ -1,0 +1,34 @@
+import { TEmail } from "../../../interfaces/email.interface";
+import { Identification} from "../../../interfaces/identification-types.interface";
+import { PersonInterface } from "../../../interfaces/people.interface";
+import { TPhone } from "../../../interfaces/phone.interface";
+import { TFinancialActivities } from "./financial-activity.type";
+
+export interface Company {
+  id?: number;
+  is_active: boolean;
+  legal_representative_id: number;
+  identification: Identification;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  emails: Array<TEmail>;
+  phones: Array<TPhone>;
+}
+
+export interface TThirdParty {
+  id: string;
+  resolution_type_id: number;
+  tradename: string;
+  clientable_type: string;
+  price_list_id: number;
+  third_id: number;
+  tax_schema_dian_id: string;
+  financialActivities: Array<TFinancialActivities>;
+  fiscal_obligation_dian_id: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  company?: Company;
+  person?: PersonInterface;
+}
