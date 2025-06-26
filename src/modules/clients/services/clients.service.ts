@@ -113,4 +113,24 @@ export const ClientsService = {
       },
     });
   },
+
+  getPaginatedSystemServices: async (
+    page: number,
+    limit: number,
+    search: string
+  ) => {
+    return axios.get({
+      url: `${URL_API}/clients/paginate/services`,
+      config: {
+        params: {
+          page: page,
+          limit: limit,
+          search: search,
+        },
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
 };

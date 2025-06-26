@@ -37,6 +37,15 @@ export const useClientsStore: any = defineStore({
     isValidFormContactInfo: false,
     taxSchemas: [] as Array<TTaxSchema>,
 
+    system_services_paginator: {
+      page: 1,
+      limit: 10,
+      search: "",
+      list: [] as Array<TSystemService>,
+      itemsCount: 0,
+      totalPages: 0,
+    },
+
     fiscalObligations: [] as Array<TFiscalObligation>,
     identificationTypes: [] as Array<IdentificationTypeInterface>,
     regimes: [] as Array<TRegime>,
@@ -409,6 +418,14 @@ export const useClientsStore: any = defineStore({
           error: true,
           data: response.data.message
         };
+      }
+    },
+    async loadSystemServices() {
+      let response = await ClientsService.getPaginatedSystemServices(this.system_services_paginator.page, this.system_services_paginator.limit, this.system_services_paginator.search);
+      if (response.status == 200) {
+        this.system_services_paginator.list = response.data.response.list;
+        this.system_services_paginator.itemsCount = response.data.response.count;
+        this.system_services_paginator.totalPages = response.data.response.totalPages;
       }
     },
   },

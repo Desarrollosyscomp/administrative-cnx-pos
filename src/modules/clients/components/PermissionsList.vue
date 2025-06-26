@@ -38,13 +38,13 @@
         </v-col>
       </v-row>
       <v-row class="mt-n4">
-        <v-col cols="12" md="4" v-for="(permission, i) in arrayTest" :key="i">
+        <v-col cols="12" md="4" v-for="(permission, i) in clientsStore.system_services_paginator.list" :key="i">
           <v-card elevation="2" link class="border-color full-height-card page-margins" @click="toggleSelection(i)">
             <v-card-text>
               <div class="align-items">
                 <p class="font-size">
                   <b>
-                    {{ permission.moduleName }}
+                    {{ permission.name }}
                   </b>
                 </p>
                 <span class="mt-n2">
@@ -53,7 +53,7 @@
                   </v-icon>
                 </span>
               </div>
-              <div class="mt-6">
+              <div class="mt-6" v-if=false>
                 <!-- Mostrar las primeras 3 acciones -->
                 <li v-for="(action, i) in permission.actions.slice(0, 3)" :key="i" class="list-style">
                   <span class="icon-style">★</span>
@@ -67,15 +67,21 @@
                 </li>
               </div>
             </v-card-text>
-            <v-card-action>
+            <v-card-actions>
               <div class="mt-3 mb-n3 button-bottom">
                 <v-btn variant="outlined" size="small" block color="indigo"
                   @click.stop="openPermissionDialog(permission)">
                   Ver permiso
                 </v-btn>
               </div>
-            </v-card-action>
+            </v-card-actions>
           </v-card>
+        </v-col>
+      </v-row>
+      <v-row v-if="clientsStore.system_services_paginator.list.length == 0">
+        <v-col>
+          <Vue3Lottie :animationData="EmptyLottie" :height="180" :width="190" />
+          <h3 class="text-center">No se encontraron resultados</h3>
         </v-col>
       </v-row>
     </div>
@@ -101,19 +107,12 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import LayoutOne from '../../../Layouts/LayoutOne.vue';
 import { useClientsStore } from '../store/useClientsStore';
+import EmptyLottie from '../../../assets/lotties/empty.json';
 
 const clientsStore = useClientsStore()
-const arrayTest = [
-  { moduleName: 'Facturación', actions: ['Productos', 'Metodos de pago', 'Detalles de factura', 'Clientes'] },
-  { moduleName: 'Inventario', actions: ['Productos', 'Conteos', 'Informes', 'Clientes'] },
-  { moduleName: 'Configuración', actions: ['Perfil', 'Clientes', 'Usuarios', 'logIn'] },
-  { moduleName: 'Terceros', actions: ['Productos', 'Detalles de factura', 'Clientes'] },
-  { moduleName: 'Restaurantes', actions: ['Productos', 'Métodos de pago', 'Detalles de factura'] },
-  { moduleName: 'Almacenes', actions: ['Productos', 'Stok', ' Métodos de pago'] },
-]
 
 const onePermissionInfo = ref()
 // let selectPermission = ref(true)
@@ -136,6 +135,13 @@ const openPermissionDialog = (permission: any) => {
 const onCloseDialog = () => {
   clientsStore.mode = "";
 };
+
+const loadSystemServices = async () => {
+  await clientsStore.loadSystemServices();
+}
+onMounted(async () => {
+  loadSystemServices()
+});
 </script>
 <!-- ******************** CSS ******************** -->
 <style scoped>
