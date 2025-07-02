@@ -67,7 +67,7 @@
             <v-card-actions>
               <div class="mt-3 mb-n3 button-bottom">
                 <v-btn variant="outlined" size="small" block color="indigo"
-                  @click.stop="openPermissionDialog(system_service)">
+                  @click.stop="openSystemServiceDialog(system_service)">
                   Ver permiso
                 </v-btn>
               </div>
@@ -87,14 +87,14 @@
         <v-container>
           <p class="text-h5 ml-4 mt-2">
             <b>
-              {{ onePermissionInfo?.moduleName }}
+              {{ selected_system_service?.name }}
             </b>
           </p>
           <v-divider></v-divider>
           <v-card-text class=" mt-n2">
-            <li v-for="(action, i) in onePermissionInfo.actions" :key="i" class="list-style-dialog">
+            <li v-for="(action, i) in selected_system_service.functionalities" :key="i" class="list-style-dialog">
               <span class="icon-style">★</span>
-              {{ action }}
+              {{ action.name }}
             </li>
           </v-card-text>
         </v-container>
@@ -117,7 +117,7 @@ const route = useRoute()
 
 const clientsStore = useClientsStore()
 
-const onePermissionInfo = ref()
+const selected_system_service = ref()
 // let selectPermission = ref(true)
 
 const toggleSelection = (system_service: TSystemService) => {
@@ -130,8 +130,9 @@ const toggleSelection = (system_service: TSystemService) => {
   }
 }
 
-const openPermissionDialog = (permission: any) => {
-  onePermissionInfo.value = permission
+const openSystemServiceDialog = (systemService: any) => {
+  console.log(systemService)
+  selected_system_service.value = systemService
   clientsStore.toogleDialog()
 }
 
