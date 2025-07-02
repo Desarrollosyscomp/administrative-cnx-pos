@@ -61,7 +61,7 @@
                   </v-list-item-title>
                 </v-list-item>
                 <v-list-item value="3" v-if="item.is_active == true">
-                  <v-list-item-title @click="onPermissions">
+                  <v-list-item-title @click="onPermissions(item)">
                     <v-icon size="small">mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
                 </v-list-item>
@@ -86,8 +86,8 @@ const emit = defineEmits(['onEdit', 'onDesactivate'])
 //   clientsStore.moduleMode = "edit";
 //   router.push("/client/form");
 // };
-const onPermissions = () => {
-  router.push("/client/permissions");
+const onPermissions = (item: TThirdParty) => {
+  router.push("/client/" + item.id + "/permissions");
 };
 
 const goToEdit = (item: TThirdParty) => {

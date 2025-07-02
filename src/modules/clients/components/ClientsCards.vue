@@ -46,17 +46,17 @@ import { TThirdParty } from '../interfaces/third-party.interface';
 import { useClientsStore } from '../store/useClientsStore';
 
 const clientsStore = useClientsStore();
-const emit = defineEmits(["onEdit", "onDeactivate"]);
+const emit = defineEmits(["on-edit", "on-desactivate"]);
 
 const goToEdit = (Client: TThirdParty) => {
-  emit("onEdit", {
-    name: "UsersTable.goToEdit",
+  emit("on-edit", {
+    name: "ClientsCards.goToEdit",
     data: { Client },
   });
 };
 const unableItem = async (Client: TThirdParty) => {
-  emit("onDeactivate", {
-    name: "UsersTable.deactivate",
+  emit("on-desactivate", {
+    name: "ClientsCards.unableItem",
     data: { Client },
   });
 };

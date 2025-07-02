@@ -22,7 +22,7 @@ export const ClientsRouter = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/client/permissions",
+    path: "/client/:id/permissions",
     name: "client-permissions",
     isAuth: false,
     //@ts-ignore

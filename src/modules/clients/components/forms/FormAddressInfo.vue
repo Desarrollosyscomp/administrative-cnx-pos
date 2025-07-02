@@ -49,16 +49,18 @@ const locationValidations = computed(() => {
 
 const onUpdateLocation = (emitted: EmitInterface) => {
 
-  clientsStore.form.country_id =
-    emitted.data.country?.id ?? clientsStore.form.country_id;
-  clientsStore.form.department_id =
-    emitted.data.department?.id ?? clientsStore.form.department_id;
-  clientsStore.form.municipality_id =
-    emitted.data.municipality?.id ?? clientsStore.form.municipality_id;
   clientsStore.form.neighborhood_id =
     emitted.data.neighborhood?.id ?? clientsStore.form.neighborhood_id;
 
-
+    clientsStore.form.municipality_id =
+    emitted.data.municipality?.id ?? clientsStore.form.municipality_id;
+    
+    clientsStore.form.department_id =
+    emitted.data.department?.id ?? clientsStore.form.department_id;
+    
+    clientsStore.form.country_id =
+      emitted.data.country?.id ?? clientsStore.form.country_id;
+      
   location.country = emitted.data.country ?? {};
   location.department = emitted.data.department ?? {};
   location.municipality = emitted.data.municipality ?? {};

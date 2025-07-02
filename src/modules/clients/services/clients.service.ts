@@ -133,4 +133,27 @@ export const ClientsService = {
       },
     });
   },
+  syncSystemServices: async (client_id: number, system_service_ids: Array<number>) => {
+    return axios.post({
+      url: `${URL_API}/clients/${client_id}/attach-system-services`,
+      data: {
+        system_service_ids,
+      },
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  getClientSystemServices: async (client_id: string) => {
+    return axios.get({
+      url: `${URL_API}/clients/${client_id}/system-services`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
 };

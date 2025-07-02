@@ -4,10 +4,6 @@
     <div class="show d-none d-sm-block ml-5 mr-4">
       <v-row>
         <v-col>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
           <v-card class="page-margins mt-n4">
             <v-card-text>
               <p class="text-h6">
@@ -20,9 +16,9 @@
                   <b>
                     Username:
                   </b>
-                  Fernanda
+                  {{ clientsStore.selectedItem.person?.first_name ?? "" }} {{ clientsStore.selectedItem.person?.surename ?? "" }}
                 </p>
-                <v-btn :disabled="selectedPermission.length == 0" variant="outlined" class="mt-n6" color="indigo">
+                <v-btn variant="outlined" class="mt-n6" color="indigo" @click="syncSystemServices">
                   Guardar
                 </v-btn>
               </div>
@@ -38,30 +34,31 @@
         </v-col>
       </v-row>
       <v-row class="mt-n4">
-        <v-col cols="12" md="4" v-for="(permission, i) in clientsStore.system_services_paginator.list" :key="i">
-          <v-card elevation="2" link class="border-color full-height-card page-margins" @click="toggleSelection(i)">
+        <v-col cols="12" md="4" v-for="(system_service) in clientsStore.system_services_paginator.list" :key="system_service.id">
+          <v-card elevation="2" link class="border-color full-height-card page-margins" @click="toggleSelection(system_service)">
             <v-card-text>
               <div class="align-items">
                 <p class="font-size">
                   <b>
-                    {{ permission.name }}
+                    {{ system_service.name }}
                   </b>
                 </p>
                 <span class="mt-n2">
-                  <v-icon v-if="selectedPermission.includes(i)" color="green" size="33">
+                  <v-icon v-if="clientHasSystemService(system_service.id)" color="green" size="33">
                     mdi-check-circle-outline
                   </v-icon>
                 </span>
               </div>
-              <div class="mt-6" v-if=false>
+              <div class="mt-6">
                 <!-- Mostrar las primeras 3 acciones -->
-                <li v-for="(action, i) in permission.actions.slice(0, 3)" :key="i" class="list-style">
-                  <span class="icon-style">★</span>
-                  {{ action }}
-                </li>
-
+                <div v-for="(i) in [0,1,2]" :key="i">
+                  <li v-if="system_service.functionalities[i]" class="list-style">
+                    <span class="icon-style">★</span>
+                    {{ system_service.functionalities[i].name }}
+                  </li>
+                </div>
                 <!-- Mostrar 'Otros' si hay más de 3 acciones -->
-                <li v-if="permission.actions.length > 3" class="list-style">
+                <li v-if="system_service.functionalities.length > 3" class="list-style">
                   <span class="icon-style">★</span>
                   Otros
                 </li>
@@ -70,7 +67,7 @@
             <v-card-actions>
               <div class="mt-3 mb-n3 button-bottom">
                 <v-btn variant="outlined" size="small" block color="indigo"
-                  @click.stop="openPermissionDialog(permission)">
+                  @click.stop="openPermissionDialog(system_service)">
                   Ver permiso
                 </v-btn>
               </div>
@@ -107,23 +104,29 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, inject } from 'vue';
 import LayoutOne from '../../../Layouts/LayoutOne.vue';
 import { useClientsStore } from '../store/useClientsStore';
 import EmptyLottie from '../../../assets/lotties/empty.json';
+import { useRoute } from 'vue-router';
+import { TSystemService } from '../interfaces/system-service.type';
+
+const swal: any = inject("swal");
+
+const route = useRoute()
 
 const clientsStore = useClientsStore()
 
 const onePermissionInfo = ref()
 // let selectPermission = ref(true)
 
-let selectedPermission = ref<number[]>([])
-const toggleSelection = (index: number) => {
-  const i = selectedPermission.value.indexOf(index);
-  if (i > -1) {
-    selectedPermission.value.splice(i, 1); // deselecciona si ya está
+const toggleSelection = (system_service: TSystemService) => {
+  console.log(clientHasSystemService(system_service.id))
+  if (clientHasSystemService(system_service.id)) {
+    const index = clientsStore.client_system_services.indexOf(system_service)
+    clientsStore.client_system_services.splice(index, 1); // deselecciona si ya está
   } else {
-    selectedPermission.value.push(index); // selecciona si no está
+    clientsStore.client_system_services.push(system_service); // selecciona si no está
   }
 }
 
@@ -139,8 +142,35 @@ const onCloseDialog = () => {
 const loadSystemServices = async () => {
   await clientsStore.loadSystemServices();
 }
+
+const syncSystemServices = async () => {
+  const selected_system_services_ids = clientsStore.client_system_services.map((system_service: any) => system_service.id)
+  await clientsStore.syncSystemServices(clientsStore.selectedItem.id, selected_system_services_ids)
+  await swal.fire({
+        icon: "success",
+        title: "Éxito",
+        text: `Servicios actualizados correctamente`,
+        showConfirmButton: false,
+        timer: 3000,
+      });
+}
+
+const loadClient = async () => {
+  await clientsStore.loadClient(route.params.id)
+}
+
+const loadClientSystemServices = async () => {
+  await clientsStore.loadClientSystemServices(route.params.id)
+}
+
+const clientHasSystemService = (system_service_id: number) => {
+  return clientsStore.client_system_services.some((system_service: any) => system_service.id == system_service_id)
+}
+
 onMounted(async () => {
+  loadClient()
   loadSystemServices()
+  loadClientSystemServices()
 });
 </script>
 <!-- ******************** CSS ******************** -->

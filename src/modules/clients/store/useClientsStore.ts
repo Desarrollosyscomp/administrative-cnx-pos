@@ -13,6 +13,7 @@ import { TInitialData } from "../interfaces/initial-data.type";
 import { ClientsService } from "../services/clients.service";
 import { TFinancialActivities } from "../interfaces/financial-activity.type";
 import { TThirdParty } from "../interfaces/third-party.interface";
+import { TSystemService } from "../interfaces/system-service.type";
 
 export const useClientsStore: any = defineStore({
   id: "clients",
@@ -45,6 +46,8 @@ export const useClientsStore: any = defineStore({
       itemsCount: 0,
       totalPages: 0,
     },
+
+    client_system_services: [] as Array<TSystemService>,
 
     fiscalObligations: [] as Array<TFiscalObligation>,
     identificationTypes: [] as Array<IdentificationTypeInterface>,
@@ -426,6 +429,30 @@ export const useClientsStore: any = defineStore({
         this.system_services_paginator.list = response.data.response.list;
         this.system_services_paginator.itemsCount = response.data.response.count;
         this.system_services_paginator.totalPages = response.data.response.totalPages;
+      }
+    },
+    async syncSystemServices(client_id:number, system_services_ids: Array<number>) {
+      const response = await ClientsService.syncSystemServices(client_id,system_services_ids)
+      if(response.status == 200){
+        return {
+
+        }
+      }else{
+        return {
+          error: true
+        }
+      }
+    },
+    async loadClientSystemServices(id: string) {
+      let response = await ClientsService.getClientSystemServices(id);
+      if (response.status == 200) {
+        this.client_system_services = response.data.response.system_services;
+      }
+    },
+    async loadClient(id: string) {  
+      let response = await ClientsService.getClientById(id);
+      if (response.status == 200) {
+        this.selectedItem = response.data.response.client;
       }
     },
   },
