@@ -459,9 +459,10 @@ export const useClientsStore: any = defineStore({
     },
     async saveTaxxaInfo(data: any) {
       let response = await ClientsService.saveTaxxaInfo(this.selectedItem.id, data);
-      if (response.status == 200) {
+      if (response.status == 201) {
         return {
           error: false,
+          data: response.data.response,
         };
       } else {
         return {
@@ -472,7 +473,7 @@ export const useClientsStore: any = defineStore({
     async loadElectronicInvoiceProviders() {
       let response = await ClientsService.getElectronicInvoiceProviders();
       if (response.status == 200) {
-        this.electronic_invoice_providers = response.data.response.electronic_invoice_providers;
+        this.electronic_invoice_providers = response.data.response.electronicInvoiceProviders;
       }
     },
   },

@@ -39,18 +39,18 @@
           <td class="text-right">
             <v-menu location="start">
               <template v-slot:activator="{ props }">
-                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props">
+                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" @click="openClientDetails(item)">
                   Opciones
                 </v-btn>
               </template>
-              <v-list>
-                <v-list-item value="1" v-if="item.is_active == true">
-                  <v-list-item-title @click="goToEdit(item)">
+              <!-- <v-list>
+                <v-list-item value="1" v-if="item.is_active == true" @click="goToEdit(item)">
+                  <v-list-item-title >
                     <v-icon color="blue-lighten-2" size="small">mdi-pencil</v-icon> Editar cliente
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="2">
-                  <v-list-item-title @click="unableItem(item)">
+                <v-list-item value="2" @click="unableItem(item)">
+                  <v-list-item-title >
                     <v-icon size="small" :color="item.is_active ? 'red-lighten-2' : 'blue-lighten-2'">
                       {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
                     </v-icon>
@@ -60,8 +60,8 @@
                     cliente
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="3" v-if="item.is_active == true">
-                  <v-list-item-title @click="onPermissions(item)">
+                <v-list-item value="3" v-if="item.is_active == true" @click="onPermissions(item)">
+                  <v-list-item-title >
                     <v-icon size="small">mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
                 </v-list-item>
@@ -75,7 +75,7 @@
                     <v-icon size="small">mdi-invoice-text-fast-outline</v-icon> Proveedor de facturacion electrónica
                   </v-list-item-title>
                 </v-list-item>
-              </v-list>
+              </v-list> -->
             </v-menu>
           </td>
         </tr>
@@ -130,6 +130,13 @@ const setIdetification = (client: TThirdParty) =>{
     return client.company?.identification?.document_number ?? 'N/A'
   }
 }
+
+const openClientDetails = (item: TThirdParty) => {
+  clientsStore.selectedItem = item;
+  // clientsStore.moduleMode = "details";
+  router.push("/client/details");
+};
+
 
 onMounted(() => {
   clientsStore.loadPaginatedList()
