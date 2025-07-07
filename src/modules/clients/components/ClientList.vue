@@ -1,5 +1,5 @@
 <template>
-  <ClientTable class="show d-none d-sm-block" @onEdit="goToEdit" @onDesactivate="unableItem" />
+  <ClientTable class="show d-none d-sm-block" @onEdit="goToEdit" @onDesactivate="unableItem" @on-set-database="onSetDatabase" @on-set-eip="onSetEIP"/>
   <ClientsCards class="mobile-cards d-block d-sm-none mt-3" @on-edit="goToEdit" @on-desactivate="unableItem" />
   <div align="center" class="mt-4">
     <Paginator v-if="clientsStore.itemsCount > clientsStore.limit" :key="clientsStore.page"
@@ -22,7 +22,7 @@ import EmptyLottie from "../../../assets/lotties/empty.json";
 
 const clientsStore = useClientsStore()
 
-const emit = defineEmits(["onEdit", "onDeactivate"]);
+const emit = defineEmits(["onEdit", "onDeactivate", "on-action"]);
 
 const onChangePage = (emitted: EmitInterface) => {
   clientsStore.page = emitted.data.page;
@@ -31,15 +31,28 @@ const onChangePage = (emitted: EmitInterface) => {
 
 const goToEdit = (emitted: EmitInterface) => {
   emit("onEdit", {
-    name: "ThirdPartiesList.goToEdit" + emitted.name,
+    name: "ThirdPartiesList.goToEdit." + emitted.name,
     data: emitted.data,
   });
 };
+
 const unableItem = (emitted: EmitInterface) => {
   emit("onDeactivate", {
-    name: "ThirdPartiesList.onDeactivatet",
+    name: "ThirdPartiesList.onDesactivate." + emitted.name,
     data: emitted.data,
   });
+};
+
+const onSetDatabase = (emitted: EmitInterface) => {
+  clientsStore.openDialog = true;
+  clientsStore.moduleMode = "set-database";
+  clientsStore.selectedItem = emitted.data.item;
+};
+
+const onSetEIP = (emitted: EmitInterface) => {
+  clientsStore.openDialog = true;
+  clientsStore.moduleMode = "set-eip";
+  clientsStore.selectedItem = emitted.data.item;
 };
 
 </script>

@@ -14,6 +14,7 @@ import { ClientsService } from "../services/clients.service";
 import { TFinancialActivities } from "../interfaces/financial-activity.type";
 import { TThirdParty } from "../interfaces/third-party.interface";
 import { TSystemService } from "../interfaces/system-service.type";
+import { ElectronicInvoiceProvider } from "../interfaces/electronic-invoice-provider.type";
 
 export const useClientsStore: any = defineStore({
   id: "clients",
@@ -47,6 +48,7 @@ export const useClientsStore: any = defineStore({
       totalPages: 0,
     },
 
+    electronic_invoice_providers: [] as Array<ElectronicInvoiceProvider>,
     client_system_services: [] as Array<TSystemService>,
 
     fiscalObligations: [] as Array<TFiscalObligation>,
@@ -358,7 +360,7 @@ export const useClientsStore: any = defineStore({
     async delete() {
       let is_active = !this.selectedItem.is_active;
       let response = await ClientsService.deleteClient(
-        this.selectedItem.id,
+        this.selectedItem.id.toString(),
         is_active
       );
       if (response.status == 200) {
@@ -453,6 +455,24 @@ export const useClientsStore: any = defineStore({
       let response = await ClientsService.getClientById(id);
       if (response.status == 200) {
         this.selectedItem = response.data.response.client;
+      }
+    },
+    async saveTaxxaInfo(data: any) {
+      let response = await ClientsService.saveTaxxaInfo(this.selectedItem.id, data);
+      if (response.status == 200) {
+        return {
+          error: false,
+        };
+      } else {
+        return {
+          error: true,
+        };
+      }
+    },
+    async loadElectronicInvoiceProviders() {
+      let response = await ClientsService.getElectronicInvoiceProviders();
+      if (response.status == 200) {
+        this.electronic_invoice_providers = response.data.response.electronic_invoice_providers;
       }
     },
   },

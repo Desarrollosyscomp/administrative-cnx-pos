@@ -65,6 +65,16 @@
                     <v-icon size="small">mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
                 </v-list-item>
+                <v-list-item @click="onSetDatabase(item)" value="4" v-if="item.is_active == true">
+                  <v-list-item-title>
+                    <v-icon size="small">mdi-database</v-icon> Base de datos
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="onSetEIP(item)" value="5" v-if="item.is_active == true">
+                  <v-list-item-title>
+                    <v-icon size="small">mdi-invoice-text-fast-outline</v-icon> Proveedor de facturacion electrónica
+                  </v-list-item-title>
+                </v-list-item>
               </v-list>
             </v-menu>
           </td>
@@ -81,11 +91,8 @@ import { useClientsStore } from '../store/useClientsStore';
 import { TThirdParty } from '../interfaces/third-party.interface';
 const clientsStore = useClientsStore()
 
-const emit = defineEmits(['onEdit', 'onDesactivate'])
-// const openEditForm = () => {
-//   clientsStore.moduleMode = "edit";
-//   router.push("/client/form");
-// };
+const emit = defineEmits(['onEdit', 'onDesactivate', "on-set-database", "on-set-eip"])
+
 const onPermissions = (item: TThirdParty) => {
   router.push("/client/" + item.id + "/permissions");
 };
@@ -98,6 +105,20 @@ const goToEdit = (item: TThirdParty) => {
 const unableItem = async (item: TThirdParty) => {
   emit("onDesactivate", {
     name: "ThirdPartiesTable.deactivate",
+    data: { item },
+  });
+};
+
+const onSetDatabase = async (item: TThirdParty) => {
+  emit("on-set-database", {
+    name: "ThirdPartiesTable.setDatabase",
+    data: { item },
+  });
+};
+
+const onSetEIP = async (item: TThirdParty) => {
+  emit("on-set-eip", {
+    name: "ThirdPartiesTable.setEIP",
     data: { item },
   });
 };

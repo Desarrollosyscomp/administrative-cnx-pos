@@ -156,4 +156,25 @@ export const ClientsService = {
       },
     });
   },
-};
+  saveTaxxaInfo: async (client_id: number, data: object) => {
+    return axios.post({
+      url: `${URL_API}/clients/${client_id}/taxxa-credentials`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  getElectronicInvoiceProviders: async () => {
+    return axios.get({
+      url: `${URL_API}/clients/find-all/electronic-invoice-providers`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  }
+}
