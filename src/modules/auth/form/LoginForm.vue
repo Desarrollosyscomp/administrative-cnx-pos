@@ -10,8 +10,9 @@
                 <v-form>
                     <v-text-field label="Usuario" type="text" variant="outlined" density="compact" required
                         append-inner-icon="mdi-email" class="border-color" v-model="formLogin.user"></v-text-field>
-                    <v-text-field label="Contraseña" type="password" variant="outlined" density="compact" required
-                        append-inner-icon="mdi-lock" class="border-color" v-model="formLogin.password"></v-text-field>
+                    <v-text-field label="Contraseña" :type="isVisible ? 'text' : 'password'" variant="outlined" density="compact" required
+                        :append-inner-icon="isVisible ? 'mdi-lock-off':'mdi-lock'" class="border-color" v-model="formLogin.password"
+                        @click:append-inner="isVisible = !isVisible"></v-text-field>
                     <div align="start">
                         <v-btn variant="plain" density="compact" class="text-black mt-n3 mb-2 ml-n4"
                             @click="goTo('forgot-password')">
@@ -34,8 +35,10 @@
 import { reactive } from 'vue';
 import router from '../../../router';
 import { useAuthStore } from '../store/useStoreAuth';
+import { ref } from 'vue';
 
 const authStore = useAuthStore();
+let isVisible = ref(false);
 
 const formLogin = reactive({
     user: 'admin',
