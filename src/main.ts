@@ -34,6 +34,7 @@ const app = createApp(App);
 
 app.component("Layout", Layout);
 app.component("Paginator", Paginator);
+app.component("Vue3Lottie", Vue3Lottie);
 
 app.use(router);
 app.use(vuetify);

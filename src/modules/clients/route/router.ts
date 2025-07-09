@@ -30,7 +30,7 @@ export const ClientsRouter = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/client/details",
+    path: "/client/:id/details",
     name: "client-details",
     isAuth: false,
     //@ts-ignore

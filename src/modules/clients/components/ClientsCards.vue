@@ -1,11 +1,11 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <div class="mobile-cards d-block d-sm-none mt-3" v-for="(item, index) in clientsStore.list" :key="index">
+  <div class="mobile-cards d-block d-sm-none " v-for="(item, index) in clientsStore.list" :key="index">
     <v-card class="mb-6" variant="outlined" color="#c9c9c9">
       <v-card-title>
         <v-row class="row">
-          <v-col class="mt-3">
-            <p style="color: black;" class="text-h7">
+          <v-col class="mt-2">
+            <p style="color: #333; font-size: 14px;">
                 {{ item.name }}
             </p>
 

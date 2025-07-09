@@ -49,6 +49,7 @@ export const useClientsStore: any = defineStore({
     },
 
     electronic_invoice_providers: [] as Array<ElectronicInvoiceProvider>,
+    selectedItemTaxxaInfo: {} as any,
     client_system_services: [] as Array<TSystemService>,
 
     fiscalObligations: [] as Array<TFiscalObligation>,
@@ -457,6 +458,15 @@ export const useClientsStore: any = defineStore({
         this.selectedItem = response.data.response.client;
       }
     },
+    
+    async loadClientDetails(id: string) {
+      let response = await ClientsService.getClientTaxxaInfo(+id);
+      if (response.status == 200) {
+        console.log(response.data.response);
+        this.selectedItemTaxxaInfo = response.data.response
+      }
+    },
+
     async saveTaxxaInfo(data: any) {
       let response = await ClientsService.saveTaxxaInfo(this.selectedItem.id, data);
       if (response.status == 201) {

@@ -40,7 +40,7 @@
             <v-menu location="start">
               <template v-slot:activator="{ props }">
                 <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" @click="openClientDetails(item)">
-                  Opciones
+                  Detalles
                 </v-btn>
               </template>
               <!-- <v-list>
@@ -93,35 +93,35 @@ const clientsStore = useClientsStore()
 
 const emit = defineEmits(['onEdit', 'onDesactivate', "on-set-database", "on-set-eip"])
 
-const onPermissions = (item: TThirdParty) => {
-  router.push("/client/" + item.id + "/permissions");
-};
+// const onPermissions = (item: TThirdParty) => {
+//   router.push("/client/" + item.id + "/permissions");
+// };
 
-const goToEdit = (item: TThirdParty) => {
-  clientsStore.moduleMode = "edit"
-  router.push("/client/form/" + item.id);
-};
+// const goToEdit = (item: TThirdParty) => {
+//   clientsStore.moduleMode = "edit"
+//   router.push("/client/form/" + item.id);
+// };
 
-const unableItem = async (item: TThirdParty) => {
-  emit("onDesactivate", {
-    name: "ThirdPartiesTable.deactivate",
-    data: { item },
-  });
-};
+// const unableItem = async (item: TThirdParty) => {
+//   emit("onDesactivate", {
+//     name: "ThirdPartiesTable.deactivate",
+//     data: { item },
+//   });
+// };
 
-const onSetDatabase = async (item: TThirdParty) => {
-  emit("on-set-database", {
-    name: "ThirdPartiesTable.setDatabase",
-    data: { item },
-  });
-};
+// const onSetDatabase = async (item: TThirdParty) => {
+//   emit("on-set-database", {
+//     name: "ThirdPartiesTable.setDatabase",
+//     data: { item },
+//   });
+// };
 
-const onSetEIP = async (item: TThirdParty) => {
-  emit("on-set-eip", {
-    name: "ThirdPartiesTable.setEIP",
-    data: { item },
-  });
-};
+// const onSetEIP = async (item: TThirdParty) => {
+//   emit("on-set-eip", {
+//     name: "ThirdPartiesTable.setEIP",
+//     data: { item },
+//   });
+// };
 
 const setIdetification = (client: TThirdParty) =>{
   if (client.clientable_type == 'person'){
@@ -132,9 +132,7 @@ const setIdetification = (client: TThirdParty) =>{
 }
 
 const openClientDetails = (item: TThirdParty) => {
-  clientsStore.selectedItem = item;
-  // clientsStore.moduleMode = "details";
-  router.push("/client/details");
+  router.push("/client/" + item.id + "/details");
 };
 
 

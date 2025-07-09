@@ -15,7 +15,7 @@
         </div>
       </v-card-title>
       <v-card-text>
-        <div class="ml-2 mb-n2">
+        <div class="ml-2 mb-n9 mt-3">
           <v-switch 
           v-model="usersStore.is_active" 
           color="#841811ff" 

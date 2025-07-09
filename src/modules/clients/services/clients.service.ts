@@ -133,7 +133,10 @@ export const ClientsService = {
       },
     });
   },
-  syncSystemServices: async (client_id: number, system_service_ids: Array<number>) => {
+  syncSystemServices: async (
+    client_id: number,
+    system_service_ids: Array<number>
+  ) => {
     return axios.post({
       url: `${URL_API}/clients/${client_id}/attach-system-services`,
       data: {
@@ -176,5 +179,16 @@ export const ClientsService = {
         },
       },
     });
-  }
-}
+  },
+  
+  getClientTaxxaInfo: async (client_id: number, ) => {
+    return axios.get({
+      url: `${URL_API}/clients/${client_id}/taxxa-credentials`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+};
