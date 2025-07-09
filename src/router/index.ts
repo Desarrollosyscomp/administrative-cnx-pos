@@ -11,7 +11,7 @@ import { PermissionsRouter } from "../modules/permissions/routes/permissions.rou
 
 const routes = [
   {
-    path: "/test",
+    path: "/",
     name: "Home",
     // component: HelloWorld,
     component: () => import("../components/HelloWorld.vue")
