@@ -3,7 +3,7 @@
     <v-container class="pa-3" fluid>
       <v-row>
         <v-col cols="12" md="4">
-          <v-card elevation="3">
+          <v-card elevation="3" class="full-height-card">
             <v-card-text class="pa-5">
               <div align="center">
                 <v-skeleton-loader type="image" v-if="!credentialsObject?.schema?.name"></v-skeleton-loader>
@@ -19,22 +19,23 @@
                   {{ credentialsObject?.client?.is_active ? "Activo" : "Inactivo" }}
                 </p>
               </div>
-              <div class="align-buttons mt-2 mb-3">
+              <div class="align-buttons mt-2 mb-5">
                 <v-btn variant="outlined" color="#841811ff" density="compact"
-                  @click="unableItem(clientsStore.list.find((item: any) => item.id == clientsStore.selectedItem.id))">
+                  @click="unableItem(credentialsObject?.client)">
                   {{ credentialsObject?.client?.is_active ? "Inactivar" : "Restaurar" }}
                 </v-btn>
                 <v-btn variant="outlined" color="#4caf50" density="compact"
                   v-if="credentialsObject?.client?.is_active == true" @click="goToEdit()">
                   Editar
                 </v-btn>
-                <v-btn variant="outlined" color="#3e97ffff" density="compact">
+                <v-btn variant="outlined" color="#3e97ffff" density="compact" @click="onPermissions()"
+                  v-if="credentialsObject?.client?.is_active == true">
                   Permisos
                 </v-btn>
               </div>
               <v-divider></v-divider>
-              <v-skeleton-loader type="paragraph" v-if="!credentialsObject?.schema?.name"></v-skeleton-loader>
-              <div class="mt-3" v-else>
+              <!-- <v-skeleton-loader type="paragraph" v-if="!credentialsObject?.schema?.name"></v-skeleton-loader> -->
+              <div class="mt-5">
                 <p>
                   <b>
                     Fecha inicio licencia:
@@ -59,7 +60,8 @@
                 <span class="color-font" v-if="credentialsObject?.schema?.name">
                   {{ credentialsObject?.schema?.name }}
                 </span>
-                <span class="text-blue" v-else @click="openCreateSchemaSwal" style="cursor: pointer;">
+                <span class="text-blue" v-else-if="!credentialsObject" @click="openCreateSchemaSwal"
+                  style="cursor: pointer;">
                   {{ 'Crear base de datos' }}
                 </span>
               </div>
@@ -82,7 +84,7 @@
               <v-card class="full-height-card" elevation="3">
                 <v-card-text>
                   <v-row>
-                    <v-col cols="12" md="5" class="pa-5">
+                    <v-col cols="12" md="5" class="pa-5 mx-n1">
                       <p class="font-size">
                         <b>
                           Seleccionar Proveedor
@@ -93,7 +95,8 @@
                         :items="clientsStore.electronic_invoice_providers" item-title='name' item-value='id'
                         v-model="clientsStore.electronic_invoice_providers">
                       </v-select>
-                      <div align="center" class="mt-n5">
+                      <v-skeleton-loader type="image" v-if="!credentialsObject?.schema?.name"></v-skeleton-loader>
+                      <div align="center" class="mt-n5" else>
                         <img src="../../../assets/images/Invoice-rafiki.svg" width="210px">
                       </div>
                     </v-col>
@@ -121,13 +124,18 @@
                             @click:append-inner="visible = !visible" :rules="passwordRules"
                             :disabled="!credentialsObject?.schema?.name">
                           </v-text-field>
-                          <v-text-field label="URL" prepend-inner-icon="mdi-lock" variant="outlined" density="compact"
-                            class="mb-3" v-model="formData.url" :rules="urlRules"
+                          <v-text-field label="URL" prepend-inner-icon="mdi-link-variant" variant="outlined"
+                            density="compact" class="mb-3" v-model="formData.url" :rules="urlRules"
                             :disabled="!credentialsObject?.schema?.name">
                           </v-text-field>
-                          <div class="justify-end d-flex ">
-                            <v-btn variant="outlined" color="success" type="submit">
-                              Guardar
+                          <v-text-field label="URL de token" prepend-inner-icon="mdi-link-lock" variant="outlined"
+                            density="compact" class="mb-3" v-model="formData.login_url" :rules="loginUrlRules"
+                            :disabled="!credentialsObject?.schema?.name">
+                          </v-text-field>
+                          <div class="justify-end d-flex mt-n2">
+                            <v-btn variant="outlined" :color="clientsStore.moduleMode == 'add' ? 'success' : 'primary'"
+                              type="submit" :disabled="!isFormChanged">
+                              {{ clientsStore.moduleMode == "add" ? 'Guardar' : 'Editar' }}
                             </v-btn>
                           </div>
                         </v-form>
@@ -158,19 +166,29 @@ import * as Yup from "yup";
 const route = useRoute();
 let visible = ref(false);
 let showValidationErrors = ref(false);
-// let thirdId = ref(0);
 let message = ref("");
+
+
 let formData = reactive({
   email: "",
   password: "",
   url: "",
+  login_url: "",
 });
 
 const validations = {
   email: Yup.string().required("El email es requerido").trim()
     .email("El correo debe contener un @ y un dominio válido como .com, .co, etc."),
   password: Yup.string().required("La contraseña es requerida"),
-  url: Yup.string().required("La URL es requerida").trim(),
+  url: Yup.string()
+    .required("La URL es requerida")
+    .trim()
+    .matches(/^https:\/\//, "La URL debe comenzar con https://"),
+
+  login_url: Yup.string()
+    .required("El login URL es requerido")
+    .trim()
+    .matches(/^https:\/\//, "El login URL debe comenzar con https://"),
 };
 
 const emailRules = ref([
@@ -200,71 +218,95 @@ const passwordRules = ref([
 
 const urlRules = ref([
   async () => {
-    if (formData.url) return true;
-    return "La URL es requerida";
+    if (!formData.url) return "La URL es requerida";
+    return true;
+  },
+  async () => {
+    if (!formData.url.startsWith("https://")) {
+      return "La URL debe comenzar con https://";
+    }
+    return true;
+  },
+]);
+
+const loginUrlRules = ref([
+  async () => {
+    if (!formData.login_url) return "El URL de token es requerido";
+    return true;
+  },
+  async () => {
+    if (!formData.login_url.startsWith("https://")) {
+      return "El login URL debe comenzar con https://";
+    }
+    return true;
   },
 ]);
 
 let validationSchema = Yup.object(validations);
 
 const setForm = () => {
-  // if (clientsStore.moduleMode !== "edit") return;
+  if (!credentialsObject.value) return;
   console.log("clientsStore.selectedItem", clientsStore.selectedItemTaxxaInfo);
   formData.email = credentialsObject.value?.taxxaTenant?.email;
   formData.password = credentialsObject.value?.taxxaTenant?.password;
   formData.url = credentialsObject.value?.taxxaTenant?.url;
+  formData.login_url = credentialsObject.value?.taxxaTenant?.login_url;
 };
 
 const submit = async () => {
   try {
     await validationSchema.validate(formData);
-    const { error, data } = await clientsStore.saveTaxxaInfo(formData);
-    if (error) {
-      console.log(data)
-      message.value = data;
-      return;
+    const addMode = clientsStore.moduleMode == 'add';
+    let _data
+    if (addMode) {
+      const { error, data } = await clientsStore.saveTaxxaInfo(formData);
+      if (error) {
+        console.log(data)
+        message.value = data;
+        return;
+      }
+      _data = data;
+    } else {
+      const { error, data } = await clientsStore.editCredentials(route.params.id as string, formData);
+      if (error) {
+        console.log(data)
+        message.value = data;
+        return;
+      }
+      _data = data;
     }
-    if (data) {
+    if (_data) {
       clientsStore.toogleDialog();
       await swal.fire({
         icon: "success",
-        text: "Credenciales de Taxxa guardadas correctamente",
+        text: addMode ? "Credenciales de Taxxa guardadas correctamente" : "Credenciales de Taxxa actualizadas correctamente",
         showConfirmButton: false,
         timer: 1000,
       });
+      await loadTenantDetails()
+      formOrigin.value = credentialsObject.value?.taxxaTenant?.email +
+        credentialsObject.value?.taxxaTenant?.password +
+        credentialsObject.value?.taxxaTenant?.url +
+        credentialsObject.value?.taxxaTenant?.login_url;
     }
-
   } catch (e) {
     console.log("Error de validación:", e);
     showValidationErrors.value = true;
   }
 };
 
-// const showSaveButton = computed(() => {
-//   let passwordIsValid = true;
-//   let thirdPartyIdIsValid = thirdId.value != 0;
-
-//   if (clientsStore.moduleMode == "add") {
-//     passwordIsValid = !!formData.password;
-//   }
-
-//   passwordIsValid =
-//     passwordIsValid ||
-//     (formData.password.length >= 6 && formData.password.length <= 20);
-//   return (
-//     formData.email &&
-//     passwordIsValid &&
-//     thirdPartyIdIsValid &&
-//     formData.password == formData.password
-//   );
-// });
 
 const loadElectronicInvoiceProviders = async () => {
   await clientsStore.loadElectronicInvoiceProviders()
 }
 
-const loadClientDetails = async () => {
-  await clientsStore.loadClientDetails(route.params.id as string);
+const loadTenantDetails = async () => {
+  await clientsStore.loadTenantDetails(route.params.id as string);
+  if (credentialsObject.value?.taxxaTenant) {
+    clientsStore.moduleMode = "edit";
+  } else {
+    clientsStore.moduleMode = "add";
+  }
 }
 
 const parsedNameClient = () => {
@@ -294,6 +336,7 @@ const goToEdit = () => {
 };
 
 const unableItem = (item: TThirdParty) => {
+  console.log("unableItem", item);
   const action = !item.is_active ? "Restaurar" : "Desactivar";
   const successMessage = !item.is_active
     ? "Restaurado con éxito"
@@ -312,7 +355,7 @@ const unableItem = (item: TThirdParty) => {
     .then(async (result: any) => {
       if (result.isConfirmed) {
         clientsStore.selectedItem = item;
-        const response = await clientsStore.delete();
+        const response = await clientsStore.delete(item.id);
         clientsStore.selectedItem = {};
         if (response.data.status == 200) {
           await swal.fire({
@@ -321,6 +364,7 @@ const unableItem = (item: TThirdParty) => {
             showConfirmButton: false,
             timer: 1000,
           });
+          router.push("/client/list");
         } else {
           await swal.fire({
             icon: "warning",
@@ -333,38 +377,69 @@ const unableItem = (item: TThirdParty) => {
     });
 };
 
-const openCreateSchemaSwal = () => {
-  swal.fire({
+const personOrCompany = () => {
+  let client = clientsStore.selectedItem;
+  if (client?.clientable_type == 'person') {
+    return `${client.person?.first_name} ${client.person?.surename}`;
+  }
+  else if (client?.clientable_type == 'company') {
+    return client.company?.name;
+  }
+}
+
+const openCreateSchemaSwal = async () => {
+  const { value: username, isConfirmed } = await swal.fire({
     title: "Crear base de datos",
-    text: "¿Está seguro que desea crear una nueva base de datos para este cliente?",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#4CAF50",
     cancelButtonColor: "#d33",
-    confirmButtonText: '<span style="color: white;">Sí</span>',
+    input: "text",
+    inputLAbel: 'Escribe aqui',
+    html: `Ingrese el nombre especifico del cliente para confirmar <br> <b> "${personOrCompany()}" </b>`,
+    confirmButtonText: '<span style="color: white;">Crear</span>',
     cancelButtonText: '<span style="color: white;">Cancelar</span>',
-  })
-    .then(async (result: any) => {
-      if (result.isConfirmed) {
-        const response = await clientsStore.createSchema();
-        if (response.data.status == 200) {
-          await swal.fire({
-            icon: "success",
-            text: "Base de datos creada con éxito",
-            showConfirmButton: false,
-            timer: 1000,
-          });
-          loadClientDetails();
-        } else {
-          await swal.fire({
-            icon: "error",
-            text: "Ocurrió un error al crear la base de datos",
-            showConfirmButton: false,
-            timer: 1000,
-          });
-        }
+    inputValidator: (value: any) => {
+      if (!value) {
+        return "Debe escribir el nombre del cliente para poder crear la base de datos";
       }
-    });
+    }
+  })
+  if (isConfirmed) {
+    let person = `${clientsStore.selectedItem?.person?.first_name} ${clientsStore.selectedItem?.person?.surename}`;
+    let company = clientsStore.selectedItem?.company?.name;
+    if (username !== company && username !== person) {
+      console.log("Nombre de cliente inválido", username, company, person);
+      await swal.fire({
+        icon: "error",
+        text: "Error, nombre de cliente inválido",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      return;
+    }
+
+    const { data } = await clientsStore.createSchema();
+    console.log("response", data);
+
+    if (data) {
+      await swal.fire({
+        icon: "success",
+        text: "Base de datos creada con éxito",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      loadClient()
+      loadTenantDetails();
+    } else {
+      await swal.fire({
+        icon: "error",
+        text: "Ocurrió un error al crear la base de datos",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
+  }
 };
 
 const credentialsObject = computed(() => {
@@ -375,10 +450,39 @@ const loadClient = () => {
   return clientsStore.loadClient(route.params.id as string);
 }
 
+const onPermissions = () => {
+  router.push("/client/" + route.params.id + "/permissions");
+};
+
+let formOrigin = ref<string>('');
+
+const setFormWatcher = () => {
+  formOrigin.value = credentialsObject.value?.taxxaTenant?.email +
+    credentialsObject.value?.taxxaTenant?.password +
+    credentialsObject.value?.taxxaTenant?.url +
+    credentialsObject.value?.taxxaTenant?.login_url;
+};
+
+
+const formEdit = computed(() => {
+  return (
+    formData.email +
+    formData.password +
+    formData.url +
+    formData.login_url
+  );
+});
+
+const isFormChanged = computed(() => {
+  return formOrigin.value !== formEdit.value;
+});
+
+
 onMounted(async () => {
-  await loadClientDetails()
+  await loadTenantDetails()
   await loadElectronicInvoiceProviders()
   await loadClient();
+  await setFormWatcher();
   setForm();
 });
 
@@ -389,7 +493,7 @@ onMounted(async () => {
   height: 100%;
 }
 
-.align-buttons{
+.align-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;

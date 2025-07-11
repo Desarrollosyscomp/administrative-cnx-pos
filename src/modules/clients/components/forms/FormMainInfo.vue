@@ -1,5 +1,7 @@
 <template>
   <v-form @submit.prevent="submitForm">
+    <pre>
+    </pre>
     <v-row>
       <v-col>
         <v-select
@@ -360,7 +362,6 @@ const setForm = () => {
 const isCompany = computed(() => {
   if(mainForm.documentType)
     return isCompanyDocumentType(mainForm.documentType);
-
   return false
 });
 

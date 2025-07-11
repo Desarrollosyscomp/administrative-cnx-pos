@@ -1,6 +1,10 @@
 <template>
   <LayoutOne>
     <v-form @submit.prevent="submitTotalForm">
+          <pre>
+
+            {{ clientsStore.form }}
+          </pre>
       <v-row>
         <v-col>
           <v-card>
@@ -144,6 +148,7 @@ const loadThirdParty = async () => {
   const form = parseClientsToForm(thirdParty);
   clientsStore.form = parseClientsToForm(thirdParty);
   console.log(clientsStore.form)
+  console.log(thirdParty)
   setTimeout(() => {
     clientsStore.selectedFinancialActivities = form.financial_activities;
     clientsStore.form.neighborhood_id = form.neighborhood_id;
@@ -193,9 +198,7 @@ const submitTotalForm = async () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      router.push({
-        name: "client-list",
-      });
+      router.push("/client/" + route.params.id as string + "/details");
     } else {
       swal.fire({
         icon: "warning",

@@ -15,6 +15,7 @@ import { TFinancialActivities } from "../interfaces/financial-activity.type";
 import { TThirdParty } from "../interfaces/third-party.interface";
 import { TSystemService } from "../interfaces/system-service.type";
 import { ElectronicInvoiceProvider } from "../interfaces/electronic-invoice-provider.type";
+import { TCredentials } from "../interfaces/credentials.type";
 
 export const useClientsStore: any = defineStore({
   id: "clients",
@@ -73,8 +74,8 @@ export const useClientsStore: any = defineStore({
       this.form = {
         user_warehouse: "0",
         tradename: "",
-        regime_dian_id: "",
-        identification_type_code: "",
+        regime_dian_id: null,
+        identification_type_code: null,
         identification_number: "",
         emails: [],
         phones: [],
@@ -108,7 +109,7 @@ export const useClientsStore: any = defineStore({
       let response = await ClientsService.getInitialData(+clientId);
       if (response.status == 200) {
         return response.data.response;
-      } 
+      }
       {
         return {
           thirdPartyFinancialActivities: [] as Array<TFinancialActivities>,
@@ -119,6 +120,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+
     getFullName() {
       return `${this.form.first_name ?? ""} 
       ${this.form.second_name ?? ""} 
@@ -358,12 +360,9 @@ export const useClientsStore: any = defineStore({
       }
     },
 
-    async delete() {
+    async delete(client_id: number) {
       let is_active = !this.selectedItem.is_active;
-      let response = await ClientsService.deleteClient(
-        this.selectedItem.id.toString(),
-        is_active
-      );
+      let response = await ClientsService.deleteClient(client_id, is_active);
       if (response.status == 200) {
         this.loadPaginatedList();
         return {
@@ -388,7 +387,9 @@ export const useClientsStore: any = defineStore({
       const municipality_dian_id = this.selectedMunicipality?.dian_id;
       const neighborhood_dian_id = this.selectedNeighborhood?.dian_id;
       let response = await ClientsService.editClient(+id, {
-        tradename: data.tradename, barcode: data.barcode,  third_party_classification_ids: data.third_party_classification_ids,
+        tradename: data.tradename,
+        barcode: data.barcode,
+        third_party_classification_ids: data.third_party_classification_ids,
         regime_dian_id: data.regime_dian_id,
         document_type: data.identification_type_code,
         identification_number: data.identification_number,
@@ -413,7 +414,7 @@ export const useClientsStore: any = defineStore({
         neighborhood_id:
           neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
       });
-      console.log(response)
+      console.log(response);
       if (response.status == 200) {
         return {
           error: false,
@@ -422,28 +423,39 @@ export const useClientsStore: any = defineStore({
       } else {
         return {
           error: true,
-          data: response.data.message
+          data: response.data.message,
         };
       }
     },
+
     async loadSystemServices() {
-      let response = await ClientsService.getPaginatedSystemServices(this.system_services_paginator.page, this.system_services_paginator.limit, this.system_services_paginator.search);
+      let response = await ClientsService.getPaginatedSystemServices(
+        this.system_services_paginator.page,
+        this.system_services_paginator.limit,
+        this.system_services_paginator.search
+      );
       if (response.status == 200) {
         this.system_services_paginator.list = response.data.response.list;
-        this.system_services_paginator.itemsCount = response.data.response.count;
-        this.system_services_paginator.totalPages = response.data.response.totalPages;
+        this.system_services_paginator.itemsCount =
+          response.data.response.count;
+        this.system_services_paginator.totalPages =
+          response.data.response.totalPages;
       }
     },
-    async syncSystemServices(client_id:number, system_services_ids: Array<number>) {
-      const response = await ClientsService.syncSystemServices(client_id,system_services_ids)
-      if(response.status == 200){
+    async syncSystemServices(
+      client_id: number,
+      system_services_ids: Array<number>
+    ) {
+      const response = await ClientsService.syncSystemServices(
+        client_id,
+        system_services_ids
+      );
+      if (response.status == 200) {
+        return {};
+      } else {
         return {
-
-        }
-      }else{
-        return {
-          error: true
-        }
+          error: true,
+        };
       }
     },
     async loadClientSystemServices(id: string) {
@@ -452,23 +464,42 @@ export const useClientsStore: any = defineStore({
         this.client_system_services = response.data.response.system_services;
       }
     },
-    async loadClient(id: string) {  
+    async loadClient(id: string) {
       let response = await ClientsService.getClientById(id);
       if (response.status == 200) {
         this.selectedItem = response.data.response.client;
       }
     },
-    
-    async loadClientDetails(id: string) {
-      let response = await ClientsService.getClientTaxxaInfo(+id);
+
+    async loadTenantDetails(id: string) {
+      let response = await ClientsService.getTenantInfo(+id);
       if (response.status == 200) {
         console.log(response.data.response);
-        this.selectedItemTaxxaInfo = response.data.response
+        this.selectedItemTaxxaInfo = response.data.response;
       }
     },
 
     async saveTaxxaInfo(data: any) {
-      let response = await ClientsService.saveTaxxaInfo(this.selectedItem.id, data);
+      let response = await ClientsService.saveTaxxaInfo(
+        this.selectedItem.id,
+        data
+      );
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+        };
+      }
+    },
+
+    async createSchema() {
+      let response = await ClientsService.createClientSchema(
+        this.selectedItem.id
+      );
       if (response.status == 201) {
         return {
           error: false,
@@ -483,7 +514,29 @@ export const useClientsStore: any = defineStore({
     async loadElectronicInvoiceProviders() {
       let response = await ClientsService.getElectronicInvoiceProviders();
       if (response.status == 200) {
-        this.electronic_invoice_providers = response.data.response.electronicInvoiceProviders;
+        this.electronic_invoice_providers =
+          response.data.response.electronicInvoiceProviders;
+      }
+    },
+
+    async editCredentials(id: string, data: TCredentials) {
+      let response = await ClientsService.editCredentials(+id, {
+        email: data.email,
+        password: data.password,
+        url: data.url,
+        login_url: data.login_url,
+      });
+      console.log(response);
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.message,
+        };
       }
     },
   },

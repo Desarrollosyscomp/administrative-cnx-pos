@@ -16,11 +16,17 @@
                   <b>
                     Username:
                   </b>
-                  {{ clientsStore.selectedItem.person?.first_name ?? "" }} {{ clientsStore.selectedItem.person?.surename ?? "" }}
+                  {{ clientsStore.selectedItem.person?.first_name ?? "" }} {{ clientsStore.selectedItem.person?.surename
+                  ?? "" }}
                 </p>
-                <v-btn variant="outlined" class="mt-n6" color="indigo" @click="syncSystemServices">
-                  Guardar
-                </v-btn>
+                <div>
+                  <v-btn variant="outlined" class="mt-n6 mx-3" color="#841811ff" @click="$router.go(-1)">
+                    Atras
+                  </v-btn>
+                  <v-btn variant="outlined" class="mt-n6" color="indigo" @click="syncSystemServices">
+                    Guardar
+                  </v-btn>
+                </div>
               </div>
             </v-card-text>
           </v-card>
@@ -34,8 +40,10 @@
         </v-col>
       </v-row>
       <v-row class="mt-n4">
-        <v-col cols="12" md="4" v-for="(system_service) in clientsStore.system_services_paginator.list" :key="system_service.id">
-          <v-card elevation="2" link class="border-color full-height-card page-margins" @click="toggleSelection(system_service)">
+        <v-col cols="12" md="4" v-for="(system_service) in clientsStore.system_services_paginator.list"
+          :key="system_service.id">
+          <v-card elevation="2" link class="border-color full-height-card page-margins"
+            @click="toggleSelection(system_service)">
             <v-card-text>
               <div class="align-items">
                 <p class="font-size">
@@ -51,7 +59,7 @@
               </div>
               <div class="mt-6">
                 <!-- Mostrar las primeras 3 acciones -->
-                <div v-for="(i) in [0,1,2]" :key="i">
+                <div v-for="(i) in [0, 1, 2]" :key="i">
                   <li v-if="system_service.functionalities[i]" class="list-style">
                     <span class="icon-style">★</span>
                     {{ system_service.functionalities[i].name }}
@@ -148,12 +156,13 @@ const syncSystemServices = async () => {
   const selected_system_services_ids = clientsStore.client_system_services.map((system_service: any) => system_service.id)
   await clientsStore.syncSystemServices(clientsStore.selectedItem.id, selected_system_services_ids)
   await swal.fire({
-        icon: "success",
-        title: "Éxito",
-        text: `Servicios actualizados correctamente`,
-        showConfirmButton: false,
-        timer: 3000,
-      });
+    icon: "success",
+    title: "Éxito",
+    text: `Servicios actualizados correctamente`,
+    showConfirmButton: false,
+    timer: 3000,
+  });
+
 }
 
 const loadClient = async () => {

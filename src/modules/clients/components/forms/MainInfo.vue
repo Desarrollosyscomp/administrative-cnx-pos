@@ -27,7 +27,7 @@
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Regimen: </b>
-        {{ clientsStore.getRegimenName() }}</span>
+        {{ clientsStore.getRegimenName()}}</span>
       <v-divider></v-divider>
     </v-card-text>
     <v-card-actions>

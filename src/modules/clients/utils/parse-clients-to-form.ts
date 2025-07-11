@@ -51,7 +51,7 @@ export const parseClientsToForm = (client: TThirdParty): TForm => {
     form.phones = client.person.phones
   } else if (client.company){
     console.log(client.company.name)
-    // form.regime_dian_id = client.company.identification.regime_id;
+    form.regime_dian_id = client.company.identification.regime_dian_id;
     form.identification_type_code = client.company.identification.document_type_dian_id;
     form.identification_number = client.company.identification.document_number;
     form.emails = client.company.emails;
