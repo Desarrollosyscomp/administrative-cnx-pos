@@ -1,6 +1,9 @@
 <template>
   <LayoutOne>
     <v-form @submit.prevent="submitTotalForm">
+      <pre>
+                  {{ clientsStore.selectedItem }}
+                </pre>
       <v-row>
         <v-col>
           <v-card>
@@ -194,7 +197,7 @@ const submitTotalForm = async () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      router.push("/client/" + route.params.id as string + "/details");
+      router.push("/client/list");
     } else {
       swal.fire({
         icon: "warning",

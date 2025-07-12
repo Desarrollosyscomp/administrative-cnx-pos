@@ -89,7 +89,9 @@ import { onMounted } from 'vue';
 import router from '../../../router';
 import { useClientsStore } from '../store/useClientsStore';
 import { TThirdParty } from '../interfaces/third-party.interface';
+import { useAppStore } from '../../../stores/app-store';
 const clientsStore = useClientsStore()
+const appStore = useAppStore()
 
 const emit = defineEmits(['onEdit', 'onDesactivate', "on-set-database", "on-set-eip"])
 
@@ -136,7 +138,10 @@ const openClientDetails = (item: TThirdParty) => {
 };
 
 
-onMounted(() => {
+onMounted(async() => {
+  clientsStore.selectedItem = {}
+  clientsStore.selectedItemTaxxaInfo = {}
+  await appStore.afterLoading(clientsStore.loadPaginatedList);
   clientsStore.loadPaginatedList()
 })
 
