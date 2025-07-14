@@ -1,9 +1,6 @@
 <template>
   <LayoutOne>
     <v-form @submit.prevent="submitTotalForm">
-      <pre>
-                  {{ clientsStore.selectedItem }}
-                </pre>
       <v-row>
         <v-col>
           <v-card>

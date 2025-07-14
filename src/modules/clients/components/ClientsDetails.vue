@@ -6,8 +6,7 @@
           <v-card elevation="3" class="full-height-card">
             <v-card-text class="pa-5">
               <div align="center">
-
-                <v-skeleton-loader type="image" v-if="!clientsStore.selectedItem.name"></v-skeleton-loader>
+                <v-skeleton-loader type="image" v-if="!clientsStore.selectedItem?.name"></v-skeleton-loader>
                 <v-avatar color="brown" size="120" v-else>
                   <span class="text-h3">{{ parsedPerfilName() }}</span>
                 </v-avatar>
@@ -16,14 +15,14 @@
                     {{ parsedNameClient() }}
                   </b>
                 </p>
-                <p class="text-h7" :class="clientsStore.selectedItem.is_active ? 'active' : 'inactive'">
-                  {{ clientsStore.selectedItem.is_active ? "Activo" : "Inactivo" }}
+                <p class="text-h7" :class="clientsStore.selectedItem?.is_active ? 'active' : 'inactive'">
+                  {{ clientsStore.selectedItem?.is_active ? "Activo" : "Inactivo" }}
                 </p>
               </div>
               <div class="align-buttons mt-2 mb-5">
                 <v-btn variant="outlined" color="#841811ff" density="compact"
-                  @click="unableItem(credentialsObject?.client)">
-                  {{ clientsStore.selectedItem.is_active ? "Inactivar" : "Restaurar" }}
+                  @click="unableItem(clientsStore.selectedItem)">
+                  {{ clientsStore.selectedItem?.is_active ? "Inactivar" : "Restaurar" }}
                 </v-btn>
                 <v-btn variant="outlined" color="#4caf50" density="compact"
                   v-if="credentialsObject?.client?.is_active == true" @click="goToEdit()">
@@ -37,33 +36,45 @@
               <v-divider></v-divider>
               <!-- <v-skeleton-loader type="paragraph" v-if="!credentialsObject?.schema?.name"></v-skeleton-loader> -->
               <div class="mt-5">
-                <p>
-                  <b>
-                    Fecha inicio licencia:
-                  </b>
-                </p>
+
                 <span class="color-font">
-                  23 de junio de 2025
-                </span>
-                <p>
-                  <b>
-                    Fecha fin licencia:
-                  </b>
-                </p>
-                <span class="color-font">
-                  8 de agosto de 2025
-                </span>
-                <p>
-                  <b>
-                    Base de datos:
-                  </b>
-                </p>
-                <span class="color-font" v-if="credentialsObject?.schema?.name">
-                  {{ credentialsObject?.schema?.name ?? 'No asignada' }}
-                </span>
-                <span class="text-blue" v-else-if="!credentialsObject" @click="openCreateSchemaSwal"
-                  style="cursor: pointer;">
-                  {{ 'Crear base de datos' }}
+                  <v-locale-provider locale="es">
+
+                    <v-expansion-panels>
+                      <v-expansion-panel>
+                        <v-expansion-panel-title>
+                          <b>
+                            Licencia
+                          </b>
+                        </v-expansion-panel-title>
+                        <v-expansion-panel-text>
+                          <v-date-input class="mt-2 mb-n4" label="Fecha inicio licencia" clearable density="compact"
+                            max-width="368" location="end center"></v-date-input>
+                          <v-date-input class="mt-2 " label="Fecha fin licencia" clearable density="compact"
+                            max-width="368" location="end center"></v-date-input>
+                          <div align="end">
+                            <v-btn variant="outlined" color="success" density="compact"> Guardar</v-btn>
+                          </div>
+                        </v-expansion-panel-text>
+                      </v-expansion-panel>
+                      <v-expansion-panel>
+                        <v-expansion-panel-title>
+                          <b>
+                            Base de datos
+                          </b>
+                        </v-expansion-panel-title>
+                        <v-expansion-panel-text>
+                          <span class="color-font" v-if="credentialsObject?.schema?.name">
+                            {{ credentialsObject?.schema?.name ?? 'No asignada' }}
+                          </span>
+                          <span class="text-blue" v-else-if="!credentialsObject" @click="openCreateSchemaSwal"
+                            style="cursor: pointer;">
+                            {{ 'Crear base de datos' }}
+                          </span>
+                        </v-expansion-panel-text>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+                  </v-locale-provider>
                 </span>
               </div>
             </v-card-text>
@@ -96,7 +107,7 @@
                         :items="clientsStore.electronic_invoice_providers" item-title='name' item-value='id'
                         v-model="clientsStore.electronic_invoice_providers">
                       </v-select>
-                      <v-skeleton-loader type="image" v-if="!clientsStore.selectedItem.name"></v-skeleton-loader>
+                      <v-skeleton-loader type="image" v-if="!clientsStore.selectedItem?.name"></v-skeleton-loader>
                       <div align="center" class="mt-n5" v-else>
                         <img src="../../../assets/images/Invoice-rafiki.svg" width="210px">
                       </div>
@@ -108,37 +119,38 @@
                           Credenciales
                         </b>
                       </p>
-                      <v-alert v-if="!credentialsObject?.database" type="warning" variant="outlined" density="compact" class="mt-2">
-                        Se necesita crear una base de datos para poder configurar el proveedor de facturación electrónica.
+                      <v-alert v-if="!credentialsObject?.database" type="warning" variant="outlined" density="compact"
+                        class="mt-2">
+                        Se necesita crear una base de datos para poder configurar el proveedor de facturación
+                        electrónica.
                       </v-alert>
                       <br>
                       <div>
-                        <v-skeleton-loader type="card" v-if="!clientsStore.selectedItem.name"></v-skeleton-loader>
+                        <v-skeleton-loader type="card" v-if="!clientsStore.selectedItem?.name"></v-skeleton-loader>
                         <v-form @submit.prevent="submit" v-else>
                           <v-alert v-if="message" class="mb-4" type="error" variant="outlined" density="compact">
                             {{ message }}
                           </v-alert>
                           <v-text-field label="Email proveido por Taxxa" prepend-inner-icon="mdi-email"
                             variant="outlined" density="compact" class="mb-3" v-model="formData.email"
-                            :rules="emailRules" type="email" :disabled="disableForm()">
+                            :rules="emailRules" type="email" :disabled="disableForm">
                           </v-text-field>
                           <v-text-field label="Contraseña" prepend-inner-icon="mdi-lock" variant="outlined"
                             density="compact" class="mb-3" :type="visible ? 'text' : 'password'"
                             v-model="formData.password" :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-                            @click:append-inner="visible = !visible" :rules="passwordRules"
-                            :disabled="disableForm()">
+                            @click:append-inner="visible = !visible" :rules="passwordRules" :disabled="disableForm">
                           </v-text-field>
                           <v-text-field label="URL" prepend-inner-icon="mdi-link-variant" variant="outlined"
                             density="compact" class="mb-3" v-model="formData.url" :rules="urlRules"
-                            :disabled="disableForm()">
+                            :disabled="disableForm">
                           </v-text-field>
                           <v-text-field label="URL de token" prepend-inner-icon="mdi-link-lock" variant="outlined"
                             density="compact" class="mb-3" v-model="formData.login_url" :rules="loginUrlRules"
-                            :disabled="disableForm()">
+                            :disabled="disableForm">
                           </v-text-field>
                           <div class="justify-end d-flex mt-n2">
                             <v-btn variant="outlined" :color="clientsStore.moduleMode == 'add' ? 'success' : 'primary'"
-                              type="submit" :disabled="!isFormChanged || disableForm()">
+                              type="submit" :disabled="!isFormChanged">
                               {{ clientsStore.moduleMode == "add" ? 'Guardar' : 'Editar' }}
                             </v-btn>
                           </div>
@@ -167,12 +179,14 @@ const emit = defineEmits(["onAddUser", "onClose", "onDesactivate"]);
 const clientsStore = useClientsStore();
 const swal: any = inject("swal");
 import * as Yup from "yup";
-import { useAppStore } from '../../../stores/app-store';
-const appStore = useAppStore();
+import { VDateInput } from 'vuetify/labs/VDateInput';
+// import { useAppStore } from '../../../stores/app-store';
+// const appStore = useAppStore();
 const route = useRoute();
 let visible = ref(false);
 let showValidationErrors = ref(false);
 let message = ref("");
+
 
 
 let formData = reactive({
@@ -289,6 +303,7 @@ const submit = async () => {
         showConfirmButton: false,
         timer: 1000,
       });
+      await loadTenantDetails()
       formOrigin.value = credentialsObject.value?.taxxaTenant?.email +
         credentialsObject.value?.taxxaTenant?.password +
         credentialsObject.value?.taxxaTenant?.url +
@@ -322,7 +337,7 @@ const parsedNameClient = () => {
   else if (client?.clientable_type == 'company') {
     return client?.company?.name;
   }
-  return ;
+  return;
 }
 
 const parsedPerfilName = () => {
@@ -360,7 +375,7 @@ const unableItem = (item: TThirdParty) => {
     .then(async (result: any) => {
       if (result.isConfirmed) {
         clientsStore.selectedItem = item;
-        const response = await clientsStore.delete(item.id);
+        const response = await clientsStore.delete(item?.id);
         if (response.data.status == 200) {
           await swal.fire({
             icon: "success",
@@ -433,6 +448,7 @@ const openCreateSchemaSwal = async () => {
         showConfirmButton: false,
         timer: 1000,
       });
+      loadTenantDetails()
     } else {
       await swal.fire({
         icon: "error",
@@ -459,10 +475,10 @@ const onPermissions = () => {
 let formOrigin = ref<string>('');
 
 const setFormWatcher = () => {
-  formOrigin.value = credentialsObject.value?.taxxaTenant?.email +
-    credentialsObject.value?.taxxaTenant?.password +
-    credentialsObject.value?.taxxaTenant?.url +
-    credentialsObject.value?.taxxaTenant?.login_url;
+  console.log(credentialsObject.value)
+  if (credentialsObject.value?.taxxaTenant){
+    formOrigin.value = `${credentialsObject.value?.taxxaTenant?.email}${credentialsObject.value?.taxxaTenant?.password}${credentialsObject.value?.taxxaTenant?.url}${credentialsObject.value?.taxxaTenant?.login_url}`;
+  }
 };
 
 
@@ -479,18 +495,19 @@ const isFormChanged = computed(() => {
   return formOrigin.value !== formEdit.value;
 });
 
-const disableForm = () => {
-  if (!credentialsObject.value) {return true};
-  if (clientsStore.selectedItem.is_active == false ){return true};
-};
+const disableForm = computed(() => {
+  if (!credentialsObject.value) { return true }
+  if (clientsStore.selectedItem.is_active == false) { return true };
+  return false
+});
 
 onMounted(async () => {
   await loadTenantDetails()
   await loadElectronicInvoiceProviders()
   await loadClient();
-  setFormWatcher();
+  await setFormWatcher();
   setForm();
-  await appStore.afterLoading(clientsStore.loadTenantDetails);
+  // await appStore.afterLoading(clientsStore.loadTenantDetails);
 });
 
 

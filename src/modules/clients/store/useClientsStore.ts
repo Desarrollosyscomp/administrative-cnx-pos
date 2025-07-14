@@ -175,6 +175,11 @@ export const useClientsStore: any = defineStore({
       const department_dian_id = this.selectedDepartment?.dian_id;
       const municipality_dian_id = this.selectedMunicipality?.dian_id;
       const neighborhood_dian_id = this.selectedNeighborhood?.dian_id;
+      const financial_activities_dian_ids =
+        this.selectedFinancialActivities.map((financialActivity) => {
+          return financialActivity.dian_id;
+        });
+      console.log(data)
 
       const response = await ClientsService.addClient({
         name: data.name,
@@ -192,7 +197,7 @@ export const useClientsStore: any = defineStore({
           neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
         emails: data.emails,
         phones: data.phones,
-        financial_activities: data.financial_activities,
+        financial_activities: financial_activities_dian_ids,
         regime_dian_id: data.regime_dian_id,
         tax_schema_dian_id: data.tax_schema_dian_id,
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
@@ -361,7 +366,7 @@ export const useClientsStore: any = defineStore({
     },
 
     async delete(client_id: number) {
-      let is_active = !this.selectedItem.is_active;
+      let is_active = !this.selectedItem?.is_active;
       let response = await ClientsService.deleteClient(client_id, is_active);
       if (response.status == 200) {
         this.loadPaginatedList();
