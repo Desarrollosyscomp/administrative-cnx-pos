@@ -25,6 +25,7 @@ const contact = reactive({
   phones: [],
   emails: []
 })
+
 const onUpdatePhones = (emitted: EmitInterface) => {
   contact.phones = emitted.data.phones;
   console.log(contact.phones);
@@ -34,7 +35,6 @@ const onUpdateEmails = (emitted: EmitInterface) => {
   contact.emails = emitted.data.emails;
   console.log(contact.emails);
 };
-
 
 const onSubmit = () => {
   clientsStore.toogleDialog()

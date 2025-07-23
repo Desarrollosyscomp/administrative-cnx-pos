@@ -6,7 +6,7 @@
         <div class="mb-5">
           <p class="text-h6 text-left">
             <b>
-              Asignacion de permisos
+              Asignación de permisos
             </b>
           </p>
         </div>

@@ -10,20 +10,29 @@
                   <p style="font-size: medium">
                     {{
                       clientsStore.moduleMode === "add"
-                        ? "Formulario de creacion de un cliente"
-                        : "Formulario de edicion de un cliente"
+                        ? "Formulario de creación de un cliente"
+                        : "Formulario de edición de un cliente"
                     }}
                   </p>
                 </b>
+                <p style="font-size: small; color: gray" v-if="!draftMessage">
+                  ⚠️ Este formulario está en borrador, complete todos los campos para guardar
+                </p>
               </v-card-text>
             </div>
-            <div align="end" style="width: 50%; display: inline-block" class="ma-n2">
-              <v-btn color="success" variant="outlined" size="small" type="submit">
-                {{
-                  clientsStore.moduleMode === "add"
-                    ? "Crear"
-                    : "Editar"
-                }}
+            <div
+              align="end"
+              style="width: 50%; display: inline-block"
+              class="ma-n2"
+            >
+              <v-btn
+                color="success"
+                variant="outlined"
+                size="small"
+                type="submit"
+                :disabled="draftMode"
+              >
+                {{ clientsStore.moduleMode === "add" ? "Crear" : "Editar" }}
               </v-btn>
             </div>
           </v-card>
@@ -55,14 +64,18 @@
       </v-col>
     </v-row>
 
-    <v-dialog max-width="700" v-model="clientsStore.openDialog" @afterLeave="onCloseDialog">
+    <v-dialog
+      max-width="700"
+      v-model="clientsStore.openDialog"
+      @afterLeave="onCloseDialog"
+    >
       <v-card>
         <v-card-title>
           <div v-if="clientsStore.mode == 'main-info'">
-            <p><b> Informacion principal </b></p>
+            <p><b> Información principal </b></p>
           </div>
           <div v-if="clientsStore.mode == 'fiscal-info'">
-            <p><b>Informacion fiscal</b></p>
+            <p><b>Información fiscal</b></p>
           </div>
           <div v-if="clientsStore.mode == 'address-info'">
             <p><b>Información residencial</b></p>
@@ -70,7 +83,6 @@
           <div v-if="clientsStore.mode == 'contact-info'">
             <p><b>Información de contacto</b></p>
           </div>
-
         </v-card-title>
         <v-card-text>
           <div v-if="clientsStore.mode == 'main-info'">
@@ -98,7 +110,7 @@ import MainInfo from "./forms/MainInfo.vue";
 import FormMainInfo from "./forms/FormMainInfo.vue";
 import FormFiscalInfo from "./forms/FormFiscalInfo.vue";
 import FormAddressInfo from "./forms/FormAddressInfo.vue";
-import { inject, onBeforeMount, onMounted } from "vue";
+import { computed, inject, onBeforeMount, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 // import validations from "../validations/validations";
 // import * as Yup from "yup";
@@ -123,12 +135,12 @@ const appStore = useAppStore();
 const swal: any = inject("swal");
 const emit = defineEmits(["onClose"]);
 const route = useRoute();
-const clientsStore = useClientsStore()
+const clientsStore = useClientsStore();
 // let validationSchema = Yup.object(validations);
-
+const draftMode = ref(false);
 const loadThirdParty = async () => {
   let id = route.params.id;
-  console.log(id)
+  console.log(id);
   if (!id) return;
   clientsStore.moduleMode = "edit";
   const response = await clientsStore.getOneClient(id);
@@ -143,8 +155,8 @@ const loadThirdParty = async () => {
   clientsStore.selectedNeighborhood = location?.neighborhood;
   const form = parseClientsToForm(thirdParty);
   clientsStore.form = parseClientsToForm(thirdParty);
-  console.log(clientsStore.form)
-  console.log(thirdParty)
+  console.log(clientsStore.form);
+  console.log(thirdParty);
   setTimeout(() => {
     clientsStore.selectedFinancialActivities = form.financial_activities;
     clientsStore.form.neighborhood_id = form.neighborhood_id;
@@ -160,31 +172,27 @@ const submitTotalForm = async () => {
     await validationFiscalInfoExport(clientsStore.getFiscalInfoForm());
     clientsStore.isValidFormFiscalInfo = false;
     clientsStore.isValidFormLocationInfo = true;
-    await validationLocationInfoExport(
-      clientsStore.getLocationInfoForm()
-    );
+    await validationLocationInfoExport(clientsStore.getLocationInfoForm());
     clientsStore.isValidFormLocationInfo = false;
     clientsStore.isValidFormContactInfo = true;
-    await validationContactInfoExport(
-      clientsStore.getContactInfoForm()
-    )
+    await validationContactInfoExport(clientsStore.getContactInfoForm());
     clientsStore.isValidFormContactInfo = false;
     clientsStore.isValidFormComercialActivities = true;
     await validationComercialActivitiesInfoExport(
       clientsStore.getFinancialActivitiesForm()
-    )
+    );
     clientsStore.isValidFormComercialActivities = false;
     let response;
     let addMode = clientsStore.moduleMode == "add";
+    draftMode.value = true;
     if (clientsStore.moduleMode == "add") {
       response = await clientsStore.addClient(clientsStore.form);
       console.log(response);
+      draftMode.value = false;
     } else if (clientsStore.moduleMode == "edit") {
       const id = clientsStore.selectedItem.id;
-      response = await clientsStore.edit(
-        id,
-        clientsStore.form
-      );
+      response = await clientsStore.edit(id, clientsStore.form);
+      draftMode.value = false;
     }
     console.log(response);
     if (!response.error) {
@@ -198,7 +206,7 @@ const submitTotalForm = async () => {
     } else {
       swal.fire({
         icon: "warning",
-        text: 'Ocurrio un error',
+        text: "Ocurrio un error",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -221,14 +229,37 @@ onBeforeMount(() => {
   clientsStore.initialiceForm();
 });
 const loadInitialData = async () => {
-  console.log(clientsStore.moduleMode)
+  console.log(clientsStore.moduleMode);
   await loadThirdParty();
   await clientsStore.loadInitialData();
 };
 
+const draftMessage = computed((): boolean => {
+  console.log(clientsStore.form.name);
+  return (
+    clientsStore.form.first_name == "" &&
+    clientsStore.form.name == "" &&
+    clientsStore.form.second_name == "" &&
+    clientsStore.form.sure_name == "" &&
+    clientsStore.form.second_sure_name == "" &&
+    clientsStore.form.identification_type_code == null &&
+    clientsStore.form.identification_number == "" &&
+    clientsStore.form.tradename == "" &&
+    clientsStore.form.tax_schema_dian_id == "" &&
+    clientsStore.form.fiscal_obligation_dian_id == "" &&
+    clientsStore.form.financial_activities.length == 0 &&
+    clientsStore.form.address == "" &&
+    clientsStore.form.country_id == 0 &&
+    clientsStore.form.department_id == 0 &&
+    clientsStore.form.municipality_id == 0 &&
+    clientsStore.form.neighborhood_id == 0 &&
+    clientsStore.form.emails.length == 0 &&
+    clientsStore.form.phones.length == 0
+  );
+});
+
 onMounted(async () => {
   await appStore.afterLoading(loadInitialData);
-  await loadInitialData()
 });
 </script>
 <style>

@@ -1,6 +1,6 @@
 <template>
   <LayoutOne>
-    <v-breadcrumbs :items="['Creacion de Clientes', 'Listar']"></v-breadcrumbs>
+    <v-breadcrumbs :items="['Creación de Clientes', 'Listar']"></v-breadcrumbs>
     <v-card class="ma-2 px-3 full-height-card" elevation="5">
       <v-card-title class="mr-1 mt-4 mb-n7">
         <div class="d-flex flex-column flex-sm-row">

@@ -4,7 +4,7 @@
       <p><b>Información de contacto</b></p>
       <br />
       <span class="custom-font-size align-components"
-        ><b>Telefonos:</b> {{ firstPhone }}</span
+        ><b>Teléfonos:</b> {{ firstPhone }}</span
       >
       <div
         v-if="clientsStore.form.phones.length > 1"
@@ -23,7 +23,7 @@
             <v-card min-width="200">
               <v-list>
                 <v-list-item
-                  title="Telefonos registrados"
+                  title="Teléfonos registrados"
                   style="font-size: 14"
                 >
                 </v-list-item>
@@ -45,7 +45,7 @@
       <v-divider></v-divider>
 
       <div class="custom-font-size align-components">
-        <span><b>Emails:</b> {{ firstEmail }} </span>
+        <span><b>Correos:</b> {{ firstEmail }} </span>
       </div>
 
       <div
@@ -82,7 +82,7 @@
       </div>
       <v-divider></v-divider>
     </v-card-text>
-    <v-spacer></v-spacer>
+    <br>
     <v-card-actions>
       <v-btn
         block
@@ -90,7 +90,7 @@
         variant="outlined"
         color="#841911"
         size="small"
-        class="mt-6"
+        class="mt-3"
         @click="openMainInfoForm"
       ></v-btn>
     </v-card-actions>

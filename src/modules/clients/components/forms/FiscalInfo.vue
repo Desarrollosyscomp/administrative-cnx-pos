@@ -1,7 +1,7 @@
 <template>
   <v-card cols="12" sm="3" class="full-height-card" :class="[clientsStore.isValidFormFiscalInfo && 'style-card-error']">
     <v-card-text class="text-left">
-      <p><b>Informacion fiscal</b></p>
+      <p><b>Información fiscal</b></p>
       <br />
       <span class="custom-font-size">
         <b> Esquema de impuestos:</b>
@@ -10,7 +10,7 @@
       <v-divider></v-divider>
 
       <span class="custom-font-size">
-        <b>Obligacion fiscal:</b>
+        <b>Obligación fiscal:</b>
         {{ clientsStore.parsedFiscalObligation() }}
       </span>
       <v-divider></v-divider>

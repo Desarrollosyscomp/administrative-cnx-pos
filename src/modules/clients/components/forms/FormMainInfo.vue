@@ -18,7 +18,7 @@
 
       <v-col>
         <v-text-field
-          label="Numero de documento"
+          label="Número de documento"
           variant="outlined"
           v-model="mainForm.documentNumber"
           density="compact"
@@ -281,7 +281,7 @@ const documentNumberRules = ref([
       }
       return true;
     } catch (e: any) {
-      return "El numero de documento es requerido";
+      return "El número de documento es requerido";
     }
   },
 ]);

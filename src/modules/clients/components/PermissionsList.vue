@@ -8,7 +8,7 @@
             <v-card-text>
               <p class="text-h6">
                 <b>
-                  Asignacion de permisos
+                  Asignación de permisos
                 </b>
               </p>
               <div class="align-items">

@@ -2,11 +2,27 @@
 <template>
   <v-row class="mt-4">
     <v-col cols="12" md="6">
-      <v-text-field color="#841811ff" density="compact" variant="outlined" label="Teléfonos" id="phoneInput" type="text"
-        minlength="7" maxlength="19" v-model="phone" append-inner-icon="mdi-plus" @click:append-inner="sendPhone"
-        @keyup.enter="sendPhone" :rules="phoneRules">
+      <v-text-field
+        color="#841811ff"
+        density="compact"
+        variant="outlined"
+        label="Teléfonos"
+        id="phoneInput"
+        type="text"
+        minlength="7"
+        maxlength="19"
+        v-model="phone"
+        append-inner-icon="mdi-plus"
+        @click:append-inner="sendPhone"
+        @keyup.enter="sendPhone"
+        :rules="phoneRules"
+      >
       </v-text-field>
-      <p v-if="validationNoRepeatPhone" class="font-size" style="color: #b00020">
+      <p
+        v-if="validationNoRepeatPhone"
+        class="font-size"
+        style="color: #b00020"
+      >
         El telefono ya se encuentra registrado
       </p>
       <v-table v-if="phones.length > 0">
@@ -15,12 +31,21 @@
             <td class="font-size">{{ phones[0].number }}</td>
             <v-spacer></v-spacer>
             <td class="text-right">
-              <v-btn v-if="phones.length < 2" color="#841811ff" size="x-small" variant="text" icon="mdi-delete"
-                @click="deletePhone(0)">
+              <v-btn
+                v-if="phones.length < 2"
+                color="#841811ff"
+                size="x-small"
+                variant="text"
+                icon="mdi-delete"
+                @click="deletePhone(0)"
+              >
               </v-btn>
               <div v-else="phones.length > 2">
-
-                <v-menu v-model="menuPhones" :close-on-content-click="false" location="end">
+                <v-menu
+                  v-model="menuPhones"
+                  :close-on-content-click="false"
+                  location="end"
+                >
                   <template v-slot:activator="{ props }">
                     <p style="color: #841811ff" v-bind="props">Ver mas</p>
                   </template>
@@ -32,15 +57,18 @@
                         </p>
                       </v-card-text>
                       <v-list>
-
-
                         <v-list-item v-for="(phone, i) in phones" :key="i">
                           <span class="font-size align-components">
-                            {{ phone.number }} </span>
+                            {{ phone.number }}
+                          </span>
                           <div align="end" class="align-components">
-
-                            <v-btn color="#841811ff" size="x-small" variant="text" icon="mdi-delete"
-                              @click="deletePhone(i)">
+                            <v-btn
+                              color="#841811ff"
+                              size="x-small"
+                              variant="text"
+                              icon="mdi-delete"
+                              @click="deletePhone(i)"
+                            >
                             </v-btn>
                           </div>
 
@@ -58,11 +86,27 @@
       </v-table>
     </v-col>
     <v-col cols="12" md="6">
-      <v-text-field :rules="emailRules" color="#841811ff" density="compact" variant="outlined" label="Emails" id="emailInput" type="text"
-        minlength="5" maxlength="254" v-model="email" append-inner-icon="mdi-plus" @click:append-inner="sendEmail"
-        @keyup.enter="sendEmail">
+      <v-text-field
+        :rules="emailRules"
+        color="#841811ff"
+        density="compact"
+        variant="outlined"
+        label="Emails"
+        id="emailInput"
+        type="text"
+        minlength="5"
+        maxlength="254"
+        v-model="email"
+        append-inner-icon="mdi-plus"
+        @click:append-inner="sendEmail"
+        @keyup.enter="sendEmail"
+      >
       </v-text-field>
-      <p v-if="validationNoRepeatEmail" class="font-size" style="color: #b00020">
+      <p
+        v-if="validationNoRepeatEmail"
+        class="font-size"
+        style="color: #b00020"
+      >
         El email ya se encuentra registrado
       </p>
 
@@ -72,12 +116,21 @@
             <td class="font-size">{{ emails[0].email }}</td>
             <v-spacer></v-spacer>
             <td class="text-right">
-              <v-btn v-if="emails.length < 2" color="#841811ff" size="x-small" variant="text" icon="mdi-delete"
-                @click="deleteEmail(0)">
+              <v-btn
+                v-if="emails.length < 2"
+                color="#841811ff"
+                size="x-small"
+                variant="text"
+                icon="mdi-delete"
+                @click="deleteEmail(0)"
+              >
               </v-btn>
               <div v-else="phones.length > 2">
-
-                <v-menu v-model="menuEmails" :close-on-content-click="false" location="end">
+                <v-menu
+                  v-model="menuEmails"
+                  :close-on-content-click="false"
+                  location="end"
+                >
                   <template v-slot:activator="{ props }">
                     <p style="color: #841811ff" v-bind="props">Ver mas</p>
                   </template>
@@ -91,11 +144,16 @@
                       <v-list>
                         <v-list-item v-for="(email, i) in emails" :key="i">
                           <span class="font-size align-components">
-                            {{ email.email }} </span>
+                            {{ email.email }}
+                          </span>
                           <div align="end" class="align-components">
-
-                            <v-btn color="#841811ff" size="x-small" variant="text" icon="mdi-delete"
-                              @click="deleteEmail(i)">
+                            <v-btn
+                              color="#841811ff"
+                              size="x-small"
+                              variant="text"
+                              icon="mdi-delete"
+                              @click="deleteEmail(i)"
+                            >
                             </v-btn>
                           </div>
 
@@ -224,6 +282,23 @@ const deleteEmail = (index: number) => {
   emails.value.splice(index, 1);
 };
 
+let inputEmail = null;
+let inputPhone = null;
+const setFocus = () => {
+  inputEmail = document.getElementById("emailInput");
+  inputPhone = document.getElementById("phoneInput");
+  if (inputEmail) {
+    inputEmail.addEventListener("blur", () => {
+      sendEmail();
+    });
+  }
+  if (inputPhone) {
+    inputPhone.addEventListener("blur", () => {
+      sendPhone();
+    });
+  }
+};
+
 watch(phones.value, () => {
   emit("onUpdatePhones", {
     name: "ThirdPartiesContact.onUpdatePhones",
@@ -243,6 +318,7 @@ watch(emails.value, () => {
 
 onMounted(() => {
   console.log(props);
+  setFocus();
 });
 </script>
 <!-- ******************** CSS ******************** -->

@@ -4,8 +4,8 @@
       <thead>
         <tr>
           <th class="text-left font-weight-black">NOMBRE</th>
-          <th class="text-center font-weight-black">DESCRIPCION</th>
-          <th class="text-center font-weight-black">NUMERO DE DOCUMENTO</th>
+          <th class="text-center font-weight-black">DESCRIPCIÓN</th>
+          <th class="text-center font-weight-black">NÚMERO DE DOCUMENTO</th>
           <th class="text-right font-weight-black">ESTADO</th>
           <th class="text-right font-weight-black">ACCIONES</th>
         </tr>
