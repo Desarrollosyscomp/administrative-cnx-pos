@@ -216,4 +216,27 @@ export const ClientsService = {
     });
   },
 
+    createLicense: async (data: object) => {
+    return axios.post({
+      url: `${URL_API}/licenses`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+    getLicense: async (tenant_id: number) => {
+    return axios.get({
+      url: `${URL_API}/licenses/find-last/${tenant_id}`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
 };

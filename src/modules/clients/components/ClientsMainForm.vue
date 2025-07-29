@@ -202,7 +202,8 @@ const submitTotalForm = async () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      router.push("/client/list");
+      await router.push("/client/list");
+      resetForm();
     } else {
       swal.fire({
         icon: "warning",
@@ -222,11 +223,20 @@ const submitTotalForm = async () => {
   }
 };
 
+const resetForm = () => {
+  clientsStore.initialiceForm();
+  clientsStore.selectedFinancialActivities = [];
+  clientsStore.selectedCountry = {};
+  clientsStore.selectedDepartment = {};
+  clientsStore.selectedMunicipality = {};
+  clientsStore.selectedNeighborhood = {};
+}
+
 const onCloseDialog = () => {
   clientsStore.mode = "";
 };
 onBeforeMount(() => {
-  clientsStore.initialiceForm();
+ // clientsStore.initialiceForm();
 });
 const loadInitialData = async () => {
   console.log(clientsStore.moduleMode);

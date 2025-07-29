@@ -3,6 +3,7 @@ import { TTaxSchema } from "../interfaces/tax-schema.type";
 import { TFiscalObligation } from "../interfaces/fiscal-obligation.type";
 import { IdentificationTypeInterface } from "../../../interfaces/identification-types.interface";
 import { TRegime } from "../interfaces/regime.type";
+import { useStorage } from "@vueuse/core";
 import {
   CountryInterface,
   DepartmentInterface,
@@ -32,7 +33,7 @@ export const useClientsStore: any = defineStore({
     totalPages: 0,
     list: [] as Array<TThirdParty>,
 
-    form: {} as any,
+    form:useStorage("form", {} as any),
     selectedItem: {} as TThirdParty,
     isValidFormMainInfo: false,
     isValidFormFiscalInfo: false,
@@ -541,6 +542,37 @@ export const useClientsStore: any = defineStore({
         return {
           error: true,
           data: response.data.message,
+        };
+      }
+    },
+
+    async createLicense(data: any) {
+      let response = await ClientsService.createLicense(data);
+      console.log(response);
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async getLicense(tenant_id: number) {
+      let response = await ClientsService.getLicense(tenant_id);
+      console.log(response);
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
         };
       }
     },

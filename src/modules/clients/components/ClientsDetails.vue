@@ -76,31 +76,45 @@
                           <b> Licencia </b>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                          <v-date-input
-                            class="mt-2 mb-n4"
+                          <v-form @submit.prevent="sendLicense">
+                            <v-date-input
+                            class="mt-2 mb-n2"
                             label="Fecha inicio licencia"
                             clearable
-                            density="compact"
-                            max-width="368"
-                            location="end center"
-                          ></v-date-input>
-                          <v-date-input
-                            class="mt-2"
-                            label="Fecha fin licencia"
-                            clearable
-                            density="compact"
-                            max-width="368"
-                            location="end center"
-                          ></v-date-input>
-                          <div align="end">
-                            <v-btn
                               variant="outlined"
-                              color="success"
                               density="compact"
-                            >
-                              Guardar</v-btn
-                            >
-                          </div>
+                              location="end center"
+                              :rules="initDateRules"
+                              v-model="licenseForm.init_date"
+                              :disabled="disableForm"
+                            ></v-date-input>
+                            <v-date-input
+                              class="mt-2"
+                              label="Fecha fin licencia"
+                              clearable
+                              variant="outlined"
+                              density="compact"
+                              location="end center"
+                              :rules="endDateRules"
+                              v-model="licenseForm.end_date"
+                              :disabled="disableForm"
+                              ></v-date-input>
+                              <p v-if="disableForm" class="text-red mt-n2" style="font-size: 12px">
+                                Se necesita crear una base de datos para
+                                modificar la licencia
+                              </p>
+                              <div align="end">
+                                <v-btn
+                                variant="outlined"
+                                color="success"
+                                density="compact"
+                                type="submit"
+                                :disabled="disableForm || !isFormChangedLicense || clickLicense"
+                              >
+                                Guardar</v-btn
+                              >
+                            </div>
+                          </v-form>
                         </v-expansion-panel-text>
                       </v-expansion-panel>
                       <v-expansion-panel>
@@ -195,7 +209,7 @@
                           type="card"
                           v-if="!clientsStore.selectedItem?.name"
                         ></v-skeleton-loader>
-                        <v-form @submit.prevent="submit" v-else>
+                        <v-form @submit.prevent="submitForm" v-else>
                           <v-alert
                             v-if="message"
                             class="mb-4"
@@ -306,11 +320,20 @@ let visible = ref(false);
 let showValidationErrors = ref(false);
 let message = ref("");
 
-let formData = reactive({
+const formData = reactive({
   email: "",
   password: "",
   url: "",
   login_url: "",
+});
+
+type TLicenseForm = {
+  init_date: Date | null;
+  end_date: Date | null;
+};
+const licenseForm = reactive<TLicenseForm>({
+  init_date: null,
+  end_date: null,
 });
 
 const validations = {
@@ -325,11 +348,16 @@ const validations = {
     .required("La URL es requerida")
     .trim()
     .matches(/^https:\/\//, "La URL debe comenzar con https://"),
-
   login_url: Yup.string()
     .required("El login URL es requerido")
     .trim()
-    .matches(/^https:\/\//, "El login URL debe comenzar con https://"),
+};
+const validationLicense = {
+  init_date: Yup.date()
+    .required("La fecha de inicio es requerida"),
+  end_date: Yup.date()
+    .required("La fecha de fin es requerida")
+    .min(Yup.ref("init_date"), "La fecha de finalización debe ser posterior a la fecha de inicio"),
 };
 
 const emailRules = ref([
@@ -383,6 +411,29 @@ const loginUrlRules = ref([
   },
 ]);
 
+const initDateRules = ref([
+  async (value: any) => {
+    try {
+      await validationLicense.init_date.validate(value);
+      return true;
+    } catch (e: any) {
+      return e.message;
+    }
+  },
+]);
+
+let validationSchemaLicense = Yup.object(validationLicense);
+const endDateRules = ref([
+  async () => {
+    try {
+      await validationSchemaLicense.validate(licenseForm);
+      return true;
+    } catch (e: any) {
+      return e.message;
+    }
+  },
+]);
+
 let validationSchema = Yup.object(validations);
 
 const setForm = () => {
@@ -394,7 +445,7 @@ const setForm = () => {
   formData.login_url = credentialsObject.value?.taxxaTenant?.login_url;
 };
 
-const submit = async () => {
+const submitForm = async () => {
   try {
     await validationSchema.validate(formData);
     const addMode = clientsStore.moduleMode == "add";
@@ -627,13 +678,65 @@ const disableForm = computed(() => {
   return false;
 });
 
+const sendLicense = async () => {
+  clickLicense.value = true;
+  try {
+    await validationSchemaLicense.validate(licenseForm);
+    const { error, data } = await clientsStore.createLicense({
+      tenant_id: clientsStore.selectedItemTaxxaInfo?.tenantWithClient.id,
+      ...licenseForm,
+    });
+    console.log("data", data);
+    console.log("error", error);
+    if (!error) {
+      // clickLicense.value = false;
+    await swal.fire({
+      icon: "success",
+      text: "Licencia creada con éxito",
+      showConfirmButton: false,
+      timer: 1200,
+    }); 
+    await loadTenantDetails();
+    // clickLicense.value = false;
+  } else {
+    await swal.fire({
+      icon: "error",
+      text: data.error,
+      showConfirmButton: false,
+      timer: 1200,
+    });
+  }
+  } catch (error) {
+    console.log("Error de validación:", error);
+    // showValidationErrors.value = true;
+  }
+};
+let clickLicense = ref<boolean>(false);
+let formOriginLicense = ref<string>("");
+const setLicense = async () => {
+  const response = await clientsStore.getLicense(
+    clientsStore.selectedItemTaxxaInfo?.tenantWithClient.id
+  );
+  if (response.data) {
+    licenseForm.init_date= response.data.init_date;
+    licenseForm.end_date= response.data.end_date;
+    formOriginLicense.value = `${licenseForm.init_date}${licenseForm.end_date}`;
+  }
+}
+  
+const isFormChangedLicense = computed(():boolean => {
+  clickLicense.value = false;
+  const value = `${licenseForm.init_date}${licenseForm.end_date}`;
+  return formOriginLicense.value !== value;
+});
+
 onMounted(async () => {
   await loadTenantDetails();
   await loadElectronicInvoiceProviders();
   await loadClient();
   await setFormWatcher();
   setForm();
-  // await appStore.afterLoading(clientsStore.loadTenantDetails);
+  await setLicense();
 });
 </script>
 <style>

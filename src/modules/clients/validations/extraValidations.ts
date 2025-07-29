@@ -42,10 +42,10 @@ export const isValidName = (value: string): boolean => {
 
 export const isValidCompanyName = (value: string): boolean => {
   // Permitir solo letras, apóstrofe (') y backtick (`), sin espacios ni otros caracteres especiales
-  if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ'` ]+$/.test(value)) return false;
+  // if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ'` ]+$/.test(value)) return false;
 
   // Bloquear nombres con demasiadas consonantes seguidas (más de 4)
-  if (/[bcdfghjklmnpqrstvwxyz]{4,}/i.test(value)) return false;
+  // if (/[bcdfghjklmnpqrstvwxyz]{4,}/i.test(value)) return false;
 
   // Bloquear nombres con demasiadas vocales seguidas (más de 4)
   if (/[aeiouáéíóú]{4,}/i.test(value)) return false;
