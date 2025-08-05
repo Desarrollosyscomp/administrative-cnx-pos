@@ -141,8 +141,8 @@ const openClientDetails = (item: TThirdParty) => {
 onMounted(async() => {
   clientsStore.selectedItem = {}
   clientsStore.selectedItemTaxxaInfo = {}
-  await appStore.afterLoading(clientsStore.loadPaginatedList);
-  clientsStore.loadPaginatedList()
+  appStore.afterLoading(clientsStore.loadPaginatedList);
+  // clientsStore.loadPaginatedList()
 })
 
 </script>

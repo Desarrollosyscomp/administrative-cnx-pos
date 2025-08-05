@@ -269,6 +269,7 @@ const draftMessage = computed((): boolean => {
 });
 
 onMounted(async () => {
+  clientsStore.initialiceForm();
   await appStore.afterLoading(loadInitialData);
 });
 </script>
