@@ -25,15 +25,13 @@ import EmptyLottie from "../../../assets/lotties/empty.json";
 
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 import { useUsersStore } from "../stores/users.store";
-
+import { useAppStore } from "../../../stores/app-store";
 import UsersCards from "./UsersCards.vue";
 import UsersTable from "./UsersTable.vue";
 
-import { onMounted } from "vue-demi";
-
 const usersStore = useUsersStore();
 const emit = defineEmits(["onEdit", "onDeactivate", "onManagePermissions"]);
-
+const appStore = useAppStore();
 
 const goToEdit = (emitted: EmitInterface) => {
   emit("onEdit", {
@@ -54,13 +52,12 @@ const managePermissions = async (emitted: EmitInterface) => {
   });
 };
 const onChangePage = (emitted: EmitInterface) => {
-  usersStore.page = emitted.data.page;
-  usersStore.loadPaginatedList();
+  if (usersStore.page !== emitted.data.page) {
+    usersStore.page = emitted.data.page;
+    appStore.afterLoading(usersStore.loadPaginatedList);
+  }
 };
 
-onMounted(async () => {
-  usersStore.loadPaginatedList();
-});
 </script>
 <!-- ******************** CSS ******************** -->
 <style scoped></style>

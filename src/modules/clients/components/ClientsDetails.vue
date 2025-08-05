@@ -99,7 +99,7 @@
                               v-model="licenseForm.end_date"
                               :disabled="disableForm"
                               ></v-date-input>
-                              <p v-if="disableForm" class="text-red mt-n2" style="font-size: 12px">
+                              <p v-if="!credentialsObject" class="text-red mt-n2" style="font-size: 12px">
                                 Se necesita crear una base de datos para
                                 modificar la licencia
                               </p>
@@ -678,10 +678,11 @@ const disableForm = computed(() => {
   return false;
 });
 
+let clickLicense = ref<boolean>(false);
 const sendLicense = async () => {
-  clickLicense.value = true;
   try {
     await validationSchemaLicense.validate(licenseForm);
+    clickLicense.value = true;
     const { error, data } = await clientsStore.createLicense({
       tenant_id: clientsStore.selectedItemTaxxaInfo?.tenantWithClient.id,
       ...licenseForm,
@@ -711,7 +712,7 @@ const sendLicense = async () => {
     // showValidationErrors.value = true;
   }
 };
-let clickLicense = ref<boolean>(false);
+
 let formOriginLicense = ref<string>("");
 const setLicense = async () => {
   const response = await clientsStore.getLicense(
@@ -725,13 +726,13 @@ const setLicense = async () => {
 }
   
 const isFormChangedLicense = computed(():boolean => {
-  clickLicense.value = false;
   const value = `${licenseForm.init_date}${licenseForm.end_date}`;
+  clickLicense.value = false;
   return formOriginLicense.value !== value;
 });
 
 onMounted(async () => {
-  await loadTenantDetails();
+  await loadTenantDetails(); 
   await loadElectronicInvoiceProviders();
   await loadClient();
   await setFormWatcher();

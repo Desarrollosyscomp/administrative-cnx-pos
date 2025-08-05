@@ -68,8 +68,10 @@ import { useClientsStore } from "../store/useClientsStore";
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 import TaxxaForm from "../components/forms/TaxxaForm.vue";
 import EIPSelector from "../components/forms/EIPSelector.vue";
+import { useAppStore } from '../../../stores/app-store';
 
 const clientsStore = useClientsStore();
+const appStore = useAppStore()
 
 let switchValue = ref(true);
 const swal: any = inject("swal");
@@ -134,7 +136,7 @@ const simpleSearch = async () => {
 watch(
   () => clientsStore.is_active,
   () => {
-    clientsStore.loadPaginatedList();
+    appStore.afterLoading(clientsStore.loadPaginatedList);
   }
 );
 const changeValue = () => {

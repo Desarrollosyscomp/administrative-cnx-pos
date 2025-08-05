@@ -21,6 +21,7 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item :value="1">
           <p><b> Nombre de actividades seleccionada: </b></p>
+          {{ clientsStore.selectedFinancialActivities }}
           <v-container fluid>
             <div v-for="(financial, i) in clientsStore.selectedFinancialActivities" :key="i" class="mb-2">
               <span class=" custom-font-size align-components mt-2">
@@ -40,6 +41,7 @@
           </v-container>
         </v-tabs-window-item>
         <v-tabs-window-item :value="2">
+          {{ clientsStore.selectedFinancialActivities }}
           <p><b> Actividades para seleccionar: </b></p>
           <v-container fluid>
             <div v-for="(financial, i) in clientsStore.financial_activities_list" :key="i" class="mb-3">
@@ -92,7 +94,7 @@ const simpleSearch = async () => {
 const selectionActivities = (financialActivity: any) => {
   clientsStore.selectedFinancialActivities.push(financialActivity);
   clientsStore.form.financial_activities.push(financialActivity)
-  clientsStore.loadPaginatedFinancialActivities(clientsStore.selectedFinancialActivities);
+  clientsStore.loadPaginatedFinancialActivities(clientsStore.financial_activities);
   clientsStore.isValidFormComercialActivities = false;
 };
 
