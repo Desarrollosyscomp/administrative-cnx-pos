@@ -4,8 +4,9 @@
       <thead>
         <tr>
           <th class="text-left font-weight-black">NOMBRE</th>
-          <th class="text-center font-weight-black">DESCRIPCION</th>
-          <th class="text-center font-weight-black">NUMERO DE DOCUMENTO</th>
+          <th class="text-center font-weight-black">DESCRIPCIÓN</th>
+          <th class="text-center font-weight-black">NÚMERO DE DOCUMENTO</th>
+          <th class="text-center font-weight-black">FECHA DE CREACIÓN</th>
           <th class="text-right font-weight-black">ESTADO</th>
           <th class="text-right font-weight-black">ACCIONES</th>
         </tr>
@@ -27,6 +28,9 @@
           <td class="text-center text-truncate" style="max-width: 20px">
             {{  setIdetification(item)  }}
           </td>
+          <td class="text-center text-truncate" style="max-width: 20px">
+            {{  DateHelpers.timestamptzToNatural(item.created_at) }}
+          </td>
           <td class="text-right">
             <v-badge :color="item.is_active ? 'success' : '#841811ff'" class="mr-12 mb-1">
               <template v-slot:badge>
@@ -39,18 +43,18 @@
           <td class="text-right">
             <v-menu location="start">
               <template v-slot:activator="{ props }">
-                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props">
-                  Opciones
+                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" @click="openClientDetails(item)">
+                  Detalles
                 </v-btn>
               </template>
-              <v-list>
-                <v-list-item value="1" v-if="item.is_active == true">
-                  <v-list-item-title @click="goToEdit(item)">
+              <!-- <v-list>
+                <v-list-item value="1" v-if="item.is_active == true" @click="goToEdit(item)">
+                  <v-list-item-title >
                     <v-icon color="blue-lighten-2" size="small">mdi-pencil</v-icon> Editar cliente
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="2">
-                  <v-list-item-title @click="unableItem(item)">
+                <v-list-item value="2" @click="unableItem(item)">
+                  <v-list-item-title >
                     <v-icon size="small" :color="item.is_active ? 'red-lighten-2' : 'blue-lighten-2'">
                       {{ item.is_active ? 'mdi-delete' : 'mdi-restore' }}
                     </v-icon>
@@ -60,12 +64,22 @@
                     cliente
                   </v-list-item-title>
                 </v-list-item>
-                <v-list-item value="3" v-if="item.is_active == true">
-                  <v-list-item-title @click="onPermissions">
+                <v-list-item value="3" v-if="item.is_active == true" @click="onPermissions(item)">
+                  <v-list-item-title >
                     <v-icon size="small">mdi-fingerprint</v-icon> Permisos
                   </v-list-item-title>
                 </v-list-item>
-              </v-list>
+                <v-list-item @click="onSetDatabase(item)" value="4" v-if="item.is_active == true">
+                  <v-list-item-title>
+                    <v-icon size="small">mdi-database</v-icon> Base de datos
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="onSetEIP(item)" value="5" v-if="item.is_active == true">
+                  <v-list-item-title>
+                    <v-icon size="small">mdi-invoice-text-fast-outline</v-icon> Proveedor de facturacion electrónica
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list> -->
             </v-menu>
           </td>
         </tr>
@@ -79,28 +93,42 @@ import { onMounted } from 'vue';
 import router from '../../../router';
 import { useClientsStore } from '../store/useClientsStore';
 import { TThirdParty } from '../interfaces/third-party.interface';
+import { useAppStore } from '../../../stores/app-store';
+import DateHelpers from '../../../utils/date/date-helpers';
 const clientsStore = useClientsStore()
+const appStore = useAppStore()
 
-const emit = defineEmits(['onEdit', 'onDesactivate'])
-// const openEditForm = () => {
-//   clientsStore.moduleMode = "edit";
-//   router.push("/client/form");
+const emit = defineEmits(['onEdit', 'onDesactivate', "on-set-database", "on-set-eip"])
+
+// const onPermissions = (item: TThirdParty) => {
+//   router.push("/client/" + item.id + "/permissions");
 // };
-const onPermissions = () => {
-  router.push("/client/permissions");
-};
 
-const goToEdit = (item: TThirdParty) => {
-  clientsStore.moduleMode = "edit"
-  router.push("/client/form/" + item.id);
-};
+// const goToEdit = (item: TThirdParty) => {
+//   clientsStore.moduleMode = "edit"
+//   router.push("/client/form/" + item.id);
+// };
 
-const unableItem = async (item: TThirdParty) => {
-  emit("onDesactivate", {
-    name: "ThirdPartiesTable.deactivate",
-    data: { item },
-  });
-};
+// const unableItem = async (item: TThirdParty) => {
+//   emit("onDesactivate", {
+//     name: "ThirdPartiesTable.deactivate",
+//     data: { item },
+//   });
+// };
+
+// const onSetDatabase = async (item: TThirdParty) => {
+//   emit("on-set-database", {
+//     name: "ThirdPartiesTable.setDatabase",
+//     data: { item },
+//   });
+// };
+
+// const onSetEIP = async (item: TThirdParty) => {
+//   emit("on-set-eip", {
+//     name: "ThirdPartiesTable.setEIP",
+//     data: { item },
+//   });
+// };
 
 const setIdetification = (client: TThirdParty) =>{
   if (client.clientable_type == 'person'){
@@ -110,8 +138,16 @@ const setIdetification = (client: TThirdParty) =>{
   }
 }
 
-onMounted(() => {
-  clientsStore.loadPaginatedList()
+const openClientDetails = (item: TThirdParty) => {
+  router.push("/client/" + item.id + "/details");
+};
+
+
+onMounted(async() => {
+  clientsStore.selectedItem = {}
+  clientsStore.selectedItemTaxxaInfo = {}
+  appStore.afterLoading(clientsStore.loadPaginatedList);
+  // clientsStore.loadPaginatedList()
 })
 
 </script>

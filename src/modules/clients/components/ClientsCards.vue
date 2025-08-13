@@ -1,11 +1,11 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <div class="mobile-cards d-block d-sm-none mt-3" v-for="(item, index) in clientsStore.list" :key="index">
+  <div class="mobile-cards d-block d-sm-none " v-for="(item, index) in clientsStore.list" :key="index">
     <v-card class="mb-6" variant="outlined" color="#c9c9c9">
       <v-card-title>
         <v-row class="row">
-          <v-col class="mt-3">
-            <p style="color: black;" class="text-h7">
+          <v-col class="mt-2">
+            <p style="color: #333; font-size: 14px;">
                 {{ item.name }}
             </p>
 
@@ -46,17 +46,17 @@ import { TThirdParty } from '../interfaces/third-party.interface';
 import { useClientsStore } from '../store/useClientsStore';
 
 const clientsStore = useClientsStore();
-const emit = defineEmits(["onEdit", "onDeactivate"]);
+const emit = defineEmits(["on-edit", "on-desactivate"]);
 
 const goToEdit = (Client: TThirdParty) => {
-  emit("onEdit", {
-    name: "UsersTable.goToEdit",
+  emit("on-edit", {
+    name: "ClientsCards.goToEdit",
     data: { Client },
   });
 };
 const unableItem = async (Client: TThirdParty) => {
-  emit("onDeactivate", {
-    name: "UsersTable.deactivate",
+  emit("on-desactivate", {
+    name: "ClientsCards.unableItem",
     data: { Client },
   });
 };

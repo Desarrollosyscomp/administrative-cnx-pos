@@ -1,6 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-
-import HelloWorld from "../components/HelloWorld.vue";
 import PageLogin from "../modules/auth/page/PageLogin.vue";
 
 import { LogInRoute } from "../modules/auth/routes/router";
@@ -15,7 +13,8 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: HelloWorld,
+    // component: HelloWorld,
+    component: () => import("../components/HelloWorld.vue")
   },
   {
     path: "/login",

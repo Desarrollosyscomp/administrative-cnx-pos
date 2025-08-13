@@ -17,7 +17,7 @@ export interface Company {
 }
 
 export interface TThirdParty {
-  id: string;
+  id: number;
   resolution_type_id: number;
   tradename: string;
   clientable_type: string;

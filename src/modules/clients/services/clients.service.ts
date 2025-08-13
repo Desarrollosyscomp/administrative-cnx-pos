@@ -56,7 +56,7 @@ export const ClientsService = {
     });
   },
 
-  deleteClient: async (id: string, is_active: boolean) => {
+  deleteClient: async (id: number, is_active: boolean) => {
     return axios.delete({
       url: `${URL_API}/clients/${id}`,
       config: {
@@ -113,4 +113,130 @@ export const ClientsService = {
       },
     });
   },
+
+  getPaginatedSystemServices: async (
+    page: number,
+    limit: number,
+    search: string
+  ) => {
+    return axios.get({
+      url: `${URL_API}/clients/paginate/services`,
+      config: {
+        params: {
+          page: page,
+          limit: limit,
+          search: search,
+        },
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  syncSystemServices: async (
+    client_id: number,
+    system_service_ids: Array<number>
+  ) => {
+    return axios.post({
+      url: `${URL_API}/clients/${client_id}/attach-system-services`,
+      data: {
+        system_service_ids,
+      },
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  getClientSystemServices: async (client_id: string) => {
+    return axios.get({
+      url: `${URL_API}/clients/${client_id}/system-services`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  saveTaxxaInfo: async (client_id: number, data: object) => {
+    return axios.post({
+      url: `${URL_API}/clients/${client_id}/taxxa-credentials`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+  createClientSchema: async (client_id: number) => {
+    return axios.post({
+      url: `${URL_API}/clients/${client_id}/create-schema`,
+      data: client_id,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  getElectronicInvoiceProviders: async () => {
+    return axios.get({
+      url: `${URL_API}/clients/find-all/electronic-invoice-providers`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  
+  getTenantInfo: async (client_id: number ) => {
+    return axios.get({
+      url: `${URL_API}/clients/${client_id}/tenant-info`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+    editCredentials: async (client_id: number, data: object) => {
+    return axios.put({
+      url: `${URL_API}/clients/${client_id}/taxxa-credentials`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+    createLicense: async (data: object) => {
+    return axios.post({
+      url: `${URL_API}/licenses`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+    getLicense: async (tenant_id: number) => {
+    return axios.get({
+      url: `${URL_API}/licenses/find-last/${tenant_id}`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
 };

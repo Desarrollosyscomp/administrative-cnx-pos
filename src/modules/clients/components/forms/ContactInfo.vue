@@ -4,13 +4,13 @@
       <p><b>Información de contacto</b></p>
       <br />
       <span class="custom-font-size align-components"
-        ><b>Telefonos:</b> {{ firstPhone }}</span
+        ><b>Teléfonos:</b> {{ firstPhone }}</span
       >
       <div
-        v-if="clientsStore.form.phones.length > 1"
+        v-if="(clientsStore.form.phones?.length ?? 0) > 1 "
         class="align-components custom-font-size w-50"
         align="end"
-      >
+        >
         <v-menu
           v-model="menuPhones"
           :close-on-content-click="false"
@@ -23,7 +23,7 @@
             <v-card min-width="200">
               <v-list>
                 <v-list-item
-                  title="Telefonos registrados"
+                  title="Teléfonos registrados"
                   style="font-size: 14"
                 >
                 </v-list-item>
@@ -31,7 +31,7 @@
                   v-for="(phones, i) in clientsStore.form.phones"
                   :key="i"
                 >
-                  <v-list class="custom-font-size mt-n3">
+                  <v-list class="custom-font-size mt-n2">
                     {{ phones.number }}
                   </v-list>
                   <v-divider></v-divider>
@@ -45,11 +45,11 @@
       <v-divider></v-divider>
 
       <div class="custom-font-size align-components">
-        <span><b>Emails:</b> {{ firstEmail }} </span>
+        <span><b>Correos:</b> {{ firstEmail }} </span>
       </div>
 
       <div
-        v-if="clientsStore.form.emails.length > 1"
+        v-if="(clientsStore.form.emails?.length ?? 0) > 1"
         class="align-components custom-font-size"
         align="end"
       >
@@ -70,7 +70,7 @@
                   v-for="(emails, i) in clientsStore.form.emails"
                   :key="i"
                 >
-                  <v-list class="custom-font-size mt-n3">
+                  <v-list class="custom-font-size mt-n2">
                     {{ emails.email }}
                   </v-list>
                   <v-divider></v-divider>
@@ -82,7 +82,7 @@
       </div>
       <v-divider></v-divider>
     </v-card-text>
-    <v-spacer></v-spacer>
+    <br>
     <v-card-actions>
       <v-btn
         block
@@ -90,7 +90,7 @@
         variant="outlined"
         color="#841911"
         size="small"
-        class="mt-6"
+        class="mt-3"
         @click="openMainInfoForm"
       ></v-btn>
     </v-card-actions>
@@ -108,6 +108,7 @@ const openMainInfoForm = () => {
 };
 
 const firstEmail = computed(() => {
+  if (!clientsStore.form.emails) return "";
   if (clientsStore.form.emails.length > 0) {
     return clientsStore.form.emails[0].email;
   } else {
@@ -116,6 +117,7 @@ const firstEmail = computed(() => {
 });
 
 const firstPhone = computed(() => {
+  if (!clientsStore.form.phones) return "";
   if (clientsStore.form.phones.length > 0) {
     return clientsStore.form.phones[0].number;
   } else {

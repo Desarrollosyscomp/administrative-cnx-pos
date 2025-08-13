@@ -5,8 +5,8 @@ export const useUsersStore: any = defineStore({
   id: "users-store",
   state: () => ({
     moduleMode: "",
-    limit: 4,
     page: 1,
+    limit: 10,
     search: "",
     is_active: true,
     itemsCount: 0,

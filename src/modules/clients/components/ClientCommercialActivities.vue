@@ -90,6 +90,7 @@ const simpleSearch = async () => {
 };
 
 const selectionActivities = (financialActivity: any) => {
+  console.log(clientsStore.form.financial_activities)
   clientsStore.selectedFinancialActivities.push(financialActivity);
   clientsStore.form.financial_activities.push(financialActivity)
   clientsStore.loadPaginatedFinancialActivities(clientsStore.selectedFinancialActivities);

@@ -14,27 +14,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
 import SyncThirdPartiesContact from '../SyncThirdPartiesContact.vue';
 import { EmitInterface } from '../../../../interfaces/Emit.interface';
 import { useClientsStore } from '../../store/useClientsStore';
 
 const clientsStore = useClientsStore()
 
-const contact = reactive({
-  phones: [],
-  emails: []
-})
 const onUpdatePhones = (emitted: EmitInterface) => {
-  contact.phones = emitted.data.phones;
-  console.log(contact.phones);
+  clientsStore.form.phones = emitted.data.phones;
 };
 
 const onUpdateEmails = (emitted: EmitInterface) => {
-  contact.emails = emitted.data.emails;
-  console.log(contact.emails);
+  clientsStore.form.emails = emitted.data.emails;
 };
-
 
 const onSubmit = () => {
   clientsStore.toogleDialog()

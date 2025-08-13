@@ -3,6 +3,7 @@ import { TTaxSchema } from "../interfaces/tax-schema.type";
 import { TFiscalObligation } from "../interfaces/fiscal-obligation.type";
 import { IdentificationTypeInterface } from "../../../interfaces/identification-types.interface";
 import { TRegime } from "../interfaces/regime.type";
+import { useStorage } from "@vueuse/core";
 import {
   CountryInterface,
   DepartmentInterface,
@@ -13,6 +14,9 @@ import { TInitialData } from "../interfaces/initial-data.type";
 import { ClientsService } from "../services/clients.service";
 import { TFinancialActivities } from "../interfaces/financial-activity.type";
 import { TThirdParty } from "../interfaces/third-party.interface";
+import { TSystemService } from "../interfaces/system-service.type";
+import { ElectronicInvoiceProvider } from "../interfaces/electronic-invoice-provider.type";
+import { TCredentials } from "../interfaces/credentials.type";
 
 export const useClientsStore: any = defineStore({
   id: "clients",
@@ -29,13 +33,26 @@ export const useClientsStore: any = defineStore({
     totalPages: 0,
     list: [] as Array<TThirdParty>,
 
-    form: {} as any,
+    form: useStorage("form", {} as any),
     selectedItem: {} as TThirdParty,
     isValidFormMainInfo: false,
     isValidFormFiscalInfo: false,
     isValidFormLocationInfo: false,
     isValidFormContactInfo: false,
     taxSchemas: [] as Array<TTaxSchema>,
+
+    system_services_paginator: {
+      page: 1,
+      limit: 10,
+      search: "",
+      list: [] as Array<TSystemService>,
+      itemsCount: 0,
+      totalPages: 0,
+    },
+
+    electronic_invoice_providers: [] as Array<ElectronicInvoiceProvider>,
+    selectedItemTaxxaInfo: {} as any,
+    client_system_services: [] as Array<TSystemService>,
 
     fiscalObligations: [] as Array<TFiscalObligation>,
     identificationTypes: [] as Array<IdentificationTypeInterface>,
@@ -58,8 +75,8 @@ export const useClientsStore: any = defineStore({
       this.form = {
         user_warehouse: "0",
         tradename: "",
-        regime_dian_id: "",
-        identification_type_code: "",
+        regime_dian_id: null,
+        identification_type_code: null,
         identification_number: "",
         emails: [],
         phones: [],
@@ -93,7 +110,7 @@ export const useClientsStore: any = defineStore({
       let response = await ClientsService.getInitialData(+clientId);
       if (response.status == 200) {
         return response.data.response;
-      } 
+      }
       {
         return {
           thirdPartyFinancialActivities: [] as Array<TFinancialActivities>,
@@ -104,6 +121,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+
     getFullName() {
       return `${this.form.first_name ?? ""} 
       ${this.form.second_name ?? ""} 
@@ -158,6 +176,11 @@ export const useClientsStore: any = defineStore({
       const department_dian_id = this.selectedDepartment?.dian_id;
       const municipality_dian_id = this.selectedMunicipality?.dian_id;
       const neighborhood_dian_id = this.selectedNeighborhood?.dian_id;
+      const financial_activities_dian_ids =
+        this.selectedFinancialActivities.map((financialActivity) => {
+          return financialActivity.dian_id;
+        });
+      console.log(data);
 
       const response = await ClientsService.addClient({
         name: data.name,
@@ -175,7 +198,7 @@ export const useClientsStore: any = defineStore({
           neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
         emails: data.emails,
         phones: data.phones,
-        financial_activities: data.financial_activities,
+        financial_activities: financial_activities_dian_ids,
         regime_dian_id: data.regime_dian_id,
         tax_schema_dian_id: data.tax_schema_dian_id,
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
@@ -245,6 +268,7 @@ export const useClientsStore: any = defineStore({
             return financialActivity.dian_id;
           }
         );
+        console.log(aux);
         let response = await ClientsService.getPaginateFinancialActivities(
           this.page,
           this.limitFinancialActivities,
@@ -343,12 +367,9 @@ export const useClientsStore: any = defineStore({
       }
     },
 
-    async delete() {
-      let is_active = !this.selectedItem.is_active;
-      let response = await ClientsService.deleteClient(
-        this.selectedItem.id,
-        is_active
-      );
+    async delete(client_id: number) {
+      let is_active = !this.selectedItem?.is_active;
+      let response = await ClientsService.deleteClient(client_id, is_active);
       if (response.status == 200) {
         this.loadPaginatedList();
         return {
@@ -373,7 +394,9 @@ export const useClientsStore: any = defineStore({
       const municipality_dian_id = this.selectedMunicipality?.dian_id;
       const neighborhood_dian_id = this.selectedNeighborhood?.dian_id;
       let response = await ClientsService.editClient(+id, {
-        tradename: data.tradename, barcode: data.barcode,  third_party_classification_ids: data.third_party_classification_ids,
+        tradename: data.tradename,
+        barcode: data.barcode,
+        third_party_classification_ids: data.third_party_classification_ids,
         regime_dian_id: data.regime_dian_id,
         document_type: data.identification_type_code,
         identification_number: data.identification_number,
@@ -398,7 +421,7 @@ export const useClientsStore: any = defineStore({
         neighborhood_id:
           neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
       });
-      console.log(response)
+      console.log(response);
       if (response.status == 200) {
         return {
           error: false,
@@ -407,7 +430,148 @@ export const useClientsStore: any = defineStore({
       } else {
         return {
           error: true,
-          data: response.data.message
+          data: response.data.message,
+        };
+      }
+    },
+
+    async loadSystemServices() {
+      let response = await ClientsService.getPaginatedSystemServices(
+        this.system_services_paginator.page,
+        this.system_services_paginator.limit,
+        this.system_services_paginator.search
+      );
+      if (response.status == 200) {
+        this.system_services_paginator.list = response.data.response.list;
+        this.system_services_paginator.itemsCount =
+          response.data.response.count;
+        this.system_services_paginator.totalPages =
+          response.data.response.totalPages;
+      }
+    },
+    async syncSystemServices(
+      client_id: number,
+      system_services_ids: Array<number>
+    ) {
+      const response = await ClientsService.syncSystemServices(
+        client_id,
+        system_services_ids
+      );
+      if (response.status == 200) {
+        return { error: false };
+      } else {
+        return { error: true };
+      }
+    },
+    async loadClientSystemServices(id: string) {
+      let response = await ClientsService.getClientSystemServices(id);
+      if (response.status == 200) {
+        this.client_system_services = response.data.response.system_services;
+      }
+    },
+    async loadClient(id: string) {
+      let response = await ClientsService.getClientById(id);
+      if (response.status == 200) {
+        this.selectedItem = response.data.response.client;
+      }
+    },
+
+    async loadTenantDetails(id: string) {
+      let response = await ClientsService.getTenantInfo(+id);
+      if (response.status == 200) {
+        console.log(response.data.response);
+        this.selectedItemTaxxaInfo = response.data.response;
+      }
+    },
+
+    async saveTaxxaInfo(data: any) {
+      let response = await ClientsService.saveTaxxaInfo(
+        this.selectedItem.id,
+        data
+      );
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+        };
+      }
+    },
+
+    async createSchema() {
+      let response = await ClientsService.createClientSchema(
+        this.selectedItem.id
+      );
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+        };
+      }
+    },
+    async loadElectronicInvoiceProviders() {
+      let response = await ClientsService.getElectronicInvoiceProviders();
+      if (response.status == 200) {
+        this.electronic_invoice_providers =
+          response.data.response.electronicInvoiceProviders;
+      }
+    },
+
+    async editCredentials(id: string, data: TCredentials) {
+      let response = await ClientsService.editCredentials(+id, {
+        email: data.email,
+        password: data.password,
+        url: data.url,
+        login_url: data.login_url,
+      });
+      console.log(response);
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.message,
+        };
+      }
+    },
+
+    async createLicense(data: any) {
+      let response = await ClientsService.createLicense(data);
+      console.log(response);
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async getLicense(tenant_id: number) {
+      let response = await ClientsService.getLicense(tenant_id);
+      console.log(response);
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
         };
       }
     },

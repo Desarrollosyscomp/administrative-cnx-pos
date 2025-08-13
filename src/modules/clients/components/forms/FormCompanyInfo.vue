@@ -11,7 +11,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-select label="Regimen" variant="outlined" density="compact" item-title="name"
+          <v-select label="Régimen" variant="outlined" density="compact" item-title="name"
             item-value="dian_id"></v-select>
         </v-col>
       </v-row>

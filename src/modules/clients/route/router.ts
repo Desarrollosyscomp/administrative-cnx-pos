@@ -22,11 +22,19 @@ export const ClientsRouter = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/client/permissions",
+    path: "/client/:id/permissions",
     name: "client-permissions",
     isAuth: false,
     //@ts-ignore
     component: () => import("../components/PermissionsList.vue"),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/client/:id/details",
+    name: "client-details",
+    isAuth: false,
+    //@ts-ignore
+    component: () => import("../components/ClientsDetails.vue"),
     meta: { requiresAuth: true },
   },
 ];

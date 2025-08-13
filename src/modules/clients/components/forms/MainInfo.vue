@@ -1,11 +1,11 @@
 <template>
   <v-card class="full-height-card" :class="[clientsStore.isValidFormMainInfo && 'style-card-error']">
     <v-card-text>
-      <p><b>Informacion principal</b></p>
+      <p><b>Información principal</b></p>
 
       <br />
       <span class="custom-font-size">
-        <b> Numero documento: </b>
+        <b> Número documento: </b>
         {{ clientsStore.getFullIdentification() }}</span>
       <v-divider></v-divider>
 
@@ -26,8 +26,8 @@
         {{ isCompany ? clientsStore.form.tradename : 'N/A' }}</span>
       <v-divider></v-divider>
       <span class="custom-font-size">
-        <b> Regimen: </b>
-        {{ clientsStore.getRegimenName() }}</span>
+        <b> Régimen: </b>
+        {{ clientsStore.getRegimenName()}}</span>
       <v-divider></v-divider>
     </v-card-text>
     <v-card-actions>

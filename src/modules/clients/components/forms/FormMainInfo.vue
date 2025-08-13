@@ -1,5 +1,7 @@
 <template>
   <v-form @submit.prevent="submitForm">
+    <pre>
+    </pre>
     <v-row>
       <v-col>
         <v-select
@@ -16,7 +18,7 @@
 
       <v-col>
         <v-text-field
-          label="Numero de documento"
+          label="Número de documento"
           variant="outlined"
           v-model="mainForm.documentNumber"
           density="compact"
@@ -279,7 +281,7 @@ const documentNumberRules = ref([
       }
       return true;
     } catch (e: any) {
-      return "El numero de documento es requerido";
+      return "El número de documento es requerido";
     }
   },
 ]);
@@ -360,7 +362,6 @@ const setForm = () => {
 const isCompany = computed(() => {
   if(mainForm.documentType)
     return isCompanyDocumentType(mainForm.documentType);
-
   return false
 });
 

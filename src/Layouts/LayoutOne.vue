@@ -8,7 +8,7 @@
         </template>
 
         <v-spacer></v-spacer>
-        <v-btn icon="mdi-cog" color="white">
+        <v-btn icon="mdi-home" color="white" @click="goTo('Home')">
         </v-btn>
       </v-app-bar>
 

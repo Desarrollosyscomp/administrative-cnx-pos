@@ -1,6 +1,6 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <div class="show d-none d-sm-block">
+  <div class="show d-none d-sm-block" >
     <v-table>
       <thead>
         <tr>
@@ -24,19 +24,6 @@
             </v-badge>
           </td>
           <td class="text-right">
-            <!-- <v-tooltip text="Deatlles" location="bottom">
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  v-bind="props"
-                  class="ma-2"
-                  variant="text"
-                  icon="mdi-eye"
-                  color="blue-lighten-2"
-                  @click="showRecord(item)"
-                >
-                </v-btn>
-              </template>
-            </v-tooltip> -->
             <v-menu location="start">
               <template v-slot:activator="{ props }">
                 <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" >
@@ -60,44 +47,8 @@
                     usuario
                   </v-list-item-title>
                 </v-list-item>
-                <!-- <v-list-item value="3" @click="managePermissions(item)">
-                  <v-list-item-title>
-                   <v-icon size="small" >mdi-fingerprint</v-icon> Permisos
-                  </v-list-item-title> 
-                </v-list-item> --> 
               </v-list>
             </v-menu>
-           <!-- <v-tooltip v-if="item.is_active" text="Editar" location="top">
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  v-bind="props"
-                  class=""
-                  variant="text"
-                  icon="mdi-pencil"
-                  size="small"
-                  color="blue-lighten-2"
-                  @click="goToEdit(item)"
-                >
-                </v-btn>
-              </template>
-            </v-tooltip>
-            <v-tooltip
-              :text="item.is_active ? 'Desactivar' : 'Restaurar'"
-              location="top"
-            >
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  v-bind="props"
-                  class=""
-                  size="small"
-                  variant="text"
-                  :icon="item.is_active ? 'mdi-delete' : 'mdi-restore'"
-                  :color="item.is_active ? 'red-lighten-2' : 'blue-lighten-2'"
-                  @click="unableItem(item)"
-                >
-                </v-btn>
-              </template>
-            </v-tooltip> -->
           </td>
         </tr>
       </tbody>
@@ -108,7 +59,10 @@
 <script setup lang="ts">
 import { useUsersStore } from "../stores/users.store";
 import { UsersInterface } from "../interfaces/users.interface";
+import { onMounted } from "vue";
+import { useAppStore } from "../../../stores/app-store";
 
+const appStore = useAppStore();
 const usersStore = useUsersStore();
 const emit = defineEmits(["onEdit", "onDeactivate", "onManagePermissions"]);
 const goToEdit = (users: UsersInterface) => {
@@ -124,12 +78,10 @@ const unableItem = async (item: UsersInterface) => {
     data: { item },
   });
 };
-// const managePermissions = async (item: UsersInterface) => {
-//   emit("onManagePermissions", {
-//     name: "UsersTable.onManagePermissions",
-//     data: { item },
-//   });
-// };
+
+onMounted(async () => {
+  await appStore.afterLoading(usersStore.loadPaginatedList);
+});
 </script>
 <!-- ******************** CSS ******************** -->
 <style scoped></style>
