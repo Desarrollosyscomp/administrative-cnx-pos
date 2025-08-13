@@ -1,6 +1,6 @@
 <!-- ******************** HTML ******************** -->
 <template>
-  <div class="show d-none d-sm-block">
+  <div class="show d-none d-sm-block" >
     <v-table>
       <thead>
         <tr>

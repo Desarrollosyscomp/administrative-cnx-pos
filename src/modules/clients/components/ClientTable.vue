@@ -6,6 +6,7 @@
           <th class="text-left font-weight-black">NOMBRE</th>
           <th class="text-center font-weight-black">DESCRIPCIÓN</th>
           <th class="text-center font-weight-black">NÚMERO DE DOCUMENTO</th>
+          <th class="text-center font-weight-black">FECHA DE CREACIÓN</th>
           <th class="text-right font-weight-black">ESTADO</th>
           <th class="text-right font-weight-black">ACCIONES</th>
         </tr>
@@ -26,6 +27,9 @@
           </td>
           <td class="text-center text-truncate" style="max-width: 20px">
             {{  setIdetification(item)  }}
+          </td>
+          <td class="text-center text-truncate" style="max-width: 20px">
+            {{  DateHelpers.timestamptzToNatural(item.created_at) }}
           </td>
           <td class="text-right">
             <v-badge :color="item.is_active ? 'success' : '#841811ff'" class="mr-12 mb-1">
@@ -90,6 +94,7 @@ import router from '../../../router';
 import { useClientsStore } from '../store/useClientsStore';
 import { TThirdParty } from '../interfaces/third-party.interface';
 import { useAppStore } from '../../../stores/app-store';
+import DateHelpers from '../../../utils/date/date-helpers';
 const clientsStore = useClientsStore()
 const appStore = useAppStore()
 

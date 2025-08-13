@@ -33,7 +33,7 @@ export const useClientsStore: any = defineStore({
     totalPages: 0,
     list: [] as Array<TThirdParty>,
 
-    form:useStorage("form", {} as any),
+    form: useStorage("form", {} as any),
     selectedItem: {} as TThirdParty,
     isValidFormMainInfo: false,
     isValidFormFiscalInfo: false,
@@ -180,7 +180,7 @@ export const useClientsStore: any = defineStore({
         this.selectedFinancialActivities.map((financialActivity) => {
           return financialActivity.dian_id;
         });
-      console.log(data)
+      console.log(data);
 
       const response = await ClientsService.addClient({
         name: data.name,
@@ -458,11 +458,9 @@ export const useClientsStore: any = defineStore({
         system_services_ids
       );
       if (response.status == 200) {
-        return {};
+        return { error: false };
       } else {
-        return {
-          error: true,
-        };
+        return { error: true };
       }
     },
     async loadClientSystemServices(id: string) {

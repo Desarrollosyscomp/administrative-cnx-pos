@@ -3,7 +3,7 @@
   <Layout>
     <!-- <h2 class="ma-2">Almacenes/Listar</h2>  -->
     <v-breadcrumbs :items="['Usuarios', 'Listar']"></v-breadcrumbs>
-    <v-card class="ma-2 px-4" elevation="5">
+    <v-card class="ma-2 px-4" elevation="5" >
       <v-card-title class="mr-1 mt-4 mb-n7">
         <div class="d-flex flex-column flex-sm-row">
           <v-text-field
@@ -48,7 +48,7 @@
       @update:modelValue="changeValue"
     >
       <div>
-        <v-card>
+        <v-card >
           <v-card-text>
             <UsersForm v-if="usersStore.moduleMode === 'add'" />
             <UsersEdit v-if="usersStore.moduleMode === 'edit'" />

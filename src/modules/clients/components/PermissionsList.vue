@@ -154,15 +154,25 @@ const loadSystemServices = async () => {
 
 const syncSystemServices = async () => {
   const selected_system_services_ids = clientsStore.client_system_services.map((system_service: any) => system_service.id)
-  await clientsStore.syncSystemServices(clientsStore.selectedItem.id, selected_system_services_ids)
-  await swal.fire({
-    icon: "success",
-    title: "Éxito",
-    text: `Servicios actualizados correctamente`,
-    showConfirmButton: false,
-    timer: 3000,
-  });
-
+ const {error} = await clientsStore.syncSystemServices(clientsStore.selectedItem.id, selected_system_services_ids)
+ console.log(error)
+ if (!error) {  
+   await swal.fire({
+     icon: "success",
+     title: "Éxito",
+     text: `Servicios actualizados correctamente`,
+     showConfirmButton: false,
+     timer: 3000,
+   });
+ } else {
+   await swal.fire({
+     icon: "warning",
+     title: "Error",
+     text: `Ocurrio un error al actualizar los servicios`,
+     showConfirmButton: false,
+     timer: 3000,
+   });
+ }
 }
 
 const loadClient = async () => {

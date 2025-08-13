@@ -2,7 +2,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>
+      <v-col cols="12" md="9">
         <div class="mb-5">
           <p class="text-h5 text-left">
             <b>
@@ -13,14 +13,17 @@
               }}
             </b>
           </p>
+          <p class="color-gray">
+            Este usuario está destinado únicamente para el uso interno de Syscomp.
+          </p>
         </div>
       </v-col>
       <v-col>
-        <div class="d-flex justify-end">
+        <!-- <div class="d-flex justify-end">
           <v-icon color="#841811ff" @click="usersStore.toogleDialog">
             mdi-close
           </v-icon>
-        </div>
+        </div> -->
       </v-col>
     </v-row>
     <div>
@@ -201,4 +204,9 @@ onMounted(async () => {
 });
 </script>
 <!-- ******************** CSS ******************** -->
-<style scoped></style>
+<style scoped>
+.color-gray {
+  color: gray;
+  font-size: 12px;
+}
+</style>
