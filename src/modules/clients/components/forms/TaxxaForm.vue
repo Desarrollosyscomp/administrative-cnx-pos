@@ -127,7 +127,6 @@ let validationSchema = Yup.object(validations);
 
 const setForm = () => {
   if (clientsStore.moduleMode !== "edit") return;
-  console.log("clientsStore.selectedItem", clientsStore.selectedItem);
   formData.email = clientsStore.selectedItem.email;
   // formData.password = usersStore.selectedItem.password;
 };
@@ -137,7 +136,6 @@ const submit = async () => {
     await validationSchema.validate(formData);
     const { error, data } = await clientsStore.saveTaxxaInfo(formData);
     if (error) {
-      console.log(data)
       message.value = data;
       return;
     }
@@ -152,7 +150,12 @@ const submit = async () => {
     }
 
   } catch (e) {
-    console.log("Error de validación:", e);
+    swal.fire({
+      icon: "error",
+      text: "Error interno",
+      showConfirmButton: false,
+      timer: 1000,
+    });
     showValidationErrors.value = true;
   }
 };

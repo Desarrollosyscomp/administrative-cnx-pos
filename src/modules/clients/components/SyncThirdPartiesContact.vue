@@ -317,7 +317,6 @@ watch(emails.value, () => {
 });
 
 onMounted(() => {
-  console.log(props);
   setFocus();
 });
 </script>

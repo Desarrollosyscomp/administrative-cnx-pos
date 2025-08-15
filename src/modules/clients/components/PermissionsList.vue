@@ -129,8 +129,7 @@ const selected_system_service = ref()
 // let selectPermission = ref(true)
 
 const toggleSelection = (system_service: TSystemService) => {
-  console.log(clientHasSystemService(system_service.id))
-  if (clientHasSystemService(system_service.id)) {
+    if (clientHasSystemService(system_service.id)) {
     const index = clientsStore.client_system_services.indexOf(system_service)
     clientsStore.client_system_services.splice(index, 1); // deselecciona si ya está
   } else {
@@ -139,7 +138,6 @@ const toggleSelection = (system_service: TSystemService) => {
 }
 
 const openSystemServiceDialog = (systemService: any) => {
-  console.log(systemService)
   selected_system_service.value = systemService
   clientsStore.toogleDialog()
 }
@@ -155,7 +153,6 @@ const loadSystemServices = async () => {
 const syncSystemServices = async () => {
   const selected_system_services_ids = clientsStore.client_system_services.map((system_service: any) => system_service.id)
  const {error} = await clientsStore.syncSystemServices(clientsStore.selectedItem.id, selected_system_services_ids)
- console.log(error)
  if (!error) {  
    await swal.fire({
      icon: "success",

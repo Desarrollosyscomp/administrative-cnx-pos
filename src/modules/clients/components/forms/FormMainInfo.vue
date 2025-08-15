@@ -343,7 +343,12 @@ const submitForm = async () => {
       timer: 1500,
     });
   }catch(e: any){
-    console.log(e.message);
+    swal.fire({
+      icon: "error",
+      text: "Error interno",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 };
 

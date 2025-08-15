@@ -90,7 +90,6 @@ const simpleSearch = async () => {
 };
 
 const selectionActivities = (financialActivity: any) => {
-  console.log(clientsStore.form.financial_activities)
   clientsStore.selectedFinancialActivities.push(financialActivity);
   clientsStore.form.financial_activities.push(financialActivity)
   clientsStore.loadPaginatedFinancialActivities(clientsStore.selectedFinancialActivities);
@@ -100,13 +99,11 @@ const selectionActivities = (financialActivity: any) => {
 const deleteActivitie = (financialActivityIndex: number) => {
   clientsStore.selectedFinancialActivities.splice(financialActivityIndex, 1);
   clientsStore.form.financial_activities.splice(financialActivityIndex, 1)
-  console.log(clientsStore.form.financial_activities);
   clientsStore.loadPaginatedFinancialActivities(clientsStore.selectedFinancialActivities);
 };
 
 watch(() => clientsStore.selectedFinancialActivities, (v) => {
   clientsStore.loadPaginatedFinancialActivities(v);
-  console.log(v);
 })
 
 const onChangePage = (emitted: EmitInterface) => {

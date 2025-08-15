@@ -438,7 +438,6 @@ let validationSchema = Yup.object(validations);
 
 const setForm = () => {
   if (!credentialsObject.value) return;
-  console.log("clientsStore.selectedItem", clientsStore.selectedItemTaxxaInfo);
   formData.email = credentialsObject.value?.taxxaTenant?.email;
   formData.password = credentialsObject.value?.taxxaTenant?.password;
   formData.url = credentialsObject.value?.taxxaTenant?.url;
@@ -453,7 +452,6 @@ const submitForm = async () => {
     if (addMode) {
       const { error, data } = await clientsStore.saveTaxxaInfo(formData);
       if (error) {
-        console.log(data);
         message.value = data;
         return;
       }
@@ -464,7 +462,6 @@ const submitForm = async () => {
         formData
       );
       if (error) {
-        console.log(data);
         message.value = data;
         return;
       }
@@ -488,7 +485,6 @@ const submitForm = async () => {
         credentialsObject.value?.taxxaTenant?.login_url;
     }
   } catch (e) {
-    console.log("Error de validación:", e);
     showValidationErrors.value = true;
   }
 };
@@ -535,7 +531,6 @@ const goToEdit = () => {
 };
 
 const unableItem = (item: TThirdParty) => {
-  console.log("unableItem", item);
   const action = !item?.is_active ? "Restaurar" : "Desactivar";
   const successMessage = !item?.is_active
     ? "Restaurado con éxito"
@@ -606,7 +601,6 @@ const openCreateSchemaSwal = async () => {
     let person = `${clientsStore.selectedItem?.person?.first_name} ${clientsStore.selectedItem?.person?.surename}`;
     let company = clientsStore.selectedItem?.company?.name;
     if (username !== company && username !== person) {
-      console.log("Nombre de cliente inválido", username, company, person);
       await swal.fire({
         icon: "error",
         text: "Error, nombre de cliente inválido",
@@ -618,7 +612,6 @@ const openCreateSchemaSwal = async () => {
 
     appStore.afterLoading(async () => {
       const { data } = await clientsStore.createSchema();
-      console.log("response", data);
       if (data) {
         await swal.fire({
           icon: "success",
@@ -654,7 +647,6 @@ const onPermissions = () => {
 let formOrigin = ref<string>("");
 
 const setFormWatcher = () => {
-  console.log(credentialsObject.value);
   if (credentialsObject.value?.taxxaTenant) {
     formOrigin.value = `${credentialsObject.value?.taxxaTenant?.email}${credentialsObject.value?.taxxaTenant?.password}${credentialsObject.value?.taxxaTenant?.url}${credentialsObject.value?.taxxaTenant?.login_url}`;
   }
@@ -687,8 +679,6 @@ const sendLicense = async () => {
       tenant_id: clientsStore.selectedItemTaxxaInfo?.tenantWithClient.id,
       ...licenseForm,
     });
-    console.log("data", data);
-    console.log("error", error);
     if (!error) {
       // clickLicense.value = false;
     await swal.fire({
@@ -708,8 +698,13 @@ const sendLicense = async () => {
     });
   }
   } catch (error) {
-    console.log("Error de validación:", error);
-    // showValidationErrors.value = true;
+    await swal.fire({
+      icon: "error",
+      text: 'Error interno',
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    showValidationErrors.value = true;
   }
 };
 

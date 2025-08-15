@@ -150,7 +150,6 @@ let validationSchema = Yup.object(validations);
 
 const setForm = () => {
   if (usersStore.moduleMode !== "edit") return;
-  console.log("usersStore.selectedItem", usersStore.selectedItem);
   formData.username = usersStore.selectedItem.username;
   // formData.password = usersStore.selectedItem.password;
 };
@@ -160,7 +159,6 @@ const submit = async () => {
     await validationSchema.validate(formData);
     const { error, data } = await usersStore.add(formData);
     if (error) {
-      console.log(data)
       message.value = data;
       return;
     }

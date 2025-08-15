@@ -140,11 +140,9 @@ const clientsStore = useClientsStore();
 const draftMode = ref(false);
 const loadThirdParty = async () => {
   let id = route.params.id;
-  console.log(id);
   if (!id) return;
   clientsStore.moduleMode = "edit";
   const response = await clientsStore.getOneClient(id);
-  console.log(response.data);
   const thirdParty = response.data.client;
 
   clientsStore.selectedItem = thirdParty;
@@ -155,8 +153,6 @@ const loadThirdParty = async () => {
   clientsStore.selectedNeighborhood = location?.neighborhood;
   const form = parseClientsToForm(thirdParty);
   clientsStore.form = parseClientsToForm(thirdParty);
-  console.log(clientsStore.form);
-  console.log(thirdParty);
   setTimeout(() => {
     clientsStore.selectedFinancialActivities = form.financial_activities;
     clientsStore.form.neighborhood_id = form.neighborhood_id;
@@ -187,14 +183,12 @@ const submitTotalForm = async () => {
     draftMode.value = true;
     if (clientsStore.moduleMode == "add") {
       response = await clientsStore.addClient(clientsStore.form);
-      console.log(response);
       draftMode.value = false;
     } else if (clientsStore.moduleMode == "edit") {
       const id = clientsStore.selectedItem.id;
       response = await clientsStore.edit(id, clientsStore.form);
       draftMode.value = false;
     }
-    console.log(response);
     if (!response.error) {
       swal.fire({
         icon: "success",
@@ -213,7 +207,6 @@ const submitTotalForm = async () => {
       });
     }
   } catch (error) {
-    console.log(error);
     swal.fire({
       icon: "warning",
       text: "El formulario no se lleno correctamente",
@@ -239,13 +232,11 @@ onBeforeMount(() => {
  // clientsStore.initialiceForm();
 });
 const loadInitialData = async () => {
-  console.log(clientsStore.moduleMode);
   await loadThirdParty();
   await clientsStore.loadInitialData();
 };
 
 const draftMessage = computed((): boolean => {
-  console.log(clientsStore.form.name);
   return (
     clientsStore.form.first_name == "" &&
     clientsStore.form.name == "" &&

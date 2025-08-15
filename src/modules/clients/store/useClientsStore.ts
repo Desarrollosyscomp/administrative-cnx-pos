@@ -164,7 +164,6 @@ export const useClientsStore: any = defineStore({
       if (!this.form.fiscal_obligation_dian_id) {
         return " ";
       }
-      console.log(this.fiscalObligations);
       const res = this.fiscalObligations.find(
         (fiscal: any) => fiscal.dian_id === this.form.fiscal_obligation_dian_id
       );
@@ -180,7 +179,6 @@ export const useClientsStore: any = defineStore({
         this.selectedFinancialActivities.map((financialActivity) => {
           return financialActivity.dian_id;
         });
-      console.log(data);
 
       const response = await ClientsService.addClient({
         name: data.name,
@@ -203,7 +201,6 @@ export const useClientsStore: any = defineStore({
         tax_schema_dian_id: data.tax_schema_dian_id,
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
       });
-      console.log(response);
       if (response.data.status == 201) {
         return {
           error: false,
@@ -268,7 +265,6 @@ export const useClientsStore: any = defineStore({
             return financialActivity.dian_id;
           }
         );
-        console.log(aux);
         let response = await ClientsService.getPaginateFinancialActivities(
           this.page,
           this.limitFinancialActivities,
@@ -318,7 +314,6 @@ export const useClientsStore: any = defineStore({
           this.search,
           this.is_active == null ? undefined : this.is_active
         );
-        console.log(response);
         if (response.status == 200) {
           const _response = response.data.response;
           return {
@@ -328,7 +323,6 @@ export const useClientsStore: any = defineStore({
           };
         }
       } catch (e: any) {
-        console.log(e.response);
         if (e.response.status === 404) {
           return {
             list: [],
@@ -351,9 +345,7 @@ export const useClientsStore: any = defineStore({
     },
 
     async getOneClient(id: string) {
-      console.log(id);
       let response = await ClientsService.getClientById(id);
-      console.log(response.data.response);
       if (response.status == 200) {
         return {
           error: false,
@@ -421,7 +413,6 @@ export const useClientsStore: any = defineStore({
         neighborhood_id:
           neighborhood_dian_id == "" ? undefined : neighborhood_dian_id,
       });
-      console.log(response);
       if (response.status == 200) {
         return {
           error: false,
@@ -479,7 +470,6 @@ export const useClientsStore: any = defineStore({
     async loadTenantDetails(id: string) {
       let response = await ClientsService.getTenantInfo(+id);
       if (response.status == 200) {
-        console.log(response.data.response);
         this.selectedItemTaxxaInfo = response.data.response;
       }
     },
@@ -531,7 +521,6 @@ export const useClientsStore: any = defineStore({
         url: data.url,
         login_url: data.login_url,
       });
-      console.log(response);
       if (response.status == 200) {
         return {
           error: false,
@@ -547,7 +536,6 @@ export const useClientsStore: any = defineStore({
 
     async createLicense(data: any) {
       let response = await ClientsService.createLicense(data);
-      console.log(response);
       if (response.status == 201) {
         return {
           error: false,
@@ -562,7 +550,6 @@ export const useClientsStore: any = defineStore({
     },
     async getLicense(tenant_id: number) {
       let response = await ClientsService.getLicense(tenant_id);
-      console.log(response);
       if (response.status == 201) {
         return {
           error: false,
