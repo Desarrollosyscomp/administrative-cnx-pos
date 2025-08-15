@@ -230,7 +230,6 @@ let validationUsernameSchema = Yup.object(validationUsername);
 
 const setForm = () => {
   if (usersStore.moduleMode !== "edit") return;
-  console.log("usersStore.selectedItem", usersStore.selectedItem);
   formData.username = usersStore.selectedItem.username;
 };
 
@@ -244,7 +243,6 @@ const submitNewUsername = async () => {
     });
 
     if (error) {
-      console.log(data);
       message.value = data;
       return;
     }
@@ -282,7 +280,6 @@ const submitNewPassword = async () => {
     });
 
     if (error) {
-      console.log(data);
       messageCurrentPassword.value = data;
       return;
     }

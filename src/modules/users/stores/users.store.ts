@@ -24,7 +24,7 @@ export const useUsersStore: any = defineStore({
     async getOneUser(id: string) {
       let response = await UsersService.getOne(id);
       if (response.status == 200) {
-        console.log(response.data);
+        this.selectedItem = response.data;
       }
     },
 
@@ -58,7 +58,6 @@ export const useUsersStore: any = defineStore({
         );
         if (response.status == 200) {
           const _response = response.data.response;
-          console.log(_response);
           return {
             list: _response.list,
             itemsCount: _response.count,
@@ -109,7 +108,6 @@ export const useUsersStore: any = defineStore({
       let response = await UsersService.editUsername(id, {
         username: data.username,
       });
-      console.log(response);
       if (response.status == 200) {
         this.loadPaginatedList();
         return {
@@ -130,7 +128,6 @@ export const useUsersStore: any = defineStore({
         new_password: data.newPassword,
         confirm_password: data.confirmPassword,
       });
-      console.log(response);
       if (response.status == 200) {
         this.loadPaginatedList();
         return {

@@ -69,7 +69,6 @@ const onUpdateLocation = (emitted: EmitInterface) => {
 
 const onUpdateAddress = (emitted: EmitInterface) => {
   clientsStore.form.address = emitted.data.address;
-  console.log(clientsStore.form.address);
 };
 
 let show_error_message = ref(false)
@@ -87,8 +86,6 @@ const onsubmit = () => {
   clientsStore.selectedNeighborhood = location.neighborhood;
   clientsStore.toogleDialog();
   clientsStore.isValidFormAddressContactInfo = false;
-  console.log(clientsStore.form.phones);
-  console.log(clientsStore.form.emails);
 };
 
 

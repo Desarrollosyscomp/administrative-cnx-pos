@@ -27,7 +27,6 @@ export type TForm = {
 };
 
 export const parseClientsToForm = (client: TThirdParty): TForm => {
-  console.log(client)
   let form = {} as TForm
   if (!client) return form;
   form.financial_activities = client.financialActivities.map((financialActivity: any) => {
@@ -50,7 +49,6 @@ export const parseClientsToForm = (client: TThirdParty): TForm => {
     form.emails = client.person.emails;
     form.phones = client.person.phones
   } else if (client.company){
-    console.log(client.company.name)
     form.regime_dian_id = client.company.identification.regime_dian_id;
     form.identification_type_code = client.company.identification.document_type_dian_id;
     form.identification_number = client.company.identification.document_number;

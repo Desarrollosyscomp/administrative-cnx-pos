@@ -101,8 +101,7 @@ const submitForm = async () => {
       clientsStore.form.fiscal_obligation_dian_id =
         formData.fiscal_obligation.split(",")[0];
 
-        console.log(typeof clientsStore.form.fiscal_obligation_dian_id)
-      clientsStore.nameFiscalObligations =
+        clientsStore.nameFiscalObligations =
         formData.fiscal_obligation.split(",")[1];
       clientsStore.toogleDialog();
     }
@@ -114,7 +113,12 @@ const submitForm = async () => {
       timer: 1500,
     });
   } catch (e:any){
-    console.log(e.message)   
+    swal.fire({
+      icon: "error",
+      text: "Error interno",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 };
 

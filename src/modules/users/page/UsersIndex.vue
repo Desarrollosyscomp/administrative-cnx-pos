@@ -85,14 +85,12 @@ const openModalCreateUser = () => {
 
 const onEdit = (emitted: EmitInterface) => {
   usersStore.moduleMode = "edit";
-  console.log("onEdit", emitted);
   usersStore.selectedItem = emitted.data.users;
   usersStore.toogleDialog();
 };
 
 const onPermissions = (emitted: EmitInterface) => {
   usersStore.moduleMode = "permissions";
-  console.log("onEdit", emitted);
   usersStore.selectedItem = emitted.data.users;
   usersStore.toogleDialog();
 };

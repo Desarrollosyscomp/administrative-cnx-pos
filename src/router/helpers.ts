@@ -34,7 +34,6 @@ const verifyRouteAccess = (
    * está logueado, lo manda para el login
    */
   if (!authStore.user.token) {
-    console.log(authStore);
     return { redirect: "out" };
   }
 

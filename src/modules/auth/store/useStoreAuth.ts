@@ -40,7 +40,6 @@ export const useAuthStore: any = defineStore({
           username: data.user,
           password: data.password,
         });
-        console.log(response.data.response.token);
         if (response.status == 200) {
           let decoded: any = jwtDecode(response.data.response.token);
           this.user = {
