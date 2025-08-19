@@ -48,7 +48,14 @@ export const useAuthStore: any = defineStore({
             typeUser: decoded.tokenObject.username,
             exp: decoded.tokenObject.exp,
           }
-          return { isLogged: true };
+          return { 
+            isLogged: true
+          };
+        } else {
+          return {
+            isLogged: false,
+            message: response.data.response.message
+          };
         }
     },
 
