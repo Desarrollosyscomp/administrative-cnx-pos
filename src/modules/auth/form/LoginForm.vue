@@ -41,8 +41,8 @@ const authStore = useAuthStore();
 let isVisible = ref(false);
 
 const formLogin = reactive({
-    user: 'admin',
-    password: 'admin123..',
+    user: '',
+    password: '',
 });
 
 const submitForm = async () => {
