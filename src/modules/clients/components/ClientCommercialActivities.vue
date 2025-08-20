@@ -22,7 +22,7 @@
         <v-tabs-window-item :value="1">
           <p><b> Nombre de actividades seleccionada: </b></p>
           <v-container fluid>
-            <div v-for="(financial, i) in clientsStore.selectedFinancialActivities" :key="i" class="mb-2">
+            <div v-for="(financial, i) in clientsStore.form.financial_activities" :key="i" class="mb-2">
               <span class=" custom-font-size align-components mt-2">
                 {{ financial.name }}
               </span>
@@ -33,7 +33,7 @@
               </div>
               <v-divider></v-divider>
             </div>
-            <div class="ma-4" v-if="clientsStore.selectedFinancialActivities.length < 1">
+            <div class="ma-4" v-if="clientsStore.form.financial_activities.length < 1">
               <Vue3Lottie :animationData="EmptyLottie" :height="180" :width="190" />
               <h3 class="text-center">No se encontraron resultados</h3>
             </div>

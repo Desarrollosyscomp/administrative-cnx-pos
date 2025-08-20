@@ -26,6 +26,15 @@
               class="ma-n2"
             >
               <v-btn
+                color="#841811ff"
+                variant="outlined"
+                size="small"
+                class="mr-2"
+                @click="attemptResetForm"
+              >
+                Resetear
+              </v-btn>
+              <v-btn
                 color="success"
                 variant="outlined"
                 size="small"
@@ -225,11 +234,27 @@ const resetForm = () => {
   clientsStore.selectedNeighborhood = {};
 }
 
+const attemptResetForm = () => {
+  swal.fire({
+    text: "¿Está seguro que desea resetear el formulario?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#4CAF50",
+    cancelButtonColor: "red",
+    confirmButtonText: '<span style="color: white;">Sí</span>',
+    cancelButtonText: '<span style="color: white;">Cancelar</span>',
+  }).then((result: any) => {
+    if (result.isConfirmed) {
+      resetForm();
+    }
+  });
+}
+
 const onCloseDialog = () => {
   clientsStore.mode = "";
 };
 onBeforeMount(() => {
- // clientsStore.initialiceForm();
+//  clientsStore.initialiceForm();
 });
 const loadInitialData = async () => {
   await loadThirdParty();

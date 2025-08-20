@@ -33,7 +33,28 @@ export const useClientsStore: any = defineStore({
     totalPages: 0,
     list: [] as Array<TThirdParty>,
 
-    form: useStorage("form", {} as any),
+    form: useStorage("form", {
+      user_warehouse: "0",
+      tradename: "",
+      regime_dian_id: null,
+      identification_type_code: null,
+      identification_number: "",
+      emails: [],
+      phones: [],
+      name: "",
+      first_name: "",
+      second_name: "",
+      sure_name: "",
+      second_sure_name: "",
+      tax_schema_dian_id: "",
+      fiscal_obligation_dian_id: "",
+      financial_activities: [],
+      address: "",
+      country_id: 0,
+      department_id: 0,
+      municipality_id: 0,
+      neighborhood_id: 0,
+    } as any),
     selectedItem: {} as TThirdParty,
     isValidFormMainInfo: false,
     isValidFormFiscalInfo: false,
@@ -265,6 +286,7 @@ export const useClientsStore: any = defineStore({
             return financialActivity.dian_id;
           }
         );
+        console.log(aux);
         let response = await ClientsService.getPaginateFinancialActivities(
           this.page,
           this.limitFinancialActivities,
@@ -294,6 +316,7 @@ export const useClientsStore: any = defineStore({
       financial_activities_list: Array<TFinancialActivities> = []
     ) {
       try {
+        console.log(financial_activities_list);
         let response: any = await this.getPaginatedFinancialActivities(
           financial_activities_list
         );
