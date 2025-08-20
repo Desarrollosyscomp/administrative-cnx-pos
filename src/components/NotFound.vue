@@ -1,7 +1,7 @@
 <template>
   <figure class="not-found-figure">
     <img src="./../assets/404.svg" alt="Not Found" class="not-found-image" />
-    <router-link to="/" class="return-button">
+    <router-link to="/login" class="return-button">
       <v-btn 
         class="mt-n6"
         color="#841811ff"
@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+
 //import { ref } from "vue";
 
 defineProps<{ msg: string }>();

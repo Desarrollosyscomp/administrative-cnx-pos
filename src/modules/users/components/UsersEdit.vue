@@ -47,7 +47,7 @@
           variant="outlined"
           color="success"
           block
-          class="mb-5 mt-n2"
+          class="mb-5 mt-1"
           type="submit"
           :disabled="isDisabledUsername || !isFormChanged"
         >

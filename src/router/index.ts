@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import PageLogin from "../modules/auth/page/PageLogin.vue";
 
 import { LogInRoute } from "../modules/auth/routes/router";
 import { UsersRouter } from "../modules/users/routes/users.routes";
@@ -8,12 +7,12 @@ import NotFound from "../components/NotFound.vue";
 import { useAuthStore } from "../modules/auth/store/useStoreAuth";
 import { verifyRouteAccess } from "./helpers";
 import { PermissionsRouter } from "../modules/permissions/routes/permissions.routes";
+import PageLogin from "../modules/auth/page/PageLogin.vue";
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "Home",
-    // component: HelloWorld,
     component: () => import("../components/HelloWorld.vue")
   },
   {
@@ -42,7 +41,10 @@ router.beforeEach((to, from, next) => {
   let { redirect } = verifyRouteAccess(authStore, toPathSegments);
 
   const enablePermissions = import.meta.env.VITE_ENABLE_PERMISSIONS === "true";
-
+  if (!authStore.user.token && to.path !== "/login") {
+    next('/login')
+    return
+  }
   if (!enablePermissions){
     next();
     return;

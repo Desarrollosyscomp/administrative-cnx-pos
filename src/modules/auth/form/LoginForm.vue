@@ -25,6 +25,7 @@
             :append-inner-icon="isVisible ? 'mdi-lock-off' : 'mdi-lock'"
             class="border-color"
             v-model="formLogin.password"
+            @keyup.enter="submitForm"
             @click:append-inner="isVisible = !isVisible"
           ></v-text-field>
           <div align="start">
