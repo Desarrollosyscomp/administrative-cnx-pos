@@ -40,7 +40,7 @@
           class="mt-n3"
           density="compact"
           type="submit"
-          >Modificar</v-btn
+          >Agregar</v-btn
         >
       </v-col>
     </v-row>

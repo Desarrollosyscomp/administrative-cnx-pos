@@ -16,7 +16,8 @@
                   </p>
                 </b>
                 <p style="font-size: small; color: gray" v-if="!draftMessage">
-                  ⚠️ Este formulario está en borrador, complete todos los campos para guardar
+                  ⚠️ Este formulario está en borrador, complete todos los campos
+                  para guardar
                 </p>
               </v-card-text>
             </div>
@@ -119,7 +120,7 @@ import MainInfo from "./forms/MainInfo.vue";
 import FormMainInfo from "./forms/FormMainInfo.vue";
 import FormFiscalInfo from "./forms/FormFiscalInfo.vue";
 import FormAddressInfo from "./forms/FormAddressInfo.vue";
-import { computed, inject, onBeforeMount, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 // import validations from "../validations/validations";
 // import * as Yup from "yup";
@@ -146,6 +147,17 @@ const emit = defineEmits(["onClose"]);
 const route = useRoute();
 const clientsStore = useClientsStore();
 // let validationSchema = Yup.object(validations);
+
+// watch(
+//   () => [clientsStore.form, clientsStore.moduleMode],
+//   ([newForm, newMode]) => {
+//     if (newMode === "add") {
+//       localStorage.setItem("form", JSON.stringify(newForm));
+//     }
+//   },
+//   { deep: true }
+// );
+
 const draftMode = ref(false);
 const loadThirdParty = async () => {
   let id = route.params.id;
@@ -232,30 +244,29 @@ const resetForm = () => {
   clientsStore.selectedDepartment = {};
   clientsStore.selectedMunicipality = {};
   clientsStore.selectedNeighborhood = {};
-}
+};
 
 const attemptResetForm = () => {
-  swal.fire({
-    text: "¿Está seguro que desea resetear el formulario?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#4CAF50",
-    cancelButtonColor: "red",
-    confirmButtonText: '<span style="color: white;">Sí</span>',
-    cancelButtonText: '<span style="color: white;">Cancelar</span>',
-  }).then((result: any) => {
-    if (result.isConfirmed) {
-      resetForm();
-    }
-  });
-}
+  swal
+    .fire({
+      text: "¿Está seguro que desea resetear el formulario?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#4CAF50",
+      cancelButtonColor: "red",
+      confirmButtonText: '<span style="color: white;">Sí</span>',
+      cancelButtonText: '<span style="color: white;">Cancelar</span>',
+    })
+    .then((result: any) => {
+      if (result.isConfirmed) {
+        resetForm();
+      }
+    });
+};
 
 const onCloseDialog = () => {
   clientsStore.mode = "";
 };
-onBeforeMount(() => {
-//  clientsStore.initialiceForm();
-});
 const loadInitialData = async () => {
   await loadThirdParty();
   await clientsStore.loadInitialData();
@@ -285,6 +296,8 @@ const draftMessage = computed((): boolean => {
 });
 
 onMounted(async () => {
+  console.log(clientsStore.moduleMode);
+  console.log(clientsStore.form);
   // clientsStore.initialiceForm();
   await appStore.afterLoading(loadInitialData);
 });

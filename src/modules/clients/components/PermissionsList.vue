@@ -16,8 +16,7 @@
                   <b>
                     Username:
                   </b>
-                  {{ clientsStore.selectedItem.person?.first_name ?? "" }} {{ clientsStore.selectedItem.person?.surename
-                  ?? "" }}
+                  {{ usernamePersonOrCompany }}
                 </p>
                 <div>
                   <v-btn variant="outlined" class="mt-n6 mx-3" color="#841811ff" @click="$router.go(-1)">
@@ -112,7 +111,7 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
-import { ref, onMounted, inject } from 'vue';
+import { ref, onMounted, inject, computed } from 'vue';
 import LayoutOne from '../../../Layouts/LayoutOne.vue';
 import { useClientsStore } from '../store/useClientsStore';
 import EmptyLottie from '../../../assets/lotties/empty.json';
@@ -183,6 +182,14 @@ const loadClientSystemServices = async () => {
 const clientHasSystemService = (system_service_id: number) => {
   return clientsStore.client_system_services.some((system_service: any) => system_service.id == system_service_id)
 }
+
+const usernamePersonOrCompany = computed(() => {
+  if (clientsStore.selectedItem.clientable_type == "person") {
+    return `${clientsStore.selectedItem.person?.first_name} ${clientsStore.selectedItem.person?.surename}`;
+  } else if (clientsStore.selectedItem.clientable_type == "company") {
+    return clientsStore.selectedItem.company?.name;
+  }
+})
 
 onMounted(async () => {
   loadClient()

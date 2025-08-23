@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <v-table>
       <thead>
         <tr>
@@ -14,25 +14,33 @@
       <tbody>
         <tr v-for="(item, index) in clientsStore.list" :key="index">
           <td class="text-left text-truncate" style="max-width: 20px">
-            {{  item.name  }}
+            {{ item.name }}
           </td>
           <td class="text-center" style="max-width: 20px">
-            <v-badge :color="item.clientable_type == 'company' ? '#841811ff' : 'success'" class="mr-14 mb-1">
+            <v-badge
+              :color="
+                item.clientable_type == 'company' ? '#841811ff' : 'success'
+              "
+              class="mr-14 mb-1"
+            >
               <template v-slot:badge>
                 <span class="pa-2">{{
-                  item.clientable_type == 'company' ? "Empresa" : "Persona"
+                  item.clientable_type == "company" ? "Empresa" : "Persona"
                 }}</span>
               </template>
             </v-badge>
           </td>
           <td class="text-center text-truncate" style="max-width: 20px">
-            {{  setIdetification(item)  }}
+            {{ setIdetification(item) }}
           </td>
           <td class="text-center text-truncate" style="max-width: 20px">
-            {{  DateHelpers.timestamptzToNatural(item.created_at) }}
+            {{ DateHelpers.timestamptzToNatural(item.created_at) }}
           </td>
           <td class="text-right">
-            <v-badge :color="item.is_active ? 'success' : '#841811ff'" class="mr-12 mb-1">
+            <v-badge
+              :color="item.is_active ? 'success' : '#841811ff'"
+              class="mr-12 mb-1"
+            >
               <template v-slot:badge>
                 <span class="pa-2">{{
                   item.is_active ? "Activo" : "Inactivo"
@@ -43,7 +51,13 @@
           <td class="text-right">
             <v-menu location="start">
               <template v-slot:activator="{ props }">
-                <v-btn size="small" color="#841811ff" variant="outlined" v-bind="props" @click="openClientDetails(item)">
+                <v-btn
+                  size="small"
+                  color="#841811ff"
+                  variant="outlined"
+                  v-bind="props"
+                  @click="openClientDetails(item)"
+                >
                   Detalles
                 </v-btn>
               </template>
@@ -143,13 +157,20 @@ const openClientDetails = (item: TThirdParty) => {
 };
 
 
+const resetForm = () => {
+  clientsStore.initialiceForm();
+  clientsStore.selectedFinancialActivities = [];
+  clientsStore.selectedCountry = {};
+  clientsStore.selectedDepartment = {};
+  clientsStore.selectedMunicipality = {};
+  clientsStore.selectedNeighborhood = {};
+};
 onMounted(async() => {
   clientsStore.selectedItem = {}
   clientsStore.selectedItemTaxxaInfo = {}
   appStore.afterLoading(clientsStore.loadPaginatedList);
-  // clientsStore.loadPaginatedList()
+  resetForm();
 })
-
 </script>
 
 <style scoped>

@@ -223,6 +223,8 @@ export const useClientsStore: any = defineStore({
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
       });
       if (response.data.status == 201) {
+        this.initialiceForm();
+        localStorage.removeItem("form");
         return {
           error: false,
           data: response.data.response,

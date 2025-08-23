@@ -18,7 +18,7 @@
     <v-row>
       <v-col md="12">
         <v-btn rounded="xs" size="large" block color="#841811ff" variant="outlined" class="mt-n3" density="compact"
-          type="submit">Modificar</v-btn>
+          type="submit">Agregar</v-btn>
       </v-col>
     </v-row>
   </v-form>
