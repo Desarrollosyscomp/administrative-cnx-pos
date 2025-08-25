@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
 
   const enablePermissions = import.meta.env.VITE_ENABLE_PERMISSIONS === "true";
   if (to.path === "/") {
-    next('/home')
+    next('/login')
     return
   }
   if (to.path === "/" && !authStore.user.token) {
