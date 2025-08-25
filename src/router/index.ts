@@ -41,6 +41,14 @@ router.beforeEach((to, from, next) => {
   let { redirect } = verifyRouteAccess(authStore, toPathSegments);
 
   const enablePermissions = import.meta.env.VITE_ENABLE_PERMISSIONS === "true";
+  if (to.path === "/") {
+    next('/home')
+    return
+  }
+  if (to.path === "/" && !authStore.user.token) {
+    next('/login')
+    return
+  }
   if (!authStore.user.token && to.path !== "/login") {
     next('/login')
     return
