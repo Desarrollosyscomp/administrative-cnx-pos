@@ -140,6 +140,20 @@
                           </span>
                         </v-expansion-panel-text>
                       </v-expansion-panel>
+                      <v-expansion-panel>
+                        <v-expansion-panel-title>
+                          <b> URL del cliente </b>
+                        </v-expansion-panel-title>
+                        <v-expansion-panel-text>
+                          <span
+                            class="color-font"
+                          >
+                            {{
+                              clientsStore.selectedItemTaxxaInfo?.url
+                            }}
+                          </span>
+                        </v-expansion-panel-text>
+                      </v-expansion-panel>
                     </v-expansion-panels>
                   </v-locale-provider>
                 </span>
@@ -633,7 +647,8 @@ const openCreateSchemaSwal = async () => {
 };
 
 const credentialsObject = computed(() => {
-  return clientsStore.selectedItemTaxxaInfo?.tenantWithClient;
+  console.log(clientsStore.selectedItemTaxxaInfo.data);
+  return clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient;
 });
 
 const loadClient = () => {
@@ -727,6 +742,7 @@ const isFormChangedLicense = computed(():boolean => {
 });
 
 onMounted(async () => {
+  console.log(credentialsObject.value);  
   await loadTenantDetails(); 
   await loadElectronicInvoiceProviders();
   await loadClient();

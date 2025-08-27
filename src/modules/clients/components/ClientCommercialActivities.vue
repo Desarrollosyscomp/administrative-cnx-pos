@@ -16,7 +16,7 @@
       </v-tabs>
 
       <v-text-field class="w-50 mt-4 mb-n3" color="#841811ff" density="compact" variant="outlined" label="Buscar"
-        v-model="clientsStore.search" append-inner-icon="mdi-magnify" @keyup.enter="simpleSearch">
+        v-model="clientsStore.searchFinancialActivities" append-inner-icon="mdi-magnify" @keyup.enter="simpleSearch">
       </v-text-field>
       <v-tabs-window v-model="tab">
         <v-tabs-window-item :value="1">
@@ -85,7 +85,7 @@ let tab = ref();
 const simpleSearch = async () => {
   clientsStore.page = 1;
   clientsStore.advancedSearchActive = false;
-  clientsStore.search = clientsStore.search.trim();
+  clientsStore.searchFinancialActivities = clientsStore.searchFinancialActivities.trim();
   await clientsStore.loadPaginatedFinancialActivities();
 };
 
