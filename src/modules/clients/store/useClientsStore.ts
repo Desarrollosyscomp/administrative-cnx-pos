@@ -26,6 +26,7 @@ export const useClientsStore: any = defineStore({
     limit: 10,
     limitFinancialActivities: 4,
     search: "",
+    searchFinancialActivities: "",
     is_active: true,
     openDialog: false,
     mode: "",
@@ -293,7 +294,7 @@ export const useClientsStore: any = defineStore({
           this.page,
           this.limitFinancialActivities,
           aux,
-          this.search
+          this.searchFinancialActivities
         );
         if (response.status == 200) {
           const _response = response.data.response;
