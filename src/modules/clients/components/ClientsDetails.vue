@@ -691,7 +691,7 @@ const sendLicense = async () => {
     await validationSchemaLicense.validate(licenseForm);
     clickLicense.value = true;
     const { error, data } = await clientsStore.createLicense({
-      tenant_id: clientsStore.selectedItemTaxxaInfo?.tenantWithClient.id,
+      tenant_id: clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id,
       ...licenseForm,
     });
     if (!error) {
@@ -725,7 +725,7 @@ const sendLicense = async () => {
 
 let formOriginLicense = ref<string>("");
 const setLicense = async () => {
-  console.log(clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient);
+  console.log(clientsStore.selectedItemTaxxaInfo?.data);
   const response = await clientsStore.getLicense(
     clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id
   );
