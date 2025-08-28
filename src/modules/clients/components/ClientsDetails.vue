@@ -149,7 +149,7 @@
                             class="color-font"
                           >
                             {{
-                              clientsStore.selectedItemTaxxaInfo?.url
+                              clientsStore.selectedItemTaxxaInfo?.url ?? "No asignada"
                             }}
                           </span>
                         </v-expansion-panel-text>
