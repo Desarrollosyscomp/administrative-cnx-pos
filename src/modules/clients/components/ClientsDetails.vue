@@ -725,8 +725,9 @@ const sendLicense = async () => {
 
 let formOriginLicense = ref<string>("");
 const setLicense = async () => {
+  console.log(clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient);
   const response = await clientsStore.getLicense(
-    clientsStore.selectedItemTaxxaInfo?.tenantWithClient.id
+    clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id
   );
   if (response.data) {
     licenseForm.init_date= response.data.init_date;
