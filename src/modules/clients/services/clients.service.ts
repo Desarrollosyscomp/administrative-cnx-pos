@@ -74,7 +74,8 @@ export const ClientsService = {
     page: number,
     limit: number,
     search: string,
-    is_active: boolean | undefined
+    is_active: boolean | undefined,
+    client_status: number| undefined
   ) => {
     return axios.get({
       url: `${URL_API}/clients/find/pagination`,
@@ -84,6 +85,7 @@ export const ClientsService = {
           limit: limit,
           search: search,
           is_active: is_active,
+          client_status: client_status,
         },
         headers: {
           Authorization: `Bearer ${user.token}`,

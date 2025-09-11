@@ -33,6 +33,7 @@ export const useClientsStore: any = defineStore({
     itemsCount: 0,
     totalPages: 0,
     list: [] as Array<TThirdParty>,
+    client_status: null,
 
     form: useStorage("form", {
       user_warehouse: "0",
@@ -338,7 +339,8 @@ export const useClientsStore: any = defineStore({
           this.page,
           this.limit,
           this.search,
-          this.is_active == null ? undefined : this.is_active
+          this.is_active == null ? undefined : this.is_active,
+          this.client_status == null ? undefined : this.client_status
         );
         if (response.status == 200) {
           const _response = response.data.response;

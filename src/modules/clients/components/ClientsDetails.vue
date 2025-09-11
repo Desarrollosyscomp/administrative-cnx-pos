@@ -78,9 +78,9 @@
                         <v-expansion-panel-text>
                           <v-form @submit.prevent="sendLicense">
                             <v-date-input
-                            class="mt-2 mb-n2"
-                            label="Fecha inicio licencia"
-                            clearable
+                              class="mt-2 mb-n2"
+                              label="Fecha inicio licencia"
+                              clearable
                               variant="outlined"
                               density="compact"
                               location="end center"
@@ -98,18 +98,26 @@
                               :rules="endDateRules"
                               v-model="licenseForm.end_date"
                               :disabled="disableForm"
-                              ></v-date-input>
-                              <p v-if="!credentialsObject" class="text-red mt-n2" style="font-size: 12px">
-                                Se necesita crear una base de datos para
-                                modificar la licencia
-                              </p>
-                              <div align="end">
-                                <v-btn
+                            ></v-date-input>
+                            <p
+                              v-if="!credentialsObject"
+                              class="text-red mt-n2"
+                              style="font-size: 12px"
+                            >
+                              Se necesita crear una base de datos para modificar
+                              la licencia
+                            </p>
+                            <div align="end">
+                              <v-btn
                                 variant="outlined"
                                 color="success"
                                 density="compact"
                                 type="submit"
-                                :disabled="disableForm || !isFormChangedLicense || clickLicense"
+                                :disabled="
+                                  disableForm ||
+                                  !isFormChangedLicense ||
+                                  clickLicense
+                                "
                               >
                                 Guardar</v-btn
                               >
@@ -145,11 +153,10 @@
                           <b> URL del cliente </b>
                         </v-expansion-panel-title>
                         <v-expansion-panel-text>
-                          <span
-                            class="color-font"
-                          >
+                          <span class="color-font">
                             {{
-                              clientsStore.selectedItemTaxxaInfo?.url ?? "No asignada"
+                              clientsStore.selectedItemTaxxaInfo?.url ??
+                              "No asignada"
                             }}
                           </span>
                         </v-expansion-panel-text>
@@ -362,16 +369,16 @@ const validations = {
     .required("La URL es requerida")
     .trim()
     .matches(/^https:\/\//, "La URL debe comenzar con https://"),
-  login_url: Yup.string()
-    .required("El login URL es requerido")
-    .trim()
+  login_url: Yup.string().required("El login URL es requerido").trim(),
 };
 const validationLicense = {
-  init_date: Yup.date()
-    .required("La fecha de inicio es requerida"),
+  init_date: Yup.date().required("La fecha de inicio es requerida"),
   end_date: Yup.date()
     .required("La fecha de fin es requerida")
-    .min(Yup.ref("init_date"), "La fecha de finalización debe ser posterior a la fecha de inicio"),
+    .min(
+      Yup.ref("init_date"),
+      "La fecha de finalización debe ser posterior a la fecha de inicio"
+    ),
 };
 
 const emailRules = ref([
@@ -686,70 +693,75 @@ const disableForm = computed(() => {
 });
 
 let clickLicense = ref<boolean>(false);
+
+let formOriginLicense = ref<string>("");
+
 const sendLicense = async () => {
   try {
     await validationSchemaLicense.validate(licenseForm);
     clickLicense.value = true;
     const { error, data } = await clientsStore.createLicense({
       tenant_id: clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id,
-      ...licenseForm,
+      init_date: licenseForm.init_date,
+      end_date: licenseForm.end_date,
     });
     if (!error) {
+      licenseForm.init_date = data.init_date;
+      licenseForm.end_date = data.end_date;
+      formOriginLicense.value = `${licenseForm.init_date}${licenseForm.end_date}`;
       // clickLicense.value = false;
-    await swal.fire({
-      icon: "success",
-      text: "Licencia creada con éxito",
-      showConfirmButton: false,
-      timer: 1200,
-    }); 
-    await loadTenantDetails();
-    // clickLicense.value = false;
-  } else {
-    await swal.fire({
-      icon: "error",
-      text: data.error,
-      showConfirmButton: false,
-      timer: 1200,
-    });
-  }
+      await swal.fire({
+        icon: "success",
+        text: "Licencia creada con éxito",
+        showConfirmButton: false,
+        timer: 1200,
+      });
+      await setLicense();
+      // await loadTenantDetails();
+      // clickLicense.value = false;
+    } else {
+      await swal.fire({
+        icon: "error",
+        text: data.error,
+        showConfirmButton: false,
+        timer: 1200,
+      });
+    }
   } catch (error) {
     await swal.fire({
       icon: "error",
-      text: 'Error interno',
+      text: "Error interno",
       showConfirmButton: false,
       timer: 1200,
     });
     showValidationErrors.value = true;
   }
 };
-
-let formOriginLicense = ref<string>("");
 const setLicense = async () => {
-  console.log(clientsStore.selectedItemTaxxaInfo?.data);
   const response = await clientsStore.getLicense(
     clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id
   );
+  console.log(response.data);
   if (response.data) {
-    licenseForm.init_date= response.data.init_date;
-    licenseForm.end_date= response.data.end_date;
+    licenseForm.init_date = response.data.init_date;
+    licenseForm.end_date = response.data.end_date;
     formOriginLicense.value = `${licenseForm.init_date}${licenseForm.end_date}`;
   }
-}
-  
-const isFormChangedLicense = computed(():boolean => {
+};
+const isFormChangedLicense = computed((): boolean => {
   const value = `${licenseForm.init_date}${licenseForm.end_date}`;
   clickLicense.value = false;
   return formOriginLicense.value !== value;
 });
 
 onMounted(async () => {
-  console.log(credentialsObject.value);  
-  await loadTenantDetails(); 
+  console.log(credentialsObject.value);
+  await loadTenantDetails();
+  await setLicense();
   await loadElectronicInvoiceProviders();
   await loadClient();
   await setFormWatcher();
   setForm();
-  await setLicense();
 });
 </script>
 <style>

@@ -15,6 +15,41 @@
             @keyup.enter="simpleSearch"
           >
           </v-text-field>
+
+          <v-menu
+            v-model="openDialogFilter"
+            :close-on-content-click="false"
+            location="end"
+          >
+            <template v-slot:activator="{ props }">
+              <v-btn variant="outlined" color="#841811ff" class="ma-2" v-bind="props">
+                Filtros
+              </v-btn>
+            </template>
+
+            <v-card min-width="300">
+              <v-card-text>
+                <p class="font-size">
+                  <b> Filtro de busqueda </b>
+                </p>
+                <br />
+                <v-select
+                  :items="items"
+                  item-value="id"
+                  item-title="type"
+                  variant="outlined"
+                  label="Seleccione un tipo"
+                  density="compact"
+                  v-model="selectFilter"
+                >
+                </v-select>
+                <v-btn color="success" variant="outlined" block @click="filterSubmit">
+                  Buscar
+                </v-btn>
+              </v-card-text>
+            </v-card>
+          </v-menu>
+
           <v-btn
             class="mt-2 ml-2"
             variant="outlined"
@@ -26,13 +61,23 @@
         </div>
       </v-card-title>
       <v-card-text class="mb-1">
-        <div class="ml-2 mb-n2 mt-3">
+        <div class="ml-2 mb-n2 mt-3" >
           <v-switch
             v-model="clientsStore.is_active"
             color="#841811ff"
             :label="clientsStore.is_active ? 'Activos' : 'Inactivos'"
           ></v-switch>
         </div>
+        <!-- <v-chip
+          v-if="clientsStore.client_status"
+          :color="clientsStore.client_status == 1 ? 'success' : 'error'"
+          class="ma-2"
+          closable
+          @click:close="selectFilter = null"
+        >
+          {{ clientsStore.client_status == 1 ? 'Proximos a vencer' : 'Vencidos' }}
+        </v-chip> -->
+
         <ClientList @onEdit="onEdit" @onDeactivate="unableItem" />
       </v-card-text>
     </v-card>
@@ -41,16 +86,11 @@
       v-model="clientsStore.openDialog"
       @update:modelValue="changeValue"
     >
-    <div>
-      <v-card>
-        <v-card-text>
-          <EIPSelector v-if="clientsStore.moduleMode === 'set-eip'" />
-          <TaxxaForm v-if="clientsStore.moduleMode === 'set-taxxa-info'" />
-          <!-- 
-            <UsersForm v-if="usersStore.moduleMode === 'add'" />
-            <UsersEdit v-if="usersStore.moduleMode === 'edit'" />
-            <UsersPermissions v-if="usersStore.moduleMode === 'permissions'" />
-            -->
+      <div>
+        <v-card>
+          <v-card-text>
+            <EIPSelector v-if="clientsStore.moduleMode === 'set-eip'" />
+            <TaxxaForm v-if="clientsStore.moduleMode === 'set-taxxa-info'" />
           </v-card-text>
         </v-card>
       </div>
@@ -60,7 +100,7 @@
 
 <script setup lang="ts">
 // import { EmitInterface } from "../../../interfaces/Emit.interface";
-import { inject, ref, watch } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import router from "../../../router";
 import ClientList from "../components/ClientList.vue";
@@ -68,18 +108,28 @@ import { useClientsStore } from "../store/useClientsStore";
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 import TaxxaForm from "../components/forms/TaxxaForm.vue";
 import EIPSelector from "../components/forms/EIPSelector.vue";
-import { useAppStore } from '../../../stores/app-store';
+import { useAppStore } from "../../../stores/app-store";
 
 const clientsStore = useClientsStore();
-const appStore = useAppStore()
+const appStore = useAppStore();
 
 let switchValue = ref(true);
 const swal: any = inject("swal");
-
+const openDialogFilter = ref(false);
 const openAddForm = () => {
   clientsStore.moduleMode = "add";
   router.push("/client/form");
 };
+
+const items = [
+  { id: null, type: "Todos" },
+  { id: 1, type: "Proximos a vencer" },
+  { id: 2, type: "Vencidos" },
+];
+// const openFilter = () => {
+//   clientsStore.moduleMode = "filter";
+//   openDialogFilter.value = true;
+// };
 
 const onEdit = (emitted: EmitInterface) => {
   clientsStore.moduleMode = "edit";
@@ -143,6 +193,20 @@ const changeValue = () => {
   clientsStore.moduleMode = "";
   clientsStore.selectedItem = {};
 };
+
+const selectFilter = ref(null)
+
+const filterSubmit = async () => {
+  clientsStore.client_status = selectFilter.value
+  selectFilter.value = null
+  openDialogFilter.value = false
+  return await clientsStore.loadPaginatedList()
+}
+
+onMounted(() => {
+  clientsStore.client_status = selectFilter.value
+  appStore.afterLoading(clientsStore.loadPaginatedList);
+})
 </script>
 
 <style scoped>

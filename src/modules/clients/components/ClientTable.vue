@@ -33,20 +33,83 @@
           <td class="text-center text-truncate" style="max-width: 20px">
             {{ setIdetification(item) }}
           </td>
-          <td class="text-center text-truncate" style="max-width: 20px">
+          <td class="text-center" style="position: relative">
             {{ DateHelpers.timestamptzToNatural(item.created_at) }}
-          </td>
-          <td class="text-right">
-            <v-badge
-              :color="item.is_active ? 'success' : '#841811ff'"
-              class="mr-12 mb-1"
+            <!-- <v-tooltip
+              :text="`Licencia expirada`"
+              location="top"
+              v-if="item.licenses.length > 0 && item.pendingDays < 0"
             >
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  v-bind="props"
+                  v-if="licenseExpiredSoon(item.pendingDays)"
+                  color="#841811ff"
+                  size="small"
+                >
+                  mdi-cancel
+                </v-icon>
+              </template>
+            </v-tooltip>
+            <v-tooltip
+              :text="`Licencia próxima a expirar en ${item.pendingDays} días`"
+              location="top"
+              v-if="item.pendingDays >= 0 && item.licenses.length > 0"
+            >
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  class="d-none d-md-block"
+                  v-bind="props"
+                  v-if="licenseExpiredSoon(item.pendingDays)"
+                  color="#841811ff"
+                  size="small"
+                  style="
+                    position: absolute;
+                    right: 25px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                  "
+                >
+                  mdi-alert
+                </v-icon>
+              </template>
+            </v-tooltip> -->
+          </td>
+          <!-- <td class="text-left" style="max-width: 2px; width: 2px">
+            <v-tooltip
+                :text="`Licencia próxima a expirar en ${item.pendingDays} días`"
+                location="top"
+                v-if="item.pendingDays"
+              >
+                <template v-slot:activator="{ props }">
+                  <v-icon
+                    v-bind="props"
+                    v-if="licenseExpiredSoon(item.pendingDays)"
+                    color="#841811ff"
+                    size="small"
+                    class="ml-n15"
+                  >
+                    mdi-alert
+                  </v-icon>
+                </template>
+              </v-tooltip>
+          </td> -->
+          <td class="text-right d-flex align-center">
+            <v-tooltip :text="item.licenses.length > 0 ? `Días restantes: ${item.pendingDays +1}` : 'Sin licencia'" location="left">
+              <template v-slot:activator="{ props }">
+              <v-badge
+              :color="getColor(item.pendingDays, item.is_active, item.licenses)"
+              class="mb-1 ml-7"
+              v-bind="props"
+              >
               <template v-slot:badge>
-                <span class="pa-2">{{
-                  item.is_active ? "Activo" : "Inactivo"
+                <span class="text-center" style="min-width: 90px">{{
+                  changeState(item.pendingDays, item.is_active, item.licenses)
                 }}</span>
               </template>
             </v-badge>
+          </template>
+          </v-tooltip>
           </td>
           <td class="text-right">
             <v-menu location="start">
@@ -103,16 +166,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import router from '../../../router';
-import { useClientsStore } from '../store/useClientsStore';
-import { TThirdParty } from '../interfaces/third-party.interface';
-import { useAppStore } from '../../../stores/app-store';
-import DateHelpers from '../../../utils/date/date-helpers';
-const clientsStore = useClientsStore()
-const appStore = useAppStore()
+import { onMounted } from "vue";
+import router from "../../../router";
+import { useClientsStore } from "../store/useClientsStore";
+import { TThirdParty } from "../interfaces/third-party.interface";
+import DateHelpers from "../../../utils/date/date-helpers";
+const clientsStore = useClientsStore();
 
-const emit = defineEmits(['onEdit', 'onDesactivate', "on-set-database", "on-set-eip"])
+const emit = defineEmits([
+  "onEdit",
+  "onDesactivate",
+  "on-set-database",
+  "on-set-eip",
+]);
 
 // const onPermissions = (item: TThirdParty) => {
 //   router.push("/client/" + item.id + "/permissions");
@@ -144,18 +210,17 @@ const emit = defineEmits(['onEdit', 'onDesactivate', "on-set-database", "on-set-
 //   });
 // };
 
-const setIdetification = (client: TThirdParty) =>{
-  if (client.clientable_type == 'person'){
-    return client.person?.identification?.document_number ?? 'N/A'
-  } else if (client.clientable_type == 'company'){
-    return client.company?.identification?.document_number ?? 'N/A'
+const setIdetification = (client: TThirdParty) => {
+  if (client.clientable_type == "person") {
+    return client.person?.identification?.document_number ?? "N/A";
+  } else if (client.clientable_type == "company") {
+    return client.company?.identification?.document_number ?? "N/A";
   }
-}
+};
 
 const openClientDetails = (item: TThirdParty) => {
   router.push("/client/" + item.id + "/details");
 };
-
 
 const resetForm = () => {
   clientsStore.initialiceForm();
@@ -165,16 +230,44 @@ const resetForm = () => {
   clientsStore.selectedMunicipality = {};
   clientsStore.selectedNeighborhood = {};
 };
-onMounted(async() => {
-  clientsStore.selectedItem = {}
-  clientsStore.selectedItemTaxxaInfo = {}
-  appStore.afterLoading(clientsStore.loadPaginatedList);
+
+const changeState = (pendingDays: number, is_active: boolean, license: any) => {
+  if (is_active == false) {
+    return "Inactivo"
+  }
+  if (license.length > 0 && pendingDays < 0){
+    return "Vencido"
+  }
+  if (is_active == true && license.length > 0 && pendingDays < 10) {
+    return "Por vencer"
+  } else {
+    return "Activo"
+  }
+}
+
+const getColor = (pendingDays: number, is_active: boolean, license: any) => {
+  const state = changeState(pendingDays, is_active, license);
+  if (state === "Inactivo") return "#841811ff";
+  if (state === "Por vencer") return "warning";
+  if (state === "Vencido") return "error";
+  if (state === "Activo") return "success";
+};
+
+onMounted(async () => {
+  clientsStore.selectedItem = {};
+  clientsStore.selectedItemTaxxaInfo = {};
   resetForm();
-})
+});
 </script>
 
 <style scoped>
 .read-the-docs {
   color: #888;
+}
+
+.align-items {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px;
 }
 </style>
