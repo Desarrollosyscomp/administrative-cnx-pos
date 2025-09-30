@@ -18,13 +18,6 @@
         </v-container>
       </v-main>
       <v-navigation-drawer v-model="drawer" temporary>
-        <div>
-          <v-list-item style="padding: 4%" prepend-avatar="https://randomuser.me/api/portraits/men/78.jpg"
-            title="John Leider"></v-list-item>
-        </div>
-
-        <v-divider></v-divider>
-
         <v-list density="compact" nav>
           <v-list-item
             @click="goTo('users-list')"
