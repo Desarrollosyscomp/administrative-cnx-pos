@@ -293,19 +293,11 @@
                           <div class="justify-end d-flex mt-n2">
                             <v-btn
                               variant="outlined"
-                              :color="
-                                clientsStore.moduleMode == 'add'
-                                  ? 'success'
-                                  : 'primary'
-                              "
+                              color="success"
                               type="submit"
                               :disabled="!isFormChanged"
                             >
-                              {{
-                                clientsStore.moduleMode == "add"
-                                  ? "Guardar"
-                                  : "Editar"
-                              }}
+                              Guardar
                             </v-btn>
                           </div>
                         </v-form>
