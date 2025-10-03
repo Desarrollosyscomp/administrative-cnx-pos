@@ -84,7 +84,6 @@
     <v-dialog
       width="540"
       v-model="clientsStore.openDialog"
-      @update:modelValue="changeValue"
     >
       <div>
         <v-card>
@@ -100,7 +99,7 @@
 
 <script setup lang="ts">
 // import { EmitInterface } from "../../../interfaces/Emit.interface";
-import { inject, onMounted, ref, watch } from "vue";
+import { inject, onBeforeMount, onMounted, ref, watch } from "vue";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import router from "../../../router";
 import ClientList from "../components/ClientList.vue";
@@ -189,7 +188,8 @@ watch(
     appStore.afterLoading(clientsStore.loadPaginatedList);
   }
 );
-const changeValue = () => {
+const onCloseDialog = async () => {
+  clientsStore.openDialog = false;
   clientsStore.moduleMode = "";
   clientsStore.selectedItem = {};
 };
@@ -202,8 +202,12 @@ const filterSubmit = async () => {
   openDialogFilter.value = false
   return await clientsStore.loadPaginatedList()
 }
+onBeforeMount(() => {
+  clientsStore.client_status = selectFilter.value
+  onCloseDialog()
+})
 
-onMounted(() => {
+onMounted(async () => {
   clientsStore.client_status = selectFilter.value
   appStore.afterLoading(clientsStore.loadPaginatedList);
 })

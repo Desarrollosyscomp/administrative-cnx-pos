@@ -241,7 +241,7 @@
                             {{ message }}
                           </v-alert>
                           <v-text-field
-                            label="Email proveido por Taxxa"
+                            label="Email entregado por Taxxa"
                             prepend-inner-icon="mdi-email"
                             variant="outlined"
                             density="compact"

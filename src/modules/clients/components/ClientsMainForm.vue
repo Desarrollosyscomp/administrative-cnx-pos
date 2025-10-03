@@ -266,6 +266,7 @@ const attemptResetForm = () => {
 
 const onCloseDialog = () => {
   clientsStore.mode = "";
+  clientsStore.openDialog = false;
 };
 const loadInitialData = async () => {
   await loadThirdParty();
