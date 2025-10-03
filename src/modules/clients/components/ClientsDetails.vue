@@ -613,7 +613,7 @@ const openCreateSchemaSwal = async () => {
   if (isConfirmed) {
     let person = `${clientsStore.selectedItem?.person?.first_name} ${clientsStore.selectedItem?.person?.surename}`;
     let company = clientsStore.selectedItem?.company?.name;
-    if (username !== company && username !== person) {
+    if (username !== company || username !== person) {
       await swal.fire({
         icon: "error",
         text: "Error, nombre de cliente inválido",
