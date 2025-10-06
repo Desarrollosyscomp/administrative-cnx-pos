@@ -42,7 +42,7 @@
                 type="submit"
                 :disabled="draftMode"
               >
-                {{ clientsStore.moduleMode === "add" ? "Crear" : "Editar" }}
+                {{ clientsStore.moduleMode === "add" ? "Crear" : "Guardar" }}
               </v-btn>
             </div>
           </v-card>
