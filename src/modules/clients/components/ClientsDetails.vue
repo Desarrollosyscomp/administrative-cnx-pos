@@ -10,7 +10,7 @@
                   type="image"
                   v-if="!clientsStore.selectedItem?.name"
                 ></v-skeleton-loader>
-                <v-avatar color="brown" size="120" v-else>
+                <v-avatar color="brown" size="150" v-else>
                   <span class="text-h3">{{ parsedPerfilName() }}</span>
                 </v-avatar>
                 <p class="text-h6 mt-2">
@@ -528,13 +528,16 @@ const parsedNameClient = () => {
 const parsedPerfilName = () => {
   let client = clientsStore.selectedItem;
   if (client?.clientable_type == "person") {
-    return `${client.person?.first_name[0]}${client.person?.surename[0]}`;
+    return `${client.person?.first_name[0].toUpperCase()}${client.person?.surename[0].toUpperCase()}`;
   } else if (client?.clientable_type == "company") {
-    return client.company?.name
-      .split(" ")
-      .map((word: any) => word[0])
-      .join("")
-      .toUpperCase();
+    if (client.company?.name.length > 2) {
+      return client.company?.name
+        .split(" ")
+        .slice(0, 4)
+        .map((word: any) => word[0])
+        .join("")
+        .toUpperCase();
+    }
   }
 };
 
