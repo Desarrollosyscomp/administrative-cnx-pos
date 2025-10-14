@@ -39,33 +39,34 @@
         </v-col>
       </v-row>
       <v-row class="mt-n4">
+
         <v-col cols="12" md="4" v-for="(system_service) in clientsStore.system_services_paginator.list"
-          :key="system_service.id">
-          <v-card elevation="2" link class="border-color full-height-card page-margins"
-            @click="toggleSelection(system_service)">
-            <v-card-text>
-              <div class="align-items">
-                <p class="font-size">
-                  <b>
-                    {{ system_service.name }}
-                  </b>
-                </p>
-                <span class="mt-n2">
-                  <v-icon v-if="clientHasSystemService(system_service.id)" color="green" size="33">
-                    mdi-check-circle-outline
-                  </v-icon>
-                </span>
-              </div>
-              <div class="mt-6">
-                <!-- Mostrar las primeras 3 acciones -->
-                <div v-for="(i) in [0, 1, 2]" :key="i">
-                  <li v-if="system_service.functionalities[i]" class="list-style">
+        :key="system_service.id">
+        <v-card elevation="2" link class="border-color full-height-card page-margins"
+        @click="toggleSelection(system_service)">
+        <v-card-text>
+          <div class="align-items">
+            <p class="font-size">
+              <b>
+                {{ system_service.name }}
+              </b>
+            </p>
+            <span class="mt-n2">
+              <v-icon v-if="clientHasSystemService(system_service.id)" color="green" size="33">
+                mdi-check-circle-outline
+              </v-icon>
+            </span>
+          </div>
+          <div class="mt-6">
+            <!-- Mostrar las primeras 3 acciones -->
+            <div v-for="(i) in [0, 1, 2]" :key="i">
+                  <li v-if="system_service.functionalities[0].functionalities[i].name" class="list-style">
                     <span class="icon-style">★</span>
-                    {{ system_service.functionalities[i].name }}
+                    {{ system_service.functionalities[0].functionalities[i].name}}
                   </li>
                 </div>
                 <!-- Mostrar 'Otros' si hay más de 3 acciones -->
-                <li v-if="system_service.functionalities.length > 3" class="list-style">
+                <li v-if="system_service.functionalities[0].functionalities.length > 3" class="list-style">
                   <span class="icon-style">★</span>
                   Otros
                 </li>
@@ -99,7 +100,7 @@
           </p>
           <v-divider></v-divider>
           <v-card-text class=" mt-n2">
-            <li v-for="(action, i) in selected_system_service.functionalities" :key="i" class="list-style-dialog">
+            <li v-for="(action, i) in selected_system_service.functionalities[0].functionalities" :key="i" class="list-style-dialog">
               <span class="icon-style">★</span>
               {{ action.name }}
             </li>
