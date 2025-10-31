@@ -48,7 +48,6 @@ export const usePermissionsStore: any = defineStore({
           };
         }
       } catch (e: any) {
-        console.log(e.response);
         if (e.response.status === 404) {
           return {
             list: [],
@@ -72,7 +71,6 @@ export const usePermissionsStore: any = defineStore({
           return response.data;
         }
       } catch (e: any) {
-        console.log(e.response);
         throw "Stop";
       }
     },
@@ -84,7 +82,6 @@ export const usePermissionsStore: any = defineStore({
         this.totalPages = response.totalPages;
         return response;
       } catch (e: any) {
-        console.log(e.response);
         throw "Stop";
       }
     },
@@ -102,7 +99,6 @@ export const usePermissionsStore: any = defineStore({
           return response.data;
         }
       } catch (e: any) {
-        console.log(e.response);
         throw "Stop";
       }
     },
@@ -132,7 +128,6 @@ export const usePermissionsStore: any = defineStore({
           return [];
         }
       } catch (e: any) {
-        console.log(e.response);
         throw "Stop";
       }
     },

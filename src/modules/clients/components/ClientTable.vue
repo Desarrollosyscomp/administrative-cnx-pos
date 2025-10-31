@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th class="text-left font-weight-black">NOMBRE</th>
-          <th class="text-center font-weight-black">DESCRIPCIÓN</th>
+          <th class="text-center font-weight-black">TIPO CLIENTE</th>
           <th class="text-center font-weight-black">NÚMERO DE DOCUMENTO</th>
           <th class="text-center font-weight-black">FECHA DE CREACIÓN</th>
           <th class="text-right font-weight-black">ESTADO</th>

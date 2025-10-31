@@ -257,7 +257,7 @@ const submitNewUsername = async () => {
       });
     }
   } catch (e) {
-    console.log("Error de validación:", e);
+    console.error("Error de validación:", e);
   }
   isDisabledUsername.value = false;
 };

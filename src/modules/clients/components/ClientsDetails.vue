@@ -649,7 +649,6 @@ const openCreateSchemaSwal = async () => {
 };
 
 const credentialsObject = computed(() => {
-  console.log(clientsStore.selectedItemTaxxaInfo.data);
   return clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient;
 });
 
@@ -736,7 +735,6 @@ const setLicense = async () => {
   const response = await clientsStore.getLicense(
     clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id
   );
-  console.log(response.data);
   if (response.data) {
     licenseForm.init_date = response.data.init_date;
     licenseForm.end_date = response.data.end_date;
@@ -750,7 +748,6 @@ const isFormChangedLicense = computed((): boolean => {
 });
 
 onMounted(async () => {
-  console.log(credentialsObject.value);
   await loadTenantDetails();
   await setLicense();
   await loadElectronicInvoiceProviders();

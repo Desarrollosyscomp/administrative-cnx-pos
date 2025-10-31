@@ -134,7 +134,6 @@ const submit = async () => {
     emit("onClose");
 
   } catch (e: any) {
-    console.log("Validation failed");
   }
 };
 const close = () => {

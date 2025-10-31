@@ -19,10 +19,8 @@ const showError = (httpErrors: Array<HttpErrors>, status: number) => {
   const notification = messages.get(status);
   if (notification) {
     const customMessage = httpErrors.find((httpError: HttpErrors) => {
-      console.log(httpError.code);
       return httpError.code == status;
     });
-    console.log(customMessage);
     if (customMessage) notification({ message: customMessage.message });
     else notification();
   }

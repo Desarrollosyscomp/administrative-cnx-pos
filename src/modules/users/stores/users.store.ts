@@ -65,7 +65,6 @@ export const useUsersStore: any = defineStore({
           };
         }
       } catch (e: any) {
-        console.log(e.response);
         if (e.response.status === 404) {
           return {
             list: [],

@@ -290,7 +290,6 @@ export const useClientsStore: any = defineStore({
             return financialActivity.dian_id;
           }
         );
-        console.log(aux);
         let response = await ClientsService.getPaginateFinancialActivities(
           this.page,
           this.limitFinancialActivities,
@@ -320,7 +319,6 @@ export const useClientsStore: any = defineStore({
       financial_activities_list: Array<TFinancialActivities> = []
     ) {
       try {
-        console.log(financial_activities_list);
         let response: any = await this.getPaginatedFinancialActivities(
           financial_activities_list
         );
