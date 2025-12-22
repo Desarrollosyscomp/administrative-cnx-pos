@@ -22,12 +22,12 @@
         <br />
       </span>
       <v-divider></v-divider>
-      <span class="custom-font-size">
+      <!-- <span class="custom-font-size">
         <b> Barrio: </b>
         {{ clientsStore.selectedNeighborhood?.name ?? '' }}
         <br />
       </span>
-      <v-divider></v-divider>
+      <v-divider></v-divider> -->
 
       <span class="custom-font-size">
         <b> Dirección: </b>
@@ -35,6 +35,7 @@
       <v-divider></v-divider>
     </v-card-text>
     <v-spacer></v-spacer>
+    <br>
     <v-card-actions>
       <v-btn block text="Abrir formulario" variant="outlined" color="#841911" size="small" class=""
         @click="openMainInfoForm"></v-btn>
