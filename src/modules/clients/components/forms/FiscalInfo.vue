@@ -1,33 +1,34 @@
 <template>
-  <v-card class="full-height-card" :class="[clientsStore.isValidFormFiscalInfo && 'style-card-error']">
-    <v-card-text class="text-left">
+  <v-card
+    class="full-height-card card-flex"
+    :class="[clientsStore.isValidFormFiscalInfo && 'style-card-error']"
+  >
+    <v-card-text class="card-content text-left">
       <p><b>Información fiscal</b></p>
       <br />
-      <span class="custom-font-size">
-        <b> Esquema de impuestos:</b>
-        {{ clientsStore.parsedTaxSchema() }}</span
-      >
-      <v-divider></v-divider>
 
       <span class="custom-font-size">
-        <b>Obligación fiscal:</b>
+        <b> Esquema de impuestos:</b>
+        {{ clientsStore.parsedTaxSchema() }}
+      </span>
+      <v-divider />
+
+      <span class="custom-font-size">
+        <b> Obligación fiscal:</b>
         {{ clientsStore.parsedFiscalObligation() }}
       </span>
-      <v-divider></v-divider>
-      <br />
+      <v-divider />
     </v-card-text>
-    <v-spacer></v-spacer>
-    <br>
-    <v-card-actions>
+
+    <v-card-actions class="card-actions-bottom">
       <v-btn
         block
         text="Abrir formulario"
         variant="outlined"
         color="#841911"
         size="small"
-        class="mt-5"
         @click="openMainInfoForm"
-      ></v-btn>
+      />
     </v-card-actions>
   </v-card>
 </template>
@@ -71,6 +72,28 @@ const openMainInfoForm = () => {
 }
 
 .full-height-card {
-    height: 100%;
+  height: 100%;
+}
+.card-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-actions-bottom {
+  margin-top: auto;
+}
+
+.custom-font-size {
+  font-size: 12px;
+}
+
+.style-card-error {
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: red;
 }
 </style>
