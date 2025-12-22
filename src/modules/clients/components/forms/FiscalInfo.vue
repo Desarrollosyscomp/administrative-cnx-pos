@@ -1,5 +1,5 @@
 <template>
-  <v-card cols="12" sm="3" class="full-height-card" :class="[clientsStore.isValidFormFiscalInfo && 'style-card-error']">
+  <v-card class="full-height-card" :class="[clientsStore.isValidFormFiscalInfo && 'style-card-error']">
     <v-card-text class="text-left">
       <p><b>Información fiscal</b></p>
       <br />
@@ -17,6 +17,7 @@
       <br />
     </v-card-text>
     <v-spacer></v-spacer>
+    <br>
     <v-card-actions>
       <v-btn
         block

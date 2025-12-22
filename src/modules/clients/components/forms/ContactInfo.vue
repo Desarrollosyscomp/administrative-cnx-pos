@@ -1,5 +1,8 @@
 <template>
-  <v-card class="full-height-card" :class="[clientsStore.isValidFormContactInfo && 'style-card-error']">
+  <v-card
+    class="full-height-card"
+    :class="[clientsStore.isValidFormContactInfo && 'style-card-error']"
+  >
     <v-card-text>
       <p><b>Información de contacto</b></p>
       <br />
@@ -7,17 +10,17 @@
         ><b>Teléfonos:</b> {{ firstPhone }}</span
       >
       <div
-        v-if="(clientsStore.form.phones?.length ?? 0) > 1 "
+        v-if="(clientsStore.form.phones?.length ?? 0) > 1"
         class="align-components custom-font-size w-50"
         align="end"
-        >
+      >
         <v-menu
           v-model="menuPhones"
           :close-on-content-click="false"
           location="end"
         >
           <template v-slot:activator="{ props }">
-            <p style="color: #841811ff; ;" v-bind="props">Ver mas</p>
+            <p style="color: #841811ff" v-bind="props">Ver mas</p>
           </template>
           <div>
             <v-card min-width="200">
@@ -44,16 +47,13 @@
 
       <v-divider></v-divider>
 
-      <div class="custom-font-size align-components">
-        <span><b>Correos:</b> {{ firstEmail }} </span>
-      </div>
+      <div class="custom-font-size align-components text-truncate mt-1">
+        <span class="text-truncate"><b>Correos:</b> {{ firstEmail }} </span>
 
-      <div
-        v-if="(clientsStore.form.emails?.length ?? 0) > 1"
-        class="align-components custom-font-size"
-        align="end"
-      >
         <v-menu
+          v-if="(clientsStore.form.emails?.length ?? 0) > 1"
+          class="align-components2 custom-font-size"
+          align="end"
           v-model="menuEmails"
           :close-on-content-click="false"
           location="end"
@@ -81,8 +81,10 @@
         </v-menu>
       </div>
       <v-divider></v-divider>
+      <br />
     </v-card-text>
-    <br>
+    <v-spacer></v-spacer>
+    <br />
     <v-card-actions>
       <v-btn
         block
@@ -90,7 +92,7 @@
         variant="outlined"
         color="#841911"
         size="small"
-        class="mt-3"
+        class="mt-5"
         @click="openMainInfoForm"
       ></v-btn>
     </v-card-actions>
@@ -135,8 +137,8 @@ const menuPhones = ref(false);
 }
 
 .align-components {
-  width: 50%;
-  display: inline-block;
+  align-items: center;
+  display: flex;
 }
 
 .style-card-error {
@@ -145,6 +147,6 @@ const menuPhones = ref(false);
   border-color: red;
 }
 .full-height-card {
-    height: 100%;
+  height: 100%;
 }
 </style>

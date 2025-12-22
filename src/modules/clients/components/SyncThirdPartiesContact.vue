@@ -113,8 +113,7 @@
       <v-table v-if="emails.length > 0">
         <tbody>
           <tr class="rowTable">
-            <td class="font-size">{{ emails[0].email }}</td>
-            <v-spacer></v-spacer>
+            <td class="font-size text-truncate" style="max-width: 200px">{{ emails[0].email }}</td>
             <td class="text-right">
               <v-btn
                 v-if="emails.length < 2"
@@ -125,7 +124,7 @@
                 @click="deleteEmail(0)"
               >
               </v-btn>
-              <div v-else="phones.length > 2">
+              <div v-else="emails.length > 2">
                 <v-menu
                   v-model="menuEmails"
                   :close-on-content-click="false"

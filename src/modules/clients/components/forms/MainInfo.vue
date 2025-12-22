@@ -37,7 +37,6 @@
         variant="outlined"
         color="#841911"
         size="small"
-        class=""
         @click="openMainInfoForm"
       ></v-btn>
     </v-card-actions>
