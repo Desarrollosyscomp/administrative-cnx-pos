@@ -23,7 +23,7 @@
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Nombre comercial: </b>
-        {{ isCompany ? clientsStore.form.tradename : 'N/A' }}</span>
+        {{ 'N/A' }}</span>
       <v-divider></v-divider>
       <span class="custom-font-size">
         <b> Régimen: </b>

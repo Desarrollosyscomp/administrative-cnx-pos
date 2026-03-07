@@ -37,7 +37,7 @@ export const useClientsStore: any = defineStore({
 
     form: useStorage("form", {
       user_warehouse: "0",
-      tradename: "",
+      // tradename: "",
       regime_dian_id: null,
       identification_type_code: null,
       identification_number: "",
@@ -97,7 +97,7 @@ export const useClientsStore: any = defineStore({
     initialiceForm() {
       this.form = {
         user_warehouse: "0",
-        tradename: "",
+        // tradename: "",
         regime_dian_id: null,
         identification_type_code: null,
         identification_number: "",
@@ -224,7 +224,14 @@ export const useClientsStore: any = defineStore({
         tax_schema_dian_id: data.tax_schema_dian_id,
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
       });
-      if (response.data.status == 201) {
+      console.log(response);
+      if(response.data.response.validationError){
+        return {
+          error: true,
+          data: response.data.response.validationError,
+        };
+      }
+      else if (response.data.status == 201) {
         this.initialiceForm();
         localStorage.removeItem("form");
         return {
@@ -252,7 +259,7 @@ export const useClientsStore: any = defineStore({
         secondName: this.form.second_name,
         surename: this.form.sure_name,
         second_surename: this.form.second_sure_name,
-        tradename: this.form.tradename,
+        tradename: "N/A",
         name: this.form.name,
         documentType: this.form.identification_type_code,
         documentNumber: this.form.identification_number,
@@ -412,7 +419,7 @@ export const useClientsStore: any = defineStore({
       const municipality_dian_id = this.selectedMunicipality?.dian_id;
       const neighborhood_dian_id = this.selectedNeighborhood?.dian_id;
       let response = await ClientsService.editClient(+id, {
-        tradename: data.tradename,
+        tradename: undefined,
         barcode: data.barcode,
         third_party_classification_ids: data.third_party_classification_ids,
         regime_dian_id: data.regime_dian_id,
@@ -505,6 +512,12 @@ export const useClientsStore: any = defineStore({
         this.selectedItem.id,
         data
       );
+      if (response.data.response.validationError) {
+        return {
+          error: true,
+          data: response.data.response.validationError,
+        };
+      }
       if (response.status == 201) {
         return {
           error: false,
@@ -513,6 +526,7 @@ export const useClientsStore: any = defineStore({
       } else {
         return {
           error: true,
+          data: response.data.message,
         };
       }
     },

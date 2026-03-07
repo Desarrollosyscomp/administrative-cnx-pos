@@ -223,6 +223,9 @@
                       >
                         Se necesita crear una base de datos para poder
                         configurar el proveedor de facturación electrónica.
+                        <br />
+                        Para tener en cuenta: el correo NO se puede repetir para
+                        ningun cliente
                       </v-alert>
                       <br />
                       <div>
@@ -320,7 +323,7 @@ import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import router from "../../../router";
 import { TThirdParty } from "../interfaces/third-party.interface";
 import { useClientsStore } from "../store/useClientsStore";
-import { computed, inject, onMounted, reactive, ref } from "vue";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
 const emit = defineEmits(["onAddUser", "onClose", "onDesactivate"]);
 const clientsStore = useClientsStore();
 const swal: any = inject("swal");
@@ -458,14 +461,13 @@ const setForm = () => {
 };
 
 const submitForm = async () => {
-  try {
     await validationSchema.validate(formData);
     const addMode = clientsStore.moduleMode == "add";
     let _data;
     if (addMode) {
       const { error, data } = await clientsStore.saveTaxxaInfo(formData);
       if (error) {
-        message.value = data;
+        message.value = `${data.message}.`;
         return;
       }
       _data = data;
@@ -475,11 +477,12 @@ const submitForm = async () => {
         formData
       );
       if (error) {
-        message.value = data;
+        message.value = `${data.message}.`;
         return;
       }
       _data = data;
     }
+    console.log(_data);
     if (_data) {
       clientsStore.toogleDialog();
       await swal.fire({
@@ -497,9 +500,6 @@ const submitForm = async () => {
         credentialsObject.value?.taxxaTenant?.url +
         credentialsObject.value?.taxxaTenant?.login_url;
     }
-  } catch (e) {
-    showValidationErrors.value = true;
-  }
 };
 
 const loadElectronicInvoiceProviders = async () => {
@@ -745,6 +745,14 @@ const isFormChangedLicense = computed((): boolean => {
   const value = `${licenseForm.init_date}${licenseForm.end_date}`;
   clickLicense.value = false;
   return formOriginLicense.value !== value;
+});
+
+watch(message, () => {
+  if (message.value) {
+    setTimeout(() => {
+      message.value = "";
+    }, 2000);
+  }
 });
 
 onMounted(async () => {

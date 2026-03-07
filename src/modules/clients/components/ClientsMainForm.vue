@@ -204,6 +204,7 @@ const submitTotalForm = async () => {
     draftMode.value = true;
     if (clientsStore.moduleMode == "add") {
       response = await clientsStore.addClient(clientsStore.form);
+      console.log(response);
       draftMode.value = false;
     } else if (clientsStore.moduleMode == "edit") {
       const id = clientsStore.selectedItem.id;
@@ -222,9 +223,9 @@ const submitTotalForm = async () => {
     } else {
       swal.fire({
         icon: "warning",
-        text: "Ocurrio un error",
+        text: `Ocurrio un error: ${response.data.message}. Recuerde que el correo debe ser unico para cada cliente`,
         showConfirmButton: false,
-        timer: 1500,
+        timer: 4500,
       });
     }
   } catch (error) {
