@@ -120,7 +120,7 @@ import MainInfo from "./forms/MainInfo.vue";
 import FormMainInfo from "./forms/FormMainInfo.vue";
 import FormFiscalInfo from "./forms/FormFiscalInfo.vue";
 import FormAddressInfo from "./forms/FormAddressInfo.vue";
-import { computed, inject, onMounted, ref } from "vue";
+import { computed, inject, onMounted, ref} from "vue";
 import { useRoute } from "vue-router";
 // import validations from "../validations/validations";
 // import * as Yup from "yup";
@@ -283,7 +283,7 @@ const draftMessage = computed((): boolean => {
     clientsStore.form.second_sure_name == "" &&
     clientsStore.form.identification_type_code == null &&
     clientsStore.form.identification_number == "" &&
-    clientsStore.form.tradename == "" &&
+    // clientsStore.form.tradename == "" &&
     clientsStore.form.tax_schema_dian_id == "" &&
     clientsStore.form.fiscal_obligation_dian_id == "" &&
     clientsStore.form.financial_activities.length == 0 &&
@@ -296,7 +296,6 @@ const draftMessage = computed((): boolean => {
     clientsStore.form.phones.length == 0
   );
 });
-
 onMounted(async () => {
   // clientsStore.initialiceForm();
   await appStore.afterLoading(loadInitialData);
