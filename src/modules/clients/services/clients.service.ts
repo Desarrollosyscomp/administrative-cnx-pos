@@ -240,5 +240,114 @@ export const ClientsService = {
       },
     });
   },
+  createAuthWebUtilities: async (data: object) => {
+    return axios.post({
+      url: `${URL_API}/conxpos-utilities/auth`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  sendDatabaseName: async (data: object) => {
+    return axios.post({
+      url: `${URL_API}/conxpos-utilities/database`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+  getAuthWebUtilities: async (client_id: number) => {
+    return axios.get({
+      url: `${URL_API}/conxpos-utilities/auth/${client_id}`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+  getDatabaseWebUtilities: async (client_id: number) => {
+    return axios.get({
+      url: `${URL_API}/conxpos-utilities/database/${client_id}`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+  editDatabaseName: async (client_id: number, newDatabaseName: string) => {
+    return axios.put({
+      url: `${URL_API}/conxpos-utilities/database/${client_id}/update-name`,
+      data: { database_name: newDatabaseName },
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+  editAuthWebUtilities: async (client_id: number, data: object) => {
+    return axios.put({
+      url: `${URL_API}/conxpos-utilities/auth/${client_id}/update-data`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  resetPasswordWebUtilities: async (client_id: number, data: object) => {
+    return axios.patch({
+      url: `${URL_API}/conxpos-utilities/auth/${client_id}/reset-password`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+  inactiveWebUtilities: async (client_id: number, is_active: boolean) => {
+    return axios.delete({
+      url: `${URL_API}/conxpos-utilities/auth/${client_id}`,
+      config: {
+        data: {
+          status: is_active,
+        },
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+  inactiveWebUtilitiesDatabase: async (client_id: number, is_active: boolean) => {
+    return axios.delete({
+      url: `${URL_API}/conxpos-utilities/database/${client_id}`,
+      config: {
+        data: {
+          is_active: is_active,
+        },
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
+
+
+    
 
 };

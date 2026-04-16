@@ -22,6 +22,7 @@ export const useClientsStore: any = defineStore({
   id: "clients",
   state: () => ({
     moduleMode: "add",
+    moduleModeWebUtilities: "add",
     page: 1,
     limit: 10,
     limitFinancialActivities: 4,
@@ -75,7 +76,9 @@ export const useClientsStore: any = defineStore({
 
     electronic_invoice_providers: [] as Array<ElectronicInvoiceProvider>,
     selectedItemTaxxaInfo: {} as any,
+    selectedWebUtilitiesInfo: {} as any,
     client_system_services: [] as Array<TSystemService>,
+    selectedWebUtilitiesDatabase: {} as any,
 
     fiscalObligations: [] as Array<TFiscalObligation>,
     identificationTypes: [] as Array<IdentificationTypeInterface>,
@@ -225,13 +228,12 @@ export const useClientsStore: any = defineStore({
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
       });
       console.log(response);
-      if(response.data.response.validationError){
+      if (response.data.response.validationError) {
         return {
           error: true,
           data: response.data.response.validationError,
         };
-      }
-      else if (response.data.status == 201) {
+      } else if (response.data.status == 201) {
         this.initialiceForm();
         localStorage.removeItem("form");
         return {
@@ -599,6 +601,165 @@ export const useClientsStore: any = defineStore({
         return {
           error: true,
           data: response.data.response,
+        };
+      }
+    },
+    async createAuthWebUtilities(data: any) {
+      let response = await ClientsService.createAuthWebUtilities({
+        client_id: this.selectedItem.id,
+        database_ip: data.databaseIP,
+        username: data.username,
+        password: data.password,
+        status: data.status,
+      });
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async sendDatabaseName(data: any) {
+      let response = await ClientsService.sendDatabaseName({
+        client_id: this.selectedItem.id,
+        database_name: data,
+      });
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async setAuthWebUtilities(client_id: number) {
+      let response = await ClientsService.getAuthWebUtilities(client_id);
+      if (response.status == 201) {
+        this.selectedWebUtilitiesInfo = response.data.response;
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async setDatabaseWebUtilities(client_id: number) {
+      let response = await ClientsService.getDatabaseWebUtilities(client_id);
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async editDatabaseName(newDatabaseName: string) {
+      let response = await ClientsService.editDatabaseName(
+        this.selectedItem.id,
+        newDatabaseName
+      );
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async editAuthWebUtilities(data: any) {
+      let response = await ClientsService.editAuthWebUtilities(
+        this.selectedItem.id,
+        {
+          database_ip: data.databaseIP,
+          username: data.username,
+        }
+      );
+      console.log(response);
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data,
+        };
+      }
+    },
+    async resetPasswordWebUtilities(data: any) {
+      console.log(data);
+      let response = await ClientsService.resetPasswordWebUtilities(
+        this.selectedItem.id,
+        {
+          password: data.newPassword,
+          confirm_password: data.confirmPassword,
+        }
+      );
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async inactiveWebUtilities(is_active: boolean) {
+      let response = await ClientsService.inactiveWebUtilities(
+        this.selectedItem.id,
+        is_active
+      );
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data,
+        };
+      }
+    },
+    async inactiveWebUtilitiesDatabase(is_active: boolean) {
+      let response = await ClientsService.inactiveWebUtilitiesDatabase(
+        this.selectedItem.id,
+        is_active
+      );
+      if (response.status == 200) {
+        return {
+          error: false,
+          data: response.data,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data,
         };
       }
     },

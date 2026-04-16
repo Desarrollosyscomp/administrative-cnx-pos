@@ -169,148 +169,274 @@
           </v-card>
         </v-col>
         <v-col>
-          <v-card elevation="3">
-            <v-card-text>
-              <p class="text-h6">
-                <b> Proveedor de facturación electrónica </b>
-              </p>
-            </v-card-text>
-          </v-card>
-          <br />
-          <v-row>
-            <v-col>
-              <v-card class="full-height-card" elevation="3">
-                <v-card-text>
-                  <v-row>
-                    <v-col cols="12" md="5" class="pa-5 mx-n1">
-                      <p class="font-size">
-                        <b> Seleccionar Proveedor </b>
-                      </p>
-                      <br />
-                      <v-select
-                        variant="outlined"
-                        density="compact"
-                        label="Seleccionar"
-                        disabled
-                        :items="clientsStore.electronic_invoice_providers"
-                        item-title="name"
-                        item-value="id"
-                        v-model="clientsStore.electronic_invoice_providers"
-                      >
-                      </v-select>
-                      <v-skeleton-loader
-                        type="image"
-                        v-if="!clientsStore.selectedItem?.name"
-                      ></v-skeleton-loader>
-                      <div align="center" class="mt-n5" v-else>
-                        <img
-                          src="../../../assets/images/Invoice-rafiki.svg"
-                          width="210px"
-                        />
-                      </div>
-                    </v-col>
-                    <v-divider vertical></v-divider>
-                    <v-col cols="12" md="7" class="pa-5">
-                      <p class="font-size">
-                        <b> Credenciales </b>
-                      </p>
-                      <v-alert
-                        v-if="!credentialsObject?.database"
-                        type="warning"
-                        variant="outlined"
-                        density="compact"
-                        class="mt-2"
-                      >
-                        Se necesita crear una base de datos para poder
-                        configurar el proveedor de facturación electrónica.
-                        <br />
-                        Para tener en cuenta: el correo NO se puede repetir para
-                        ningun cliente
-                      </v-alert>
-                      <br />
-                      <div>
-                        <v-skeleton-loader
-                          type="card"
-                          v-if="!clientsStore.selectedItem?.name"
-                        ></v-skeleton-loader>
-                        <v-form @submit.prevent="submitForm" v-else>
-                          <v-alert
-                            v-if="message"
-                            class="mb-4"
-                            type="error"
+          <v-card elevation="3" >
+            <v-sheet >
+              <v-tabs
+                v-model="tab"
+                color="primary"
+                bg-color="white"
+                slider-color="indigo-lighten-4"
+                grow
+              >
+                <v-tab value="one">Proveedor de facturación electrónica</v-tab>
+                <v-tab value="two">Herramientas web</v-tab>
+              </v-tabs>
+
+              <v-tabs-window v-model="tab">
+                <v-tabs-window-item value="one">
+                  <v-sheet >
+                    <v-card-text>
+                      <v-row>
+                        <v-col cols="12" md="5" class="pa-5 mx-n1">
+                          <p class="font-size">
+                            <b> Seleccionar Proveedor </b>
+                          </p>
+                          <br />
+                          <v-select
                             variant="outlined"
                             density="compact"
+                            label="Seleccionar"
+                            disabled
+                            :items="clientsStore.electronic_invoice_providers"
+                            item-title="name"
+                            item-value="id"
+                            v-model="clientsStore.electronic_invoice_providers"
                           >
-                            {{ message }}
-                          </v-alert>
-                          <v-text-field
-                            label="Email entregado por Taxxa"
-                            prepend-inner-icon="mdi-email"
-                            variant="outlined"
-                            density="compact"
-                            class="mb-3"
-                            v-model="formData.email"
-                            :rules="emailRules"
-                            type="email"
-                            :disabled="disableForm"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            label="Contraseña"
-                            prepend-inner-icon="mdi-lock"
-                            variant="outlined"
-                            density="compact"
-                            class="mb-3"
-                            :type="visible ? 'text' : 'password'"
-                            v-model="formData.password"
-                            :append-inner-icon="
-                              visible ? 'mdi-eye-off' : 'mdi-eye'
-                            "
-                            @click:append-inner="visible = !visible"
-                            :rules="passwordRules"
-                            :disabled="disableForm"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            label="URL"
-                            prepend-inner-icon="mdi-link-variant"
-                            variant="outlined"
-                            density="compact"
-                            class="mb-3"
-                            v-model="formData.url"
-                            :rules="urlRules"
-                            :disabled="disableForm"
-                          >
-                          </v-text-field>
-                          <v-text-field
-                            label="URL de token"
-                            prepend-inner-icon="mdi-link-lock"
-                            variant="outlined"
-                            density="compact"
-                            class="mb-3"
-                            v-model="formData.login_url"
-                            :rules="loginUrlRules"
-                            :disabled="disableForm"
-                          >
-                          </v-text-field>
-                          <div class="justify-end d-flex mt-n2">
-                            <v-btn
-                              variant="outlined"
-                              color="success"
-                              type="submit"
-                              :disabled="!isFormChanged"
-                            >
-                              Guardar
-                            </v-btn>
+                          </v-select>
+                          <v-skeleton-loader
+                            type="image"
+                            v-if="!clientsStore.selectedItem?.name"
+                          ></v-skeleton-loader>
+                          <div align="center" class="mt-n5" v-else>
+                            <img
+                              src="../../../assets/images/Invoice-rafiki.svg"
+                              width="210px"
+                            />
                           </div>
-                        </v-form>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
+                        </v-col>
+                        <v-divider vertical></v-divider>
+                        <v-col cols="12" md="7" class="pa-5">
+                          <p class="font-size">
+                            <b> Credenciales </b>
+                          </p>
+                          <v-alert
+                            v-if="!credentialsObject?.database"
+                            type="warning"
+                            variant="outlined"
+                            density="compact"
+                            class="mt-2"
+                          >
+                            Se necesita crear una base de datos para poder
+                            configurar el proveedor de facturación electrónica.
+                            <br />
+                            Para tener en cuenta: el correo NO se puede repetir
+                            para ningun cliente
+                          </v-alert>
+                          <br />
+                          <div>
+                            <v-skeleton-loader
+                              type="card"
+                              v-if="!clientsStore.selectedItem?.name"
+                            ></v-skeleton-loader>
+                            <v-form @submit.prevent="submitForm" v-else>
+                              <v-alert
+                                v-if="message"
+                                class="mb-4"
+                                type="error"
+                                variant="outlined"
+                                density="compact"
+                              >
+                                {{ message }}
+                              </v-alert>
+                              <v-text-field
+                                label="Email entregado por Taxxa"
+                                prepend-inner-icon="mdi-email"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                v-model="formDataTaxxa.email"
+                                :rules="emailRules"
+                                type="email"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <v-text-field
+                                label="Contraseña"
+                                prepend-inner-icon="mdi-lock"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                :type="visible ? 'text' : 'password'"
+                                v-model="formDataTaxxa.password"
+                                :append-inner-icon="
+                                  visible ? 'mdi-eye-off' : 'mdi-eye'
+                                "
+                                @click:append-inner="visible = !visible"
+                                :rules="passwordRules"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <v-text-field
+                                label="URL"
+                                prepend-inner-icon="mdi-link-variant"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                v-model="formDataTaxxa.url"
+                                :rules="urlRules"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <v-text-field
+                                label="URL de token"
+                                prepend-inner-icon="mdi-link-lock"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                v-model="formDataTaxxa.login_url"
+                                :rules="loginUrlRules"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <div class="justify-end d-flex mt-n2">
+                                <v-btn
+                                  variant="outlined"
+                                  color="success"
+                                  type="submit"
+                                  :disabled="!isFormChanged"
+                                >
+                                  Guardar
+                                </v-btn>
+                              </div>
+                            </v-form>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-sheet>
+                </v-tabs-window-item>
+                <v-tabs-window-item value="two">
+                  <v-sheet class="pa-4">
+                    <ClientsDetailsWebUtilities />
+                      <!-- <v-card-text>
+                      <v-row>
+                        <v-col cols="12" md="5" class="pa-5 mx-n1">
+                          <p class="font-size">
+                            <b> Formulario inicio sesion web reporter </b>
+                          </p>
+                          <br />
+                          <v-skeleton-loader
+                            type="image"
+                            v-if="!clientsStore.selectedItem?.name"
+                          ></v-skeleton-loader>
+                          <div align="center" class="mt-7" v-else>
+                            <img
+                              src="../../../assets/images/report-bro.svg"
+                              width="210px"
+                            />
+                          </div>
+                        </v-col>
+                        <v-divider vertical></v-divider>
+                        <v-col cols="12" md="7" class="pa-5">
+                          <p class="font-size">
+                            <b> Formulario </b>
+                          </p>
+                          <v-alert
+                            v-if="!credentialsObject?.database"
+                            type="warning"
+                            variant="outlined"
+                            density="compact"
+                            class="mt-2"
+                          >
+                            Se necesita crear una base de datos para poder
+                            configurar las herramientas web.
+                            <br />
+                            Para tener en cuenta: el correo NO se puede repetir
+                            para ningun cliente
+                          </v-alert>
+                          <br />
+                          <div>
+                            <v-skeleton-loader
+                              type="card"
+                              v-if="!clientsStore.selectedItem?.name"
+                            ></v-skeleton-loader>
+                            <v-form @submit.prevent="submitForm" v-else>
+                              <v-alert
+                                v-if="message"
+                                class="mb-4"
+                                type="error"
+                                variant="outlined"
+                                density="compact"
+                              >
+                                {{ message }}
+                              </v-alert>
+                              <v-text-field
+                                label="Ip base de datos"
+                                prepend-inner-icon="mdi-database"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                v-model="formDataTaxxa.email"
+                                :rules="emailRules"
+                                type="email"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <v-text-field
+                                label="Nombre de usuario"
+                                prepend-inner-icon="mdi-account"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                v-model="formDataTaxxa.email"
+                                :rules="emailRules"
+                                type="email"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <v-text-field
+                                label="Contraseña"
+                                prepend-inner-icon="mdi-lock"
+                                variant="outlined"
+                                density="compact"
+                                class="mb-3"
+                                :type="visible ? 'text' : 'password'"
+                                v-model="formDataTaxxa.password"
+                                :append-inner-icon="
+                                  visible ? 'mdi-eye-off' : 'mdi-eye'
+                                "
+                                @click:append-inner="visible = !visible"
+                                :rules="passwordRules"
+                                :disabled="disableForm"
+                              >
+                              </v-text-field>
+                              <div class="justify-end d-flex mt-n2">
+                                <v-btn
+                                  variant="outlined"
+                                  color="success"
+                                  type="submit"
+                                  :disabled="!isFormChanged"
+                                >
+                                  Guardar
+                                </v-btn>
+                              </div>
+                            </v-form>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-card-text> -->
+                  </v-sheet>
+                </v-tabs-window-item>
+              </v-tabs-window>
+              <!-- <v-card elevation="3">
+              <v-card-text>
+                <p class="text-h6">
+                  <b> Proveedor de facturación electrónica </b>
+                </p>
+              </v-card-text>
+            </v-card> -->
+            </v-sheet>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -330,19 +456,28 @@ const swal: any = inject("swal");
 import * as Yup from "yup";
 import { VDateInput } from "vuetify/labs/VDateInput";
 import { useAppStore } from "../../../stores/app-store";
+import ClientsDetailsWebUtilities from "./ClientsDetailsWebUtilities.vue";
 const appStore = useAppStore();
 const route = useRoute();
 let visible = ref(false);
 let showValidationErrors = ref(false);
 let message = ref("");
 
-const formData = reactive({
+const formDataTaxxa = reactive({
   email: "",
   password: "",
   url: "",
   login_url: "",
 });
 
+// const formDataTaxxa = reactive({
+//   email: "",
+//   password: "",
+//   url: "",
+//   login_url: "",
+// });
+
+let tab = ref("one");
 type TLicenseForm = {
   init_date: Date | null;
   end_date: Date | null;
@@ -403,11 +538,11 @@ const passwordRules = ref([
 
 const urlRules = ref([
   async () => {
-    if (!formData.url) return "La URL es requerida";
+    if (!formDataTaxxa.url) return "La URL es requerida";
     return true;
   },
   async () => {
-    if (!formData.url.startsWith("https://")) {
+    if (!formDataTaxxa.url.startsWith("https://")) {
       return "La URL debe comenzar con https://";
     }
     return true;
@@ -416,11 +551,11 @@ const urlRules = ref([
 
 const loginUrlRules = ref([
   async () => {
-    if (!formData.login_url) return "El URL de token es requerido";
+    if (!formDataTaxxa.login_url) return "El URL de token es requerido";
     return true;
   },
   async () => {
-    if (!formData.login_url.startsWith("https://")) {
+    if (!formDataTaxxa.login_url.startsWith("https://")) {
       return "El login URL debe comenzar con https://";
     }
     return true;
@@ -454,52 +589,52 @@ let validationSchema = Yup.object(validations);
 
 const setForm = () => {
   if (!credentialsObject.value) return;
-  formData.email = credentialsObject.value?.taxxaTenant?.email;
-  formData.password = credentialsObject.value?.taxxaTenant?.password;
-  formData.url = credentialsObject.value?.taxxaTenant?.url;
-  formData.login_url = credentialsObject.value?.taxxaTenant?.login_url;
+  formDataTaxxa.email = credentialsObject.value?.taxxaTenant?.email;
+  formDataTaxxa.password = credentialsObject.value?.taxxaTenant?.password;
+  formDataTaxxa.url = credentialsObject.value?.taxxaTenant?.url;
+  formDataTaxxa.login_url = credentialsObject.value?.taxxaTenant?.login_url;
 };
 
 const submitForm = async () => {
-    await validationSchema.validate(formData);
-    const addMode = clientsStore.moduleMode == "add";
-    let _data;
-    if (addMode) {
-      const { error, data } = await clientsStore.saveTaxxaInfo(formData);
-      if (error) {
-        message.value = `${data.message}.`;
-        return;
-      }
-      _data = data;
-    } else {
-      const { error, data } = await clientsStore.editCredentials(
-        route.params.id as string,
-        formData
-      );
-      if (error) {
-        message.value = `${data.message}.`;
-        return;
-      }
-      _data = data;
+  await validationSchema.validate(formDataTaxxa);
+  const addMode = clientsStore.moduleMode == "add";
+  let _data;
+  if (addMode) {
+    const { error, data } = await clientsStore.saveTaxxaInfo(formDataTaxxa);
+    if (error) {
+      message.value = `${data.message}.`;
+      return;
     }
-    console.log(_data);
-    if (_data) {
-      clientsStore.toogleDialog();
-      await swal.fire({
-        icon: "success",
-        text: addMode
-          ? "Credenciales de Taxxa guardadas correctamente"
-          : "Credenciales de Taxxa actualizadas correctamente",
-        showConfirmButton: false,
-        timer: 1000,
-      });
-      await loadTenantDetails();
-      formOrigin.value =
-        credentialsObject.value?.taxxaTenant?.email +
-        credentialsObject.value?.taxxaTenant?.password +
-        credentialsObject.value?.taxxaTenant?.url +
-        credentialsObject.value?.taxxaTenant?.login_url;
+    _data = data;
+  } else {
+    const { error, data } = await clientsStore.editCredentials(
+      route.params.id as string,
+      formDataTaxxa
+    );
+    if (error) {
+      message.value = `${data.message}.`;
+      return;
     }
+    _data = data;
+  }
+  console.log(_data);
+  if (_data) {
+    clientsStore.toogleDialog();
+    await swal.fire({
+      icon: "success",
+      text: addMode
+        ? "Credenciales de Taxxa guardadas correctamente"
+        : "Credenciales de Taxxa actualizadas correctamente",
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    await loadTenantDetails();
+    formOrigin.value =
+      credentialsObject.value?.taxxaTenant?.email +
+      credentialsObject.value?.taxxaTenant?.password +
+      credentialsObject.value?.taxxaTenant?.url +
+      credentialsObject.value?.taxxaTenant?.login_url;
+  }
 };
 
 const loadElectronicInvoiceProviders = async () => {
@@ -669,7 +804,7 @@ const setFormWatcher = () => {
 };
 
 const formEdit = computed(() => {
-  return formData.email + formData.password + formData.url + formData.login_url;
+  return formDataTaxxa.email + formDataTaxxa.password + formDataTaxxa.url + formDataTaxxa.login_url;
 });
 
 const isFormChanged = computed(() => {
@@ -770,9 +905,9 @@ onMounted(async () => {
 }
 
 .align-buttons {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
 }
 
 .font-size {
