@@ -519,8 +519,8 @@ const setDatabaseName = async () => {
   formDataUtilitiesDatabase.databaseName =
     response.data.utilitiesDatabase?.database_name ?? "";
   clientsStore.selectedWebUtilitiesDatabase = response.data.utilitiesDatabase;
-  formDataUtilitiesDatabase.db_username = response.data.utilitiesDatabase?.db_user;
-  formDataUtilitiesDatabase.db_password = response.data.utilitiesDatabase?.db_password;
+  formDataUtilitiesDatabase.db_username = response.data.utilitiesDatabase?.db_user ?? "root";
+  formDataUtilitiesDatabase.db_password = response.data.utilitiesDatabase?.db_password ?? "conexion1234";
 };
 
 const loadElectronicInvoiceProviders = async () => {
