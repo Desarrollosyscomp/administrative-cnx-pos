@@ -627,7 +627,9 @@ export const useClientsStore: any = defineStore({
     async sendDatabaseName(data: any) {
       let response = await ClientsService.sendDatabaseName({
         client_id: this.selectedItem.id,
-        database_name: data,
+        database_name: data.databaseName,
+        db_user: data.db_username,
+        db_password: data.db_password,
       });
       if (response.status == 201) {
         return {
@@ -670,10 +672,15 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
-    async editDatabaseName(newDatabaseName: string) {
+    async editDatabaseName(data: any) {
       let response = await ClientsService.editDatabaseName(
-        this.selectedItem.id,
-        newDatabaseName
+        +this.selectedItem.id,
+        {
+          client_id: this.selectedItem.id,
+          database_name: data.databaseName,
+          db_user: data.db_username,
+          db_password: data.db_password,
+        }
       );
       if (response.status == 200) {
         return {
@@ -683,7 +690,7 @@ export const useClientsStore: any = defineStore({
       } else {
         return {
           error: true,
-          data: response.data.response,
+          data: response.data,
         };
       }
     },

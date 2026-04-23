@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" md="5" class="pa-6 mx-n1">
+    <v-col cols="12" md="5" class="pa-5 mx-n1 left-rectangle">
       <p class="font-size text-center">
         <b> Formulario inicio sesion web reporter </b>
       </p>
@@ -9,28 +9,32 @@
         type="image"
         v-if="!clientsStore.selectedItem?.name"
       ></v-skeleton-loader>
-      <div class="align-items" v-else>
-        <div align="center" class="mt-7">
-          <img src="../../../assets/images/report-bro.svg" width="210px" />
+      <div class="align-image-and-button" v-else>
+        <div align="center" class="image">
+          <img src="../../../assets/images/report-bro.svg" width="220px" />
         </div>
-        <v-btn
-          v-if="clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth"
-          variant="outlined"
-          :color="
-            clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status == 1
-              ? 'error'
-              : 'success'
-          "
-          type="submit"
-          @click="inactiveWebUtilitiesAndDatabase"
-          block
-        >
-          {{
-            clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status == 1
-              ? "Inactivar"
-              : "Activar"
-          }}
-        </v-btn>
+        <div class="inactive-button">
+          <v-btn
+            v-if="clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth"
+            variant="outlined"
+            :color="
+              clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status ==
+              1
+                ? 'error'
+                : 'success'
+            "
+            type="submit"
+            @click="inactiveWebUtilitiesAndDatabase"
+            block
+          >
+            {{
+              clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status ==
+              1
+                ? "Inactivar"
+                : "Activar"
+            }}
+          </v-btn>
+        </div>
       </div>
     </v-col>
     <v-divider vertical></v-divider>
@@ -65,14 +69,49 @@
             variant="outlined"
             density="compact"
             class="mb-3"
-            v-model="databaseNameObject.databaseName"
-            type="email"
+            v-model="formDataUtilitiesDatabase.databaseName"
             :disabled="disableForm"
-            append-inner-icon="mdi-file-document-outline"
-            @click:append-inner="submitDatabaseName"
           >
           </v-text-field>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-text-field
+              label="Usuario base de datos"
+              prepend-inner-icon="mdi-database-sync"
+              variant="outlined"
+              density="compact"
+              v-model="formDataUtilitiesDatabase.db_username"
+              :rules="databaseUsernameRules"
+              type="email"
+              :disabled="disableForm"
+            >
+            </v-text-field>
+          </v-col>
+          <v-col cols="12" md="6">
+            <v-text-field
+              label="Contraseña base de datos"
+              prepend-inner-icon="mdi-database-lock"
+              variant="outlined"
+              density="compact"
+              v-model="formDataUtilitiesDatabase.db_password"
+              :type="visibleDatabasePassword ? 'text' : 'password'"
+              :append-inner-icon="
+                visibleDatabasePassword ? 'mdi-eye-off' : 'mdi-eye'
+              "
+              @click:append-inner="
+                visibleDatabasePassword = !visibleDatabasePassword
+              "
+              :rules="databasePasswordRules"
+              :disabled="disableForm"
+            >
+            </v-text-field>
+          </v-col>
+        </v-row>
+          <v-btn variant="outlined" color="success" type="submit" :disabled="!isFormChangedDatabase" block class="mt-2">
+            Guardar base de datos
+          </v-btn>
         </v-form>
+        <br />
         <v-form @submit.prevent="submitForm">
           <v-text-field
             label="Ip base de datos"
@@ -196,6 +235,7 @@ const route = useRoute();
 let visible = ref(false);
 let visiblePassword = ref(false);
 let visibleConfirmPassword = ref(false);
+let visibleDatabasePassword = ref(false);
 // const appStore = useAppStore();
 const isDatabaseNameSave = ref(false);
 // let showValidationErrors = ref(false);
@@ -207,18 +247,27 @@ const formDataUtilities = reactive({
   password: "",
   status: 1,
 });
+const formDataUtilitiesDatabase = reactive({
+  databaseName: "",
+  db_username: "root",
+  db_password: "conexion1234",
+});
 const formDataUtilitiesPassword = reactive({
   newPassword: "",
   confirmPassword: "",
 });
-const databaseNameObject = reactive({
-  databaseName: "",
-});
+
 const isSetForm = ref(false);
 
 const validationDatabaseName = {
   databaseName: Yup.string()
     .required("El nombre de la base de datos es requerido")
+    .trim(),
+  db_username: Yup.string()
+    .required("El nombre de usuario de la base de datos es requerido")
+    .trim(),
+  db_password: Yup.string()
+    .required("La contraseña de la base de datos es requerida")
     .trim(),
 };
 const validations = {
@@ -280,6 +329,26 @@ const databaseNameRules = ref([
     }
   },
 ]);
+const databaseUsernameRules = ref([
+  async (value: any) => {
+    try {
+      await validationDatabaseName.db_username.validate(value);
+      return true;
+    } catch (e: any) {
+      return e.message;
+    }
+  },
+]);
+const databasePasswordRules = ref([
+  async (value: any) => {
+    try {
+      await validationDatabaseName.db_password.validate(value);
+      return true;
+    } catch (e: any) {
+      return e.message;
+    }
+  },
+]);
 
 const usernameRules = ref([
   async (value: any) => {
@@ -325,7 +394,7 @@ const confirmPasswordRules = ref([
 ]);
 let validationSchema = Yup.object(validations);
 let validationSchemaPassword = Yup.object(validationsPassword);
-// let validationSchemaDatabaseName = Yup.object(validationDatabaseName);
+let validationSchemaDatabaseName = Yup.object(validationDatabaseName);
 
 const submitForm = async () => {
   if (isDatabaseNameSave.value) {
@@ -349,7 +418,6 @@ const submitForm = async () => {
       databaseIP: formDataUtilities.databaseIP,
       username: formDataUtilities.username,
     });
-    console.log(data.error);
     if (error) {
       message.value = `${data.error}.`;
       return;
@@ -374,48 +442,43 @@ const submitForm = async () => {
   }
 };
 const submitDatabaseName = async () => {
-  // await validationSchema.validate(formDataUtilities);
+  await validationSchemaDatabaseName.validate(formDataUtilitiesDatabase);
   const addMode = clientsStore.moduleModeWebUtilities == "add";
-  console.log(clientsStore.moduleModeWebUtilities);
   let _data;
   if (addMode) {
-    console.log("estoy en add");
     const { error, data } = await clientsStore.sendDatabaseName(
-      databaseNameObject.databaseName
+      formDataUtilitiesDatabase
     );
-    console.log(data);
     if (error) {
       message.value = `${data.error}.`;
       return;
     }
     _data = data;
   } else {
-    console.log("estoy en edit");
     const response = await clientsStore.editDatabaseName(
-      databaseNameObject.databaseName
+      formDataUtilitiesDatabase
     );
-    console.log(response);
     if (response.error) {
       message.value = `${response.data.error}.`;
       return;
     }
     _data = response.data;
   }
-  console.log(_data);
   if (_data) {
     await swal.fire({
       icon: "success",
       text: addMode
-        ? "Nombre de base de datos guardado correctamente"
-        : "Nombre de base de datos actualizado correctamente",
+        ? "Base de datos guardada correctamente"
+        : "Base de datos actualizada correctamente",
       showConfirmButton: false,
       timer: 2000,
     });
     await setDatabaseName();
     await loadWebUtilitiesDatabase();
-    // formOrigin.value =
-    //   authcredentialsObject.value?.database_ip +
-    //   authcredentialsObject.value?.username;
+    formOriginDatabase.value =
+    formDataUtilitiesDatabase.databaseName +
+    formDataUtilitiesDatabase.db_username +
+    formDataUtilitiesDatabase.db_password;
   }
 };
 const submitNewPassword = async () => {
@@ -452,11 +515,12 @@ const setForm = async (): Promise<void> => {
 };
 const setDatabaseName = async () => {
   const response = await clientsStore.setDatabaseWebUtilities(route.params.id);
-  console.log(response.data.utilitiesDatabase);
   if (!response.data) return;
-  databaseNameObject.databaseName =
+  formDataUtilitiesDatabase.databaseName =
     response.data.utilitiesDatabase?.database_name ?? "";
   clientsStore.selectedWebUtilitiesDatabase = response.data.utilitiesDatabase;
+  formDataUtilitiesDatabase.db_username = response.data.utilitiesDatabase?.db_user;
+  formDataUtilitiesDatabase.db_password = response.data.utilitiesDatabase?.db_password;
 };
 
 const loadElectronicInvoiceProviders = async () => {
@@ -464,23 +528,17 @@ const loadElectronicInvoiceProviders = async () => {
 };
 
 const loadWebUtilities = async () => {
-  console.log(clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth == null);
   if (clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth) {
-    console.log("edit");
     clientsStore.moduleMode = "edit";
   } else {
-    console.log("add");
     clientsStore.moduleMode = "add";
   }
 };
 
 const loadWebUtilitiesDatabase = async () => {
-  console.log(clientsStore.selectedWebUtilitiesDatabase == null);
   if (clientsStore.selectedWebUtilitiesDatabase) {
-    console.log("edit");
     clientsStore.moduleModeWebUtilities = "edit";
   } else {
-    console.log("add");
     clientsStore.moduleModeWebUtilities = "add";
   }
 };
@@ -500,14 +558,16 @@ const loadClient = () => {
 // };
 
 let formOrigin = ref<string>("");
+let formOriginDatabase = ref<string>("");
 
 const setFormWatcher = () => {
-  // if (credentialsObject.value?.taxxaTenant) {
-  //   formOrigin.value = `${credentialsObject.value?.taxxaTenant?.email}${credentialsObject.value?.taxxaTenant?.password}${credentialsObject.value?.taxxaTenant?.url}${credentialsObject.value?.taxxaTenant?.login_url}`;
-  // }
-  console.log(authcredentialsObject.value);
   if (authcredentialsObject.value) {
     formOrigin.value = `${authcredentialsObject.value?.database_ip}${authcredentialsObject.value?.username}`;
+  }
+};
+const setFormWatcherDatabase = () => {
+  if (clientsStore.selectedWebUtilitiesDatabase) {
+    formOriginDatabase.value = `${clientsStore.selectedWebUtilitiesDatabase?.database_name}${clientsStore.selectedWebUtilitiesDatabase?.db_user}${clientsStore.selectedWebUtilitiesDatabase?.db_password}`;
   }
 };
 
@@ -515,8 +575,15 @@ const formEdit = computed(() => {
   return formDataUtilities.databaseIP + formDataUtilities.username;
 });
 
+const formEditDatabase = computed(() => {
+  return formDataUtilitiesDatabase.databaseName + formDataUtilitiesDatabase.db_username + formDataUtilitiesDatabase.db_password;
+});
+
 const isFormChanged = computed(() => {
   return formOrigin.value !== formEdit.value;
+});
+const isFormChangedDatabase = computed(() => {
+  return formOriginDatabase.value !== formEditDatabase.value;
 });
 
 const disableForm = computed(() => {
@@ -543,8 +610,6 @@ const inactiveDatabase = async () => {
 };
 
 const inactiveWebUtilitiesAndDatabase = async () => {
-  console.log(!clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status);
-  console.log(!clientsStore.selectedWebUtilitiesDatabase.is_active);
   const response = await clientsStore.inactiveWebUtilities(
     !clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status
   );
@@ -578,6 +643,7 @@ onMounted(async () => {
   await loadElectronicInvoiceProviders();
   await loadClient();
   setFormWatcher();
+  setFormWatcherDatabase();
   loadWebUtilities();
   loadWebUtilitiesDatabase();
 });
@@ -614,5 +680,24 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   gap: 55px;
+}
+
+.left-rectangle {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-image-and-button {
+  margin-top: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+@media (max-width: 1024px) {
+  .align-image-and-button {
+    margin-top: 0;
+  }
 }
 </style>

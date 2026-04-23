@@ -285,10 +285,10 @@ export const ClientsService = {
     });
   },
 
-  editDatabaseName: async (client_id: number, newDatabaseName: string) => {
+  editDatabaseName: async (client_id: number, data: object) => {
     return axios.put({
       url: `${URL_API}/conxpos-utilities/database/${client_id}/update-name`,
-      data: { database_name: newDatabaseName },
+      data,
       config: {
         headers: {
           Authorization: `Bearer ${user.token}`,
