@@ -39,8 +39,8 @@
     </v-col>
     <v-divider vertical></v-divider>
     <v-col cols="12" md="7" class="pa-5 mt-n5">
-      <v-alert
-        v-if="!credentialsObject?.database"
+      <!-- <v-alert
+        v-if="!clientsStore.selectedWebUtilitiesDatabase"
         type="warning"
         variant="outlined"
         density="compact"
@@ -48,7 +48,7 @@
       >
         Se necesita crear una base de datos para poder configurar las
         herramientas web.
-      </v-alert>
+      </v-alert> -->
       <br />
 
       <div>
@@ -542,9 +542,9 @@ const loadWebUtilitiesDatabase = async () => {
     clientsStore.moduleModeWebUtilities = "add";
   }
 };
-const credentialsObject = computed(() => {
-  return clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient;
-});
+// const credentialsObject = computed(() => {
+//   return clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient;
+// });
 const authcredentialsObject = computed(() => {
   return clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth;
 });
@@ -587,9 +587,6 @@ const isFormChangedDatabase = computed(() => {
 });
 
 const disableForm = computed(() => {
-  if (!credentialsObject.value) {
-    return true;
-  }
   if (clientsStore.selectedItem.is_active == false) {
     return true;
   }
