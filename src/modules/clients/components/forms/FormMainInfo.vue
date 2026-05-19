@@ -334,7 +334,7 @@ const submitForm = async () => {
     clientsStore.form.identification_type_code = mainForm.documentType;
     clientsStore.form.identification_number = mainForm.documentNumber;
     clientsStore.form.tradename = mainForm.tradename;
-    clientsStore.form.name = mainForm.name;
+    clientsStore.form.name = mainForm.name ?? undefined;
     clientsStore.toogleDialog();
     swal.fire({
       icon: "success",
