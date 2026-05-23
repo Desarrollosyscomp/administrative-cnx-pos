@@ -29,11 +29,11 @@
                   }}
                 </p>
               </div>
-              <v-skeleton-loader
+              <!-- <v-skeleton-loader
                 type="paragraph"
                 v-if="!clientsStore.selectedItem?.name"
-              ></v-skeleton-loader>
-              <div class="align-buttons mt-2 mb-5" v-else>
+              ></v-skeleton-loader> -->
+              <div class="align-buttons mt-2 mb-5">
                 <v-btn
                   variant="outlined"
                   color="#841811ff"

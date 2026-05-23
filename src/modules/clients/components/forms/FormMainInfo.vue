@@ -317,34 +317,104 @@ const nameRules = ref([
     }
   },
 ]);
-const submitForm = async () => {
-  try{
-    
-    await validationMainInfoExport(mainForm)
 
-    clientsStore.form.regime_dian_id = mainForm.regimen;
-    clientsStore.selectedItem.regimen = mainForm.regimen;
-    clientsStore.form.first_name = mainForm.firstName;
-    clientsStore.selectedItem.first_name = mainForm.firstName;
-    clientsStore.form.second_name = mainForm.secondName;
-    clientsStore.selectedItem.second_name = mainForm.secondName;
-    clientsStore.form.sure_name = mainForm.surename;
-    clientsStore.selectedItem.sure_name = mainForm.secondName;
-    clientsStore.form.second_sure_name = mainForm.second_surename;
-    clientsStore.form.identification_type_code = mainForm.documentType;
-    clientsStore.form.identification_number = mainForm.documentNumber;
-    clientsStore.form.tradename = mainForm.tradename;
-    if (isCompanyDocumentType(mainForm.documentType ?? "")) {
-      clientsStore.form.name = mainForm.name;
-    }
+
+// const submitForm = async () => {
+//   try{
+    
+//     await validationMainInfoExport(mainForm)
+    
+//     if (isCompanyDocumentType(mainForm.documentType ?? "")) {
+//       clientsStore.form.name = mainForm.name;
+//       clientsStore.selectedItem.name = mainForm.name;
+//       clientsStore.form.first_name = "";
+//       clientsStore.form.second_name = "";
+//       clientsStore.form.sure_name = "";
+//       clientsStore.form.second_sure_name = "";
+//       clientsStore.selectedItem.first_name = "";
+//       clientsStore.selectedItem.second_name = "";
+//       clientsStore.selectedItem.sure_name = "";
+//       clientsStore.selectedItem.second_sure_name = "";
+//     }
+//     else{
+//       clientsStore.form.name = "";
+//       clientsStore.selectedItem.name = "";
+//       clientsStore.form.first_name = mainForm.firstName;
+//       clientsStore.form.second_name = mainForm.secondName;
+//       clientsStore.form.sure_name = mainForm.surename;
+//       clientsStore.form.second_sure_name = mainForm.second_surename;
+//       clientsStore.selectedItem.first_name = mainForm.firstName;
+//       clientsStore.selectedItem.second_name = mainForm.secondName;
+//       clientsStore.selectedItem.sure_name = mainForm.surename;
+//       clientsStore.selectedItem.second_sure_name = mainForm.second_surename;
+//     }
+//     clientsStore.form.regime_dian_id = mainForm.regimen;
+//     clientsStore.selectedItem.regimen = mainForm.regimen;
+//     clientsStore.form.identification_type_code = mainForm.documentType;
+//     clientsStore.form.identification_number = mainForm.documentNumber;
+//     clientsStore.form.tradename = mainForm.tradename;
+//     clientsStore.toogleDialog();
+//     swal.fire({
+//       icon: "success",
+//       text: "Campos completados",
+//       showConfirmButton: false,
+//       timer: 1500,
+//     });
+//   }catch(e: any){
+//     swal.fire({
+//       icon: "error",
+//       text: "Error interno",
+//       showConfirmButton: false,
+//       timer: 1500,
+//     });
+//   }
+// };
+const submitForm = async () => {
+  try {
+    await validationMainInfoExport(mainForm);
+
+    const isCompany = isCompanyDocumentType(
+      mainForm.documentType ?? ""
+    );
+
+    const clientData = isCompany
+      ? {
+          name: mainForm.name,
+          first_name: "",
+          second_name: "",
+          sure_name: "",
+          second_sure_name: "",
+        }
+      : {
+          name: "",
+          first_name: mainForm.firstName,
+          second_name: mainForm.secondName,
+          sure_name: mainForm.surename,
+          second_sure_name: mainForm.second_surename,
+        };
+
+    Object.assign(clientsStore.form, {
+      ...clientData,
+      regime_dian_id: mainForm.regimen,
+      identification_type_code: mainForm.documentType,
+      identification_number: mainForm.documentNumber,
+      tradename: mainForm.tradename,
+    });
+
+    Object.assign(clientsStore.selectedItem, {
+      ...clientData,
+      regimen: mainForm.regimen,
+    });
+
     clientsStore.toogleDialog();
+
     swal.fire({
       icon: "success",
       text: "Campos completados",
       showConfirmButton: false,
       timer: 1500,
     });
-  }catch(e: any){
+  } catch (e: any) {
     swal.fire({
       icon: "error",
       text: "Error interno",
@@ -353,7 +423,6 @@ const submitForm = async () => {
     });
   }
 };
-
 const setForm = () => {
   mainForm.documentType = clientsStore.form.identification_type_code;
   mainForm.regimen = clientsStore.form.regime_dian_id;
