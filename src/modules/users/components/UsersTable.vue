@@ -66,7 +66,6 @@ const appStore = useAppStore();
 const usersStore = useUsersStore();
 const emit = defineEmits(["onEdit", "onDeactivate", "onManagePermissions"]);
 const goToEdit = (users: UsersInterface) => {
-  console.log("users", usersStore.list);
   emit("onEdit", {
     name: "UsersTable.goToEdit",
     data: { users },

@@ -227,7 +227,6 @@ export const useClientsStore: any = defineStore({
         tax_schema_dian_id: data.tax_schema_dian_id,
         fiscal_obligation_dian_id: data.fiscal_obligation_dian_id,
       });
-      console.log(response);
       if (response.data.response.validationError) {
         return {
           error: true,
@@ -702,7 +701,6 @@ export const useClientsStore: any = defineStore({
           username: data.username,
         }
       );
-      console.log(response);
       if (response.status == 200) {
         return {
           error: false,
@@ -716,7 +714,6 @@ export const useClientsStore: any = defineStore({
       }
     },
     async resetPasswordWebUtilities(data: any) {
-      console.log(data);
       let response = await ClientsService.resetPasswordWebUtilities(
         this.selectedItem.id,
         {

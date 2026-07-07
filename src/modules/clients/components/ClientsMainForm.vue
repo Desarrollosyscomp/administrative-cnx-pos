@@ -204,7 +204,6 @@ const submitTotalForm = async () => {
     draftMode.value = true;
     if (clientsStore.moduleMode == "add") {
       response = await clientsStore.addClient(clientsStore.form);
-      console.log(response);
       draftMode.value = false;
     } else if (clientsStore.moduleMode == "edit") {
       const id = clientsStore.selectedItem.id;

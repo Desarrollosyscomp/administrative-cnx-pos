@@ -102,7 +102,6 @@ const changeValue = (value: boolean) => {
 };
 
 const unableItem = (emitted: EmitInterface) => {
-  console.log("unableItem", emitted.data);
   const action = !emitted.data.item.is_active ? "Restaurar" : "Desactivar";
   const successMessage = !emitted.data.item.is_active
     ? "Restaurado con éxito"

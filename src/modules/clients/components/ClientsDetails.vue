@@ -617,7 +617,6 @@ const submitForm = async () => {
     }
     _data = data;
   }
-  console.log(_data);
   if (_data) {
     clientsStore.toogleDialog();
     await swal.fire({
