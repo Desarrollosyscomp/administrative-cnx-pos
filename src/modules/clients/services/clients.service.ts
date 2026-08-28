@@ -230,9 +230,9 @@ export const ClientsService = {
     });
   },
 
-    getLicense: async (tenant_id: number) => {
+    getLicense: async (database_id: number) => {
     return axios.get({
-      url: `${URL_API}/licenses/find-last/${tenant_id}`,
+      url: `${URL_API}/licenses/find-last/${database_id}`,
       config: {
         headers: {
           Authorization: `Bearer ${user.token}`,
@@ -347,7 +347,28 @@ export const ClientsService = {
     });
   },
 
+  createLicenseWebUtilities: async (data: object) => {
+    return axios.post({
+      url: `${URL_API}/conxpos-utilities/clients/license`,
+      data,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
 
+  getLicenseWebUtilities: async (database_id: number) => {
+    return axios.get({
+      url: `${URL_API}/conxpos-utilities/find-last/${database_id}`,
+      config: {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      },
+    });
+  },
     
 
 };

@@ -13,6 +13,46 @@
         <div align="center" class="image">
           <img src="../../../assets/images/report-bro.svg" width="220px" />
         </div>
+        <!-- <div class="licence">
+          <p class="font-size text-center">
+            <b> Licencia web reporter </b>
+            <v-form @submit.prevent="submitDatabaseName"></v-form> 
+            <v-form>
+              <v-date-input
+                class="mt-2 mb-n2"
+                label="Fecha inicio licencia"
+                clearable
+                variant="outlined"
+                density="compact"
+                location="end center"
+                :disabled="disableForm"
+                prepend-icon=""
+                prepend-inner-icon="mdi-calendar"
+              ></v-date-input>
+              <v-date-input
+                class="mt-2"
+                label="Fecha fin licencia"
+                clearable
+                variant="outlined"
+                density="compact"
+                location="end center"
+                :disabled="disableForm"
+                prepend-icon=""
+                prepend-inner-icon="mdi-calendar"
+              ></v-date-input>
+              <div align="end">
+                <v-btn
+                  variant="outlined"
+                  color="success"
+                  density="compact"
+                  type="submit"
+                >
+                  Guardar</v-btn
+                >
+              </div>
+            </v-form>
+          </p>
+        </div> -->
         <div class="inactive-button">
           <v-btn
             v-if="clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth"
@@ -73,41 +113,48 @@
             :disabled="disableForm"
           >
           </v-text-field>
-        <v-row>
-          <v-col cols="12" md="6">
-            <v-text-field
-              label="Usuario base de datos"
-              prepend-inner-icon="mdi-database-sync"
-              variant="outlined"
-              density="compact"
-              v-model="formDataUtilitiesDatabase.db_username"
-              :rules="databaseUsernameRules"
-              type="email"
-              :disabled="disableForm"
-            >
-            </v-text-field>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-text-field
-              label="Contraseña base de datos"
-              prepend-inner-icon="mdi-database-lock"
-              variant="outlined"
-              density="compact"
-              v-model="formDataUtilitiesDatabase.db_password"
-              :type="visibleDatabasePassword ? 'text' : 'password'"
-              :append-inner-icon="
-                visibleDatabasePassword ? 'mdi-eye-off' : 'mdi-eye'
-              "
-              @click:append-inner="
-                visibleDatabasePassword = !visibleDatabasePassword
-              "
-              :rules="databasePasswordRules"
-              :disabled="disableForm"
-            >
-            </v-text-field>
-          </v-col>
-        </v-row>
-          <v-btn variant="outlined" color="success" type="submit" :disabled="!isFormChangedDatabase" block class="mt-2">
+          <v-row>
+            <v-col cols="12" md="6">
+              <v-text-field
+                label="Usuario base de datos"
+                prepend-inner-icon="mdi-database-sync"
+                variant="outlined"
+                density="compact"
+                v-model="formDataUtilitiesDatabase.db_username"
+                :rules="databaseUsernameRules"
+                type="email"
+                :disabled="disableForm"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                label="Contraseña base de datos"
+                prepend-inner-icon="mdi-database-lock"
+                variant="outlined"
+                density="compact"
+                v-model="formDataUtilitiesDatabase.db_password"
+                :type="visibleDatabasePassword ? 'text' : 'password'"
+                :append-inner-icon="
+                  visibleDatabasePassword ? 'mdi-eye-off' : 'mdi-eye'
+                "
+                @click:append-inner="
+                  visibleDatabasePassword = !visibleDatabasePassword
+                "
+                :rules="databasePasswordRules"
+                :disabled="disableForm"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          <v-btn
+            variant="outlined"
+            color="success"
+            type="submit"
+            :disabled="!isFormChangedDatabase"
+            block
+            class="mt-2"
+          >
             Guardar base de datos
           </v-btn>
         </v-form>
@@ -476,9 +523,9 @@ const submitDatabaseName = async () => {
     await setDatabaseName();
     await loadWebUtilitiesDatabase();
     formOriginDatabase.value =
-    formDataUtilitiesDatabase.databaseName +
-    formDataUtilitiesDatabase.db_username +
-    formDataUtilitiesDatabase.db_password;
+      formDataUtilitiesDatabase.databaseName +
+      formDataUtilitiesDatabase.db_username +
+      formDataUtilitiesDatabase.db_password;
   }
 };
 const submitNewPassword = async () => {
@@ -519,8 +566,10 @@ const setDatabaseName = async () => {
   formDataUtilitiesDatabase.databaseName =
     response.data.utilitiesDatabase?.database_name ?? "";
   clientsStore.selectedWebUtilitiesDatabase = response.data.utilitiesDatabase;
-  formDataUtilitiesDatabase.db_username = response.data.utilitiesDatabase?.db_user ?? "root";
-  formDataUtilitiesDatabase.db_password = response.data.utilitiesDatabase?.db_password ?? "conexion1234";
+  formDataUtilitiesDatabase.db_username =
+    response.data.utilitiesDatabase?.db_user ?? "root";
+  formDataUtilitiesDatabase.db_password =
+    response.data.utilitiesDatabase?.db_password ?? "conexion1234";
 };
 
 const loadElectronicInvoiceProviders = async () => {
@@ -576,7 +625,11 @@ const formEdit = computed(() => {
 });
 
 const formEditDatabase = computed(() => {
-  return formDataUtilitiesDatabase.databaseName + formDataUtilitiesDatabase.db_username + formDataUtilitiesDatabase.db_password;
+  return (
+    formDataUtilitiesDatabase.databaseName +
+    formDataUtilitiesDatabase.db_username +
+    formDataUtilitiesDatabase.db_password
+  );
 });
 
 const isFormChanged = computed(() => {

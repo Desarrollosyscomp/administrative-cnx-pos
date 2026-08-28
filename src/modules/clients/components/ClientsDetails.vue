@@ -66,8 +66,11 @@
                 </v-btn>
               </div>
               <v-divider></v-divider>
+              <div align="center" class="mt-3 text-primary">
+                <p><b>Ajustes Proveedor tecnologico</b></p>
+              </div>
               <!-- <v-skeleton-loader type="paragraph" v-if="!credentialsObject?.schema?.name"></v-skeleton-loader> -->
-              <div class="mt-5">
+              <div class="mt-3">
                 <span class="color-font">
                   <v-locale-provider locale="es">
                     <v-expansion-panels>
@@ -165,12 +168,73 @@
                   </v-locale-provider>
                 </span>
               </div>
+              <br />
+              <v-divider></v-divider>
+              <div align="center" class="mt-3 text-primary">
+                <p><b>Ajustes herramientas web</b></p>
+              </div>
+              <v-expansion-panels class="mt-3">
+                <v-expansion-panel>
+                  <v-expansion-panel-title>
+                    <b> Licencia web reporter </b>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-form @submit.prevent="submitLicenceWebUtilities">
+                      <v-date-input
+                        class="mt-2 mb-n2"
+                        label="Fecha inicio licencia"
+                        clearable
+                        variant="outlined"
+                        density="compact"
+                        location="end center"
+                        v-model="licenceWebUtilities.init_date"
+                        :rules="initDateLicenseRules"
+                        :disabled="disableForm"
+                      ></v-date-input>
+                      <v-date-input
+                        class="mt-2"
+                        label="Fecha fin licencia"
+                        clearable
+                        variant="outlined"
+                        density="compact"
+                        location="end center"
+                        v-model="licenceWebUtilities.end_date"
+                        :rules="endDateLicenseRules"
+                        :disabled="disableForm"
+                      ></v-date-input>
+                      <p
+                        v-if="!credentialsObject"
+                        class="text-red mt-n2"
+                        style="font-size: 12px"
+                      >
+                        Se necesita crear una base de datos para modificar la
+                        licencia
+                      </p>
+                      <div align="end">
+                        <v-btn
+                          variant="outlined"
+                          color="success"
+                          density="compact"
+                          type="submit"
+                          :disabled="
+                            disableForm ||
+                            !isFormChangedLicenseWebUtilities ||
+                            clickLicenseWebUtilities
+                          "
+                        >
+                          Guardar</v-btn
+                        >
+                      </div>
+                    </v-form>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
             </v-card-text>
           </v-card>
         </v-col>
         <v-col>
-          <v-card elevation="3" >
-            <v-sheet >
+          <v-card elevation="3">
+            <v-sheet>
               <v-tabs
                 v-model="tab"
                 color="primary"
@@ -184,141 +248,154 @@
 
               <v-tabs-window v-model="tab">
                 <v-tabs-window-item value="one">
-                  <v-sheet >
-                    <v-card-text>
-                      <v-row>
-                        <v-col cols="12" md="5" class="pa-5 mx-n1">
-                          <p class="font-size">
-                            <b> Seleccionar Proveedor </b>
-                          </p>
-                          <br />
-                          <v-select
-                            variant="outlined"
-                            density="compact"
-                            label="Seleccionar"
-                            disabled
-                            :items="clientsStore.electronic_invoice_providers"
-                            item-title="name"
-                            item-value="id"
-                            v-model="clientsStore.electronic_invoice_providers"
-                          >
-                          </v-select>
-                          <v-skeleton-loader
-                            type="image"
-                            v-if="!clientsStore.selectedItem?.name"
-                          ></v-skeleton-loader>
-                          <div align="center" class="mt-n5" v-else>
-                            <img
-                              src="../../../assets/images/Invoice-rafiki.svg"
-                              width="210px"
-                            />
-                          </div>
-                        </v-col>
-                        <v-divider vertical></v-divider>
-                        <v-col cols="12" md="7" class="pa-5">
-                          <p class="font-size">
-                            <b> Credenciales </b>
-                          </p>
-                          <v-alert
-                            v-if="!credentialsObject?.database"
-                            type="warning"
-                            variant="outlined"
-                            density="compact"
-                            class="mt-2"
-                          >
-                            Se necesita crear una base de datos para poder
-                            configurar el proveedor de facturación electrónica.
+                  <v-sheet>
+                    <v-card-text style="height: 62vh">
+                      <div>
+                        <v-row
+                          style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            height: 59vh;
+                          "
+                          all
+                        >
+                          <v-col cols="12" md="5" class="pa-5 mx-n1">
+                            <p class="font-size">
+                              <b> Seleccionar Proveedor </b>
+                            </p>
                             <br />
-                            Para tener en cuenta: el correo NO se puede repetir
-                            para ningun cliente
-                          </v-alert>
-                          <br />
-                          <div>
+                            <v-select
+                              variant="outlined"
+                              density="compact"
+                              label="Seleccionar"
+                              disabled
+                              :items="clientsStore.electronic_invoice_providers"
+                              item-title="name"
+                              item-value="id"
+                              v-model="
+                                clientsStore.electronic_invoice_providers
+                              "
+                            >
+                            </v-select>
                             <v-skeleton-loader
-                              type="card"
+                              type="image"
                               v-if="!clientsStore.selectedItem?.name"
                             ></v-skeleton-loader>
-                            <v-form @submit.prevent="submitForm" v-else>
-                              <v-alert
-                                v-if="message"
-                                class="mb-4"
-                                type="error"
-                                variant="outlined"
-                                density="compact"
-                              >
-                                {{ message }}
-                              </v-alert>
-                              <v-text-field
-                                label="Email entregado por Taxxa"
-                                prepend-inner-icon="mdi-email"
-                                variant="outlined"
-                                density="compact"
-                                class="mb-3"
-                                v-model="formDataTaxxa.email"
-                                :rules="emailRules"
-                                type="email"
-                                :disabled="disableForm"
-                              >
-                              </v-text-field>
-                              <v-text-field
-                                label="Contraseña"
-                                prepend-inner-icon="mdi-lock"
-                                variant="outlined"
-                                density="compact"
-                                class="mb-3"
-                                :type="visible ? 'text' : 'password'"
-                                v-model="formDataTaxxa.password"
-                                :append-inner-icon="
-                                  visible ? 'mdi-eye-off' : 'mdi-eye'
-                                "
-                                @click:append-inner="visible = !visible"
-                                :rules="passwordRules"
-                                :disabled="disableForm"
-                              >
-                              </v-text-field>
-                              <v-text-field
-                                label="URL"
-                                prepend-inner-icon="mdi-link-variant"
-                                variant="outlined"
-                                density="compact"
-                                class="mb-3"
-                                v-model="formDataTaxxa.url"
-                                :rules="urlRules"
-                                :disabled="disableForm"
-                              >
-                              </v-text-field>
-                              <v-text-field
-                                label="URL de token"
-                                prepend-inner-icon="mdi-link-lock"
-                                variant="outlined"
-                                density="compact"
-                                class="mb-3"
-                                v-model="formDataTaxxa.login_url"
-                                :rules="loginUrlRules"
-                                :disabled="disableForm"
-                              >
-                              </v-text-field>
-                              <div class="justify-end d-flex mt-n2">
-                                <v-btn
+                            <div align="center" class="mt-n5" v-else>
+                              <img
+                                src="../../../assets/images/Invoice-rafiki.svg"
+                                width="210px"
+                              />
+                            </div>
+                          </v-col>
+                          <v-divider vertical></v-divider>
+                          <v-col cols="12" md="7" class="pa-5">
+                            <p class="font-size">
+                              <b> Credenciales </b>
+                            </p>
+                            <v-alert
+                              v-if="!credentialsObject?.database"
+                              type="warning"
+                              variant="outlined"
+                              density="compact"
+                              class="mt-2"
+                            >
+                              Se necesita crear una base de datos para poder
+                              configurar el proveedor de facturación
+                              electrónica.
+                              <br />
+                              Para tener en cuenta: el correo NO se puede
+                              repetir para ningun cliente
+                            </v-alert>
+                            <br />
+                            <div>
+                              <v-skeleton-loader
+                                type="card"
+                                v-if="!clientsStore.selectedItem?.name"
+                              ></v-skeleton-loader>
+                              <v-form @submit.prevent="submitForm" v-else>
+                                <v-alert
+                                  v-if="message"
+                                  class="mb-4"
+                                  type="error"
                                   variant="outlined"
-                                  color="success"
-                                  type="submit"
-                                  :disabled="!isFormChanged"
+                                  density="compact"
                                 >
-                                  Guardar
-                                </v-btn>
-                              </div>
-                            </v-form>
-                          </div>
-                        </v-col>
-                      </v-row>
+                                  {{ message }}
+                                </v-alert>
+                                <v-text-field
+                                  label="Email entregado por Taxxa"
+                                  prepend-inner-icon="mdi-email"
+                                  variant="outlined"
+                                  density="compact"
+                                  class="mb-3"
+                                  v-model="formDataTaxxa.email"
+                                  :rules="emailRules"
+                                  type="email"
+                                  :disabled="disableForm"
+                                >
+                                </v-text-field>
+                                <v-text-field
+                                  label="Contraseña"
+                                  prepend-inner-icon="mdi-lock"
+                                  variant="outlined"
+                                  density="compact"
+                                  class="mb-3"
+                                  :type="visible ? 'text' : 'password'"
+                                  v-model="formDataTaxxa.password"
+                                  :append-inner-icon="
+                                    visible ? 'mdi-eye-off' : 'mdi-eye'
+                                  "
+                                  @click:append-inner="visible = !visible"
+                                  :rules="passwordRules"
+                                  :disabled="disableForm"
+                                >
+                                </v-text-field>
+                                <v-text-field
+                                  label="URL"
+                                  prepend-inner-icon="mdi-link-variant"
+                                  variant="outlined"
+                                  density="compact"
+                                  class="mb-3"
+                                  v-model="formDataTaxxa.url"
+                                  :rules="urlRules"
+                                  :disabled="disableForm"
+                                >
+                                </v-text-field>
+                                <v-text-field
+                                  label="URL de token"
+                                  prepend-inner-icon="mdi-link-lock"
+                                  variant="outlined"
+                                  density="compact"
+                                  class="mb-3"
+                                  v-model="formDataTaxxa.login_url"
+                                  :rules="loginUrlRules"
+                                  :disabled="disableForm"
+                                >
+                                </v-text-field>
+                                <div class="justify-end d-flex mt-n2">
+                                  <v-btn
+                                    variant="outlined"
+                                    color="success"
+                                    type="submit"
+                                    :disabled="!isFormChanged"
+                                  >
+                                    Guardar
+                                  </v-btn>
+                                </div>
+                              </v-form>
+                            </div>
+                          </v-col>
+                        </v-row>
+                      </div>
                     </v-card-text>
                   </v-sheet>
                 </v-tabs-window-item>
                 <v-tabs-window-item value="two">
                   <v-sheet class="pa-4">
                     <ClientsDetailsWebUtilities />
-                      <!-- <v-card-text>
+                    <!-- <v-card-text>
                       <v-row>
                         <v-col cols="12" md="5" class="pa-5 mx-n1">
                           <p class="font-size">
@@ -487,6 +564,11 @@ const licenseForm = reactive<TLicenseForm>({
   end_date: null,
 });
 
+const licenceWebUtilities = reactive<TLicenseForm>({
+  init_date: null,
+  end_date: null,
+});
+
 const validations = {
   email: Yup.string()
     .required("El email es requerido")
@@ -502,6 +584,15 @@ const validations = {
   login_url: Yup.string().required("El login URL es requerido").trim(),
 };
 const validationLicense = {
+  init_date: Yup.date().required("La fecha de inicio es requerida"),
+  end_date: Yup.date()
+    .required("La fecha de fin es requerida")
+    .min(
+      Yup.ref("init_date"),
+      "La fecha de finalización debe ser posterior a la fecha de inicio"
+    ),
+};
+const validationLicenseWebUtilities = {
   init_date: Yup.date().required("La fecha de inicio es requerida"),
   end_date: Yup.date()
     .required("La fecha de fin es requerida")
@@ -578,6 +669,31 @@ const endDateRules = ref([
   async () => {
     try {
       await validationSchemaLicense.validate(licenseForm);
+      return true;
+    } catch (e: any) {
+      return e.message;
+    }
+  },
+]);
+
+const initDateLicenseRules = ref([
+  async (value: any) => {
+    try {
+      await validationLicenseWebUtilities.init_date.validate(value);
+      return true;
+    } catch (e: any) {
+      return e.message;
+    }
+  },
+]);
+
+let validationSchemaLicenseWebUtilities = Yup.object(
+  validationLicenseWebUtilities
+);
+const endDateLicenseRules = ref([
+  async () => {
+    try {
+      await validationSchemaLicenseWebUtilities.validate(licenceWebUtilities);
       return true;
     } catch (e: any) {
       return e.message;
@@ -790,8 +906,8 @@ const loadClient = () => {
   return clientsStore.loadClient(route.params.id as string);
 };
 
-const onPermissions = () => {
-  router.push("/client/" + route.params.id + "/permissions");
+const onPermissions = async () => {
+  await router.push("/client/" + route.params.id + "/permissions");
 };
 
 let formOrigin = ref<string>("");
@@ -803,7 +919,12 @@ const setFormWatcher = () => {
 };
 
 const formEdit = computed(() => {
-  return formDataTaxxa.email + formDataTaxxa.password + formDataTaxxa.url + formDataTaxxa.login_url;
+  return (
+    formDataTaxxa.email +
+    formDataTaxxa.password +
+    formDataTaxxa.url +
+    formDataTaxxa.login_url
+  );
 });
 
 const isFormChanged = computed(() => {
@@ -821,8 +942,10 @@ const disableForm = computed(() => {
 });
 
 let clickLicense = ref<boolean>(false);
+let clickLicenseWebUtilities = ref<boolean>(false);
 
 let formOriginLicense = ref<string>("");
+let formOriginLicenseWebUtilities = ref<string>("");
 
 const sendLicense = async () => {
   try {
@@ -889,12 +1012,93 @@ watch(message, () => {
   }
 });
 
+const idDatabaseWebUtilities = ref();
+const setDatabaseId = async () => {
+  const response = await clientsStore.setDatabaseWebUtilities(route.params.id);
+  if (!response.data) return;
+  console.log(response);
+  idDatabaseWebUtilities.value = response.data.utilitiesDatabase?.id;
+  console.log(idDatabaseWebUtilities.value);
+};
+
+const submitLicenceWebUtilities = async () => {
+  try {
+    await validationSchemaLicense.validate(licenceWebUtilities);
+    clickLicenseWebUtilities.value = true;
+    const { error, data } = await clientsStore.addLicenseWebUtilities({
+      database_id: idDatabaseWebUtilities.value,
+      init_date: licenceWebUtilities.init_date,
+      end_date: licenceWebUtilities.end_date,
+    });
+
+    if (!error) {
+      console.log(data);
+      licenceWebUtilities.init_date = data.license.lic_init_date;
+      licenceWebUtilities.end_date = data.license.lic_end_date;
+      formOriginLicenseWebUtilities.value = `${licenceWebUtilities.init_date}${licenceWebUtilities.end_date}`;
+      await swal.fire({
+        icon: "success",
+        text: "Licencia creada con éxito",
+        showConfirmButton: false,
+        timer: 1200,
+      });
+      await setLicenseWebUtilities();
+    } else {
+      await swal.fire({
+        icon: "error",
+        text: data.error,
+        showConfirmButton: false,
+        timer: 1200,
+      });
+    }
+  } catch (error) {
+    await swal.fire({
+      icon: "error",
+      text: "Error",
+      showConfirmButton: false,
+      timer: 1200,
+    });
+    showValidationErrors.value = true;
+  }
+};
+const parseDate = (date: string | null): Date | null => {
+  if (!date) return null;
+
+  const [year, month, day] = date.split('T')[0].split('-');
+
+  return new Date(
+    Number(year),
+    Number(month) - 1,
+    Number(day)
+  );
+};
+const setLicenseWebUtilities = async () => {
+  const response = await clientsStore.getLicenseWebUtilities(
+    idDatabaseWebUtilities.value
+  );
+  if (response.data) {
+    console.log('1', formOriginLicenseWebUtilities.value);
+    licenceWebUtilities.init_date = parseDate(response.data.lic_init_date);
+    licenceWebUtilities.end_date = parseDate(response.data.lic_end_date);
+    formOriginLicenseWebUtilities.value = `${licenceWebUtilities.init_date}${licenceWebUtilities.end_date}`;
+    console.log('2',formOriginLicenseWebUtilities.value);
+  }
+};
+
+const isFormChangedLicenseWebUtilities = computed((): boolean => {
+  const value = `${licenceWebUtilities.init_date}${licenceWebUtilities.end_date}`;
+  clickLicenseWebUtilities.value = false;
+  return formOriginLicenseWebUtilities.value !== value;
+});
+
 onMounted(async () => {
   await loadTenantDetails();
   await setLicense();
   await loadElectronicInvoiceProviders();
   await loadClient();
   await setFormWatcher();
+  await setDatabaseId();
+  await setLicenseWebUtilities();
   setForm();
 });
 </script>

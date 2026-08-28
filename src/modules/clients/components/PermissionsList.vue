@@ -246,11 +246,10 @@ const usernamePersonOrCompany = computed(() => {
     return clientsStore.selectedItem.company?.name;
   }
 });
-
 onMounted(async () => {
+  await loadClientSystemServices();
   await loadClient();
   await loadSystemServices();
-  await loadClientSystemServices();
 });
 </script>
 <!-- ******************** CSS ******************** -->

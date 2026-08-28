@@ -767,5 +767,40 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+
+    async addLicenseWebUtilities(data: any) {
+      console.log(data);
+      let response = await ClientsService.createLicenseWebUtilities({
+        database_id: data.database_id,
+        init_date: data.init_date,
+        end_date: data.end_date,
+      });
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
+    async getLicenseWebUtilities(database_id: number) {
+      console.log(database_id);
+      let response = await ClientsService.getLicenseWebUtilities(database_id);
+      if (response.status == 201) {
+        return {
+          error: false,
+          data: response.data.response,
+        };
+      } else {
+        return {
+          error: true,
+          data: response.data.response,
+        };
+      }
+    },
   },
 });

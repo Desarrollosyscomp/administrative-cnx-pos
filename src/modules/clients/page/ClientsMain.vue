@@ -124,6 +124,7 @@ const items = [
   { id: null, type: "Todos" },
   { id: 1, type: "Proximos a vencer" },
   { id: 2, type: "Vencidos" },
+  { id: 3, type: "Web reporter" },
 ];
 // const openFilter = () => {
 //   clientsStore.moduleMode = "filter";
