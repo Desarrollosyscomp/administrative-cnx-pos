@@ -215,7 +215,6 @@
                           density="compact"
                           type="submit"
                           :disabled="
-                            disableForm ||
                             !isFormChangedLicenseWebUtilities ||
                             clickLicenseWebUtilities
                           "
