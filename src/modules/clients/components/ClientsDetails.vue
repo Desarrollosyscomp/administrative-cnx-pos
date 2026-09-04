@@ -189,7 +189,6 @@
                         location="end center"
                         v-model="licenceWebUtilities.init_date"
                         :rules="initDateLicenseRules"
-                        :disabled="disableForm"
                       ></v-date-input>
                       <v-date-input
                         class="mt-2"
@@ -200,16 +199,15 @@
                         location="end center"
                         v-model="licenceWebUtilities.end_date"
                         :rules="endDateLicenseRules"
-                        :disabled="disableForm"
                       ></v-date-input>
-                      <p
-                        v-if="!credentialsObject"
+                      <!-- <p
+                        v-if="disbledFormWebUtilities"
                         class="text-red mt-n2"
                         style="font-size: 12px"
                       >
-                        Se necesita crear una base de datos para modificar la
+                        Se necesita configurar la herramienta web para modificar la
                         licencia
-                      </p>
+                      </p> -->
                       <div align="end">
                         <v-btn
                           variant="outlined"
@@ -1011,11 +1009,14 @@ watch(message, () => {
     }, 2000);
   }
 });
-
+const disbledFormWebUtilities = ref(false);
 const idDatabaseWebUtilities = ref();
 const setDatabaseId = async () => {
   const response = await clientsStore.setDatabaseWebUtilities(route.params.id);
   if (!response.data) return;
+  if (response.error == true) {
+    disbledFormWebUtilities.value = true;
+  }
   console.log(response);
   idDatabaseWebUtilities.value = response.data.utilitiesDatabase?.id;
   console.log(idDatabaseWebUtilities.value);
@@ -1077,11 +1078,9 @@ const setLicenseWebUtilities = async () => {
     idDatabaseWebUtilities.value
   );
   if (response.data) {
-    console.log('1', formOriginLicenseWebUtilities.value);
     licenceWebUtilities.init_date = parseDate(response.data.lic_init_date);
     licenceWebUtilities.end_date = parseDate(response.data.lic_end_date);
     formOriginLicenseWebUtilities.value = `${licenceWebUtilities.init_date}${licenceWebUtilities.end_date}`;
-    console.log('2',formOriginLicenseWebUtilities.value);
   }
 };
 

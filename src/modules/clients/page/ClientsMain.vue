@@ -198,6 +198,7 @@ const onCloseDialog = async () => {
 const selectFilter = ref(null)
 
 const filterSubmit = async () => {
+  clientsStore.page = 1;
   clientsStore.client_status = selectFilter.value
   selectFilter.value = null
   openDialogFilter.value = false
