@@ -202,7 +202,8 @@ const filterSubmit = async () => {
   clientsStore.client_status = selectFilter.value
   selectFilter.value = null
   openDialogFilter.value = false
-  return await clientsStore.loadPaginatedList()
+  const functionToCall = clientsStore.loadPaginatedList
+  return await appStore.afterLoading(functionToCall)
 }
 onBeforeMount(() => {
   clientsStore.client_status = selectFilter.value
