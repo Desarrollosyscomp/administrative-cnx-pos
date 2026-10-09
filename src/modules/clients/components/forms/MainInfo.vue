@@ -43,6 +43,8 @@
   </v-card>
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE: MainInfo ====================
+// Resumen de los datos principales del cliente.
 import { computed, onMounted, reactive, watch } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
 import { COMPANY_DIAN_IDS } from "../../validations/validations";

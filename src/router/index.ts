@@ -1,3 +1,6 @@
+// ==================== ROUTER PRINCIPAL ====================
+// Une las rutas de cada módulo y protege la navegación: sin token redirige a /login.
+// La validación por módulos solo aplica si VITE_ENABLE_PERMISSIONS === 'true'.
 import { createRouter, createWebHistory } from "vue-router";
 
 import { LogInRoute } from "../modules/auth/routes/router";
@@ -9,6 +12,7 @@ import { verifyRouteAccess } from "./helpers";
 import { PermissionsRouter } from "../modules/permissions/routes/permissions.routes";
 import PageLogin from "../modules/auth/page/PageLogin.vue";
 
+// -------------------- Rutas base: inicio, login y página 404 --------------------
 const routes = [
   {
     path: "/home",
@@ -34,6 +38,7 @@ const router = createRouter({
   ],
 });
 
+// -------------------- Guard global de navegación --------------------
 router.beforeEach((to, from, next) => {
   from;
   const authStore = useAuthStore();
@@ -53,6 +58,7 @@ router.beforeEach((to, from, next) => {
     next('/login')
     return
   }
+  // -------------------- Permisos desactivados: basta con tener token --------------------
   if (!enablePermissions){
     next();
     return;

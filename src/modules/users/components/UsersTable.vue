@@ -57,6 +57,8 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersTable ====================
+// Tabla de usuarios; carga la primera página al montarse.
 import { useUsersStore } from "../stores/users.store";
 import { UsersInterface } from "../interfaces/users.interface";
 import { onMounted } from "vue";

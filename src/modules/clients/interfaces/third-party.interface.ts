@@ -1,3 +1,5 @@
+// ==================== INTERFACES DE CLIENTE ====================
+// Cliente (TThirdParty) con su persona o empresa asociada.
 import { TEmail } from "../../../interfaces/email.interface";
 import { Identification} from "../../../interfaces/identification-types.interface";
 import { PersonInterface } from "../../../interfaces/people.interface";

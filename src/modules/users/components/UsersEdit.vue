@@ -121,6 +121,9 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersEdit ====================
+// Diálogo de edición: cambia el nombre de usuario y, por separado, la contraseña
+// (requiere la actual). Valida con Yup antes de llamar al store.
 import { computed, inject, onMounted, reactive, ref } from "vue-demi";
 import * as Yup from "yup";
 
@@ -233,6 +236,7 @@ const setForm = () => {
   formData.username = usersStore.selectedItem.username;
 };
 
+// -------------------- PATCH /users/update-username/:id --------------------
 const submitNewUsername = async () => {
   try {
     isDisabledUsername.value = true;
@@ -262,6 +266,7 @@ const submitNewUsername = async () => {
   isDisabledUsername.value = false;
 };
 
+// -------------------- PATCH /users/update-password/:id --------------------
 const submitNewPassword = async () => {
   try {
     isDisabledPassword.value = true;
@@ -310,6 +315,7 @@ const formEdit = computed(() => {
   return formData.username;
 });
 
+// -------------------- Habilita guardar solo si el nombre cambió --------------------
 const isFormChanged = computed(() => {
   return formOrigin.value !== formEdit.value;
 });

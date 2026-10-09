@@ -55,6 +55,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== FORMULARIO: LoginForm ====================
+// Envía usuario y contraseña al store de auth; si es correcto navega a /home.
 import { inject, reactive } from "vue";
 import router from "../../../router";
 import { useAuthStore } from "../store/useStoreAuth";
@@ -69,6 +71,7 @@ const formLogin = reactive({
   password: "",
 });
 
+// -------------------- Inicia sesión o muestra el error devuelto por la API --------------------
 const submitForm = async () => {
   let res = await authStore.login(formLogin);
   if (res.isLogged) {

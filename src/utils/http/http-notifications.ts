@@ -1,3 +1,5 @@
+// ==================== SELECCIÓN DE NOTIFICACIÓN POR CÓDIGO HTTP ====================
+// Muestra el mensaje del código recibido, con texto personalizado o excepciones por llamada.
 import { forbidden, conflict, unauthorized } from "./http-notifications-popups";
 
 import { HttpErrors, HttpErrorsAndExceptions } from "./interfaces";
@@ -26,6 +28,7 @@ const showError = (httpErrors: Array<HttpErrors>, status: number) => {
   }
 };
 
+// -------------------- Punto de entrada usado por el cliente HTTP --------------------
 const showNotification = (params: {
   status: number;
   httpErrors?: Array<HttpErrors> | HttpErrorsAndExceptions;

@@ -45,6 +45,8 @@
 </v-card>
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE: AddressInfo ====================
+// Resumen de la ubicación del cliente con acceso a su edición.
 import { useClientsStore } from "../../store/useClientsStore";
 
 const clientsStore = useClientsStore();

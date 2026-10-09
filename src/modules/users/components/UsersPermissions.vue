@@ -36,6 +36,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersPermissions ====================
+// Vista de permisos del usuario (maqueta sin conexión a la API).
 import { ref } from "vue";
 import { useUsersStore } from "../stores/users.store";
 

@@ -20,6 +20,8 @@
 </template>
 <!-- ******************** JS ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: PermissionsList ====================
+// Contenedor de la tabla de permisos.
 import { EmitInterface } from "../../../interfaces/Emit.interface"; 
 
 

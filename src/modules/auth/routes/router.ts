@@ -1,3 +1,5 @@
+// ==================== RUTAS DEL MÓDULO AUTH ====================
+// /login.
 export const LogInRoute = [
   {
     path: "/login",

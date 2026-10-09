@@ -1,3 +1,5 @@
+// ==================== VALIDACIONES ADICIONALES DEL FORMULARIO DE CLIENTE ====================
+// Formato de documento, nombres, razón social, correo y teléfono, y validación por sección.
 import {
   // contactValidations,
   fiscalValidations,

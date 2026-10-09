@@ -50,6 +50,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== FORMULARIO: TaxxaForm ====================
+// Credenciales y URLs del proveedor Taxxa.
 import { computed, inject, onMounted, reactive, ref } from "vue-demi";
 import * as Yup from "yup";
 import { useClientsStore } from "../../store/useClientsStore";

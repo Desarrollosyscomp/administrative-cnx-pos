@@ -1,3 +1,5 @@
+// ==================== SERVICIO DE AUTENTICACIÓN ====================
+// POST {API}/auth/login con { username, password }.
 import { Http as axios } from "../../../utils/http/http";
 import { getApiUrl } from "../../../utils/http/get-api-url";
 const URL_API = getApiUrl();

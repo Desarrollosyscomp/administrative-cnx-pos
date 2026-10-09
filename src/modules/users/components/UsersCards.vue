@@ -58,6 +58,8 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersCards ====================
+// Vista en tarjetas de los usuarios.
 import { useUsersStore } from "../stores/users.store";
 import { UsersInterface } from "../interfaces/users.interface";
 

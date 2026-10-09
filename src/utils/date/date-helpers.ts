@@ -1,3 +1,5 @@
+// ==================== AYUDANTES DE FECHA ====================
+// Formatea fechas con zona horaria en formato local es-ES.
 const DateHelpers = {
   timestamptzToNatural(dateString: string) {
     const date = new Date(dateString);

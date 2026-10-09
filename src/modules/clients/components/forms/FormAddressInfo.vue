@@ -25,6 +25,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== FORMULARIO: FormAddressInfo ====================
+// Sección de ubicación (usa LocationsComponent) y dirección.
 import { computed, reactive, ref } from 'vue';
 import LocationsComponent from '../../../../components/location-component/LocationsComponent.vue';
 import { EmitInterface } from '../../../../interfaces/Emit.interface';

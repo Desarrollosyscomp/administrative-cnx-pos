@@ -1,3 +1,6 @@
+// ==================== SERVICIO DE UBICACIONES ====================
+// Consulta países, departamentos, municipios y barrios en {API}/clients/get*.
+// El token se toma del store de auth al cargar el módulo.
 import { useAuthStore } from "../../auth/store/useStoreAuth"; 
 import { getApiUrl } from "../../../utils/http/get-api-url"; 
 import { Http as axios } from '../../../utils/http/http'

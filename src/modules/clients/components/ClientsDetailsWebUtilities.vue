@@ -266,6 +266,9 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: ClientsDetailsWebUtilities ====================
+// Acceso del cliente al web reporter: usuario y contraseña, IP y base MySQL de reportes,
+// restablecimiento de contraseña y activación/inactivación (API /conxpos-utilities).
 import { useRoute } from "vue-router";
 // import router from "../../../router";
 // import { TThirdParty } from "../interfaces/third-party.interface";
@@ -443,6 +446,7 @@ let validationSchema = Yup.object(validations);
 let validationSchemaPassword = Yup.object(validationsPassword);
 let validationSchemaDatabaseName = Yup.object(validationDatabaseName);
 
+// -------------------- Crea o actualiza el usuario web --------------------
 const submitForm = async () => {
   if (isDatabaseNameSave.value) {
     message.value = "Por favor, guarde el nombre de la base de datos";
@@ -488,6 +492,7 @@ const submitForm = async () => {
       authcredentialsObject.value?.username;
   }
 };
+// -------------------- Registra o actualiza la base MySQL --------------------
 const submitDatabaseName = async () => {
   await validationSchemaDatabaseName.validate(formDataUtilitiesDatabase);
   const addMode = clientsStore.moduleModeWebUtilities == "add";
@@ -528,6 +533,7 @@ const submitDatabaseName = async () => {
       formDataUtilitiesDatabase.db_password;
   }
 };
+// -------------------- Restablece la contraseña del usuario web --------------------
 const submitNewPassword = async () => {
   await validationSchemaPassword.validate(formDataUtilitiesPassword);
   const response = await clientsStore.resetPasswordWebUtilities(
@@ -549,6 +555,7 @@ const submitNewPassword = async () => {
   }
 };
 
+// -------------------- Carga el usuario web existente --------------------
 const setForm = async (): Promise<void> => {
   const response = await clientsStore.setAuthWebUtilities(route.params.id);
   if (!response.data.utilitiesAuth.conxposUtilityAuth) return;
@@ -560,6 +567,7 @@ const setForm = async (): Promise<void> => {
 
   clientsStore.selectedWebUtilitiesInfo = response.data.utilitiesAuth;
 };
+// -------------------- Carga la base web existente --------------------
 const setDatabaseName = async () => {
   const response = await clientsStore.setDatabaseWebUtilities(route.params.id);
   if (!response.data) return;
@@ -649,6 +657,7 @@ const disableForm = computed(() => {
   return false;
 });
 
+// -------------------- Activa o desactiva la base web --------------------
 const inactiveDatabase = async () => {
   const response = await clientsStore.inactiveWebUtilitiesDatabase(
     !clientsStore.selectedWebUtilitiesDatabase.is_active
@@ -659,6 +668,7 @@ const inactiveDatabase = async () => {
   }
 };
 
+// -------------------- Activa o desactiva el usuario web --------------------
 const inactiveWebUtilitiesAndDatabase = async () => {
   const response = await clientsStore.inactiveWebUtilities(
     !clientsStore.selectedWebUtilitiesInfo.conxposUtilityAuth.status

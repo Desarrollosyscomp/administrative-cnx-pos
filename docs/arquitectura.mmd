@@ -1,0 +1,68 @@
+%% ==================== ARQUITECTURA DEL FRONT ADMINISTRATIVO ====================
+%% Proyecto: administrative-cnx-pos (Vue 3 + Vite + Vuetify + Pinia)
+%% Capas: Vista (página) → Componentes → Store (Pinia) → Servicio → Cliente HTTP (axios) → API administrativa
+
+flowchart TB
+
+    USER(["Usuario administrativo<br/>navegador"])
+
+    subgraph FRONT["administrative-cnx-pos (Vite, puerto 5173)"]
+        direction TB
+
+        subgraph BOOT["1. Arranque"]
+            MAIN["main.ts<br/>Vuetify (es, MDI), Pinia, router, Lottie<br/>componentes globales Layout y Paginator"]
+            APP["App.vue<br/>router-view + pantallas de carga<br/>provee SweetAlert2 como 'swal'"]
+        end
+
+        subgraph NAV["2. Navegación"]
+            ROUTER["router/index.ts<br/>rutas de auth, users, clients, permissions"]
+            GUARD["beforeEach<br/>sin token → /login<br/>permisos por módulo si VITE_ENABLE_PERMISSIONS"]
+            LAYOUT["Layouts/LayoutOne.vue<br/>barra superior, menú lateral, cerrar sesión"]
+        end
+
+        subgraph VIEWS["3. Vistas y componentes por módulo"]
+            V_AUTH["auth/<br/>PageLogin, LoginForm"]
+            V_USERS["users/<br/>UsersIndex, UsersForm, UsersEdit, UsersTable"]
+            V_CLI["clients/<br/>ClientsMain, ClientsMainForm,<br/>ClientsDetails, ClientsDetailsWebUtilities,<br/>PermissionsList"]
+            V_PERM["permissions/<br/>PermissionsIndex (datos de ejemplo)"]
+            V_SHARED["components/<br/>Paginator, LocationsComponent,<br/>LoadingScreen, NotFound"]
+        end
+
+        subgraph STATE["4. Estado (Pinia)"]
+            S_AUTH["auth<br/>token y usuario en localStorage 'auth'"]
+            S_APP["app-store<br/>pantalla de carga"]
+            S_USERS["users-store"]
+            S_CLI["clients<br/>borrador del formulario en localStorage 'form'"]
+            S_LOC["locations-component-store"]
+        end
+
+        subgraph DATA["5. Acceso a la API"]
+            SVC["modules/*/services/*.ts<br/>arman URL + Authorization: Bearer"]
+            URL["utils/http/get-api-url.ts<br/>DEV: VITE_NEST_API_URL<br/>PROD: VITE_QA_API_URL"]
+            HTTP["utils/http/http.ts<br/>axios; errores → { status, data }"]
+            NOTIF["http-notifications<br/>avisos Notiflix 401 / 403 / 409"]
+        end
+    end
+
+    API["administrative-api-cxpos<br/>/auth, /users, /clients,<br/>/licenses, /conxpos-utilities"]
+    LS[("localStorage<br/>auth, permissions, form")]
+
+    USER --> MAIN --> APP --> ROUTER
+    ROUTER --> GUARD
+    GUARD -->|"lee token"| S_AUTH
+    ROUTER --> V_AUTH & V_USERS & V_CLI & V_PERM
+    V_USERS & V_CLI & V_PERM --> LAYOUT
+    V_CLI --> V_SHARED
+    V_USERS --> V_SHARED
+    V_AUTH --> S_AUTH
+    V_USERS --> S_USERS
+    V_CLI --> S_CLI
+    V_SHARED --> S_LOC
+    V_USERS & V_CLI --> S_APP
+    S_AUTH & S_USERS & S_CLI & S_LOC --> SVC
+    SVC --> URL
+    SVC --> HTTP
+    HTTP -->|"HTTP JSON"| API
+    HTTP -.->|"error"| NOTIF
+    S_AUTH <--> LS
+    S_CLI <--> LS

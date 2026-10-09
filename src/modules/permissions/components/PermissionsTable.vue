@@ -24,6 +24,9 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: PermissionsTable ====================
+// Muestra módulos y acciones de ejemplo definidos en este archivo (arrayTest);
+// no consulta la API.
 const arrayTest = [
   { moduleName: 'Usuarios', actions: ['Crear', 'Eliminar', 'Paginar', 'Editar'] },
   { moduleName: 'Clientes', actions: ['Crear', 'Eliminar', 'Paginar', 'Editar'] },

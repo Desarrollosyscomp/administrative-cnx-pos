@@ -16,6 +16,7 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup>
+// ==================== COMPONENTE: LocationsDetails (plantilla generada, sin uso) ====================
 import { useLocationsStore } from "../stores/index";
 
 const locationsStore = useLocationsStore();

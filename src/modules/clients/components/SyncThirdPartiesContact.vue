@@ -174,6 +174,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: SyncThirdPartiesContact ====================
+// Listas editables de teléfonos y correos; emite los cambios al formulario.
 import { onMounted, ref, watch } from "vue";
 import {
   emailRegex,

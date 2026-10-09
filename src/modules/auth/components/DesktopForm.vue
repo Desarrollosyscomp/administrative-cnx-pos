@@ -8,6 +8,8 @@
 
 
 <script setup lang="ts">
+// ==================== COMPONENTE: DesktopForm ====================
+// Diseño de escritorio de la pantalla de login.
 import LoginForm from '../form/LoginForm.vue';
 </script>
 

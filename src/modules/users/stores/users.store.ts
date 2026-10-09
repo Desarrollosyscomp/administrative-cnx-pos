@@ -1,3 +1,6 @@
+// ==================== STORE: users-store ====================
+// Estado del listado (paginación, búsqueda, filtro), del diálogo y del usuario seleccionado.
+// Los errores de validación de la API se devuelven como { error: true, data: mensaje }.
 import { defineStore } from "pinia";
 import { UsersService } from "../services/users.services";
 import { UsersInterface } from "../interfaces/users.interface";
@@ -17,6 +20,7 @@ export const useUsersStore: any = defineStore({
     openDialog: false,
   }),
   actions: {
+    // -------------------- Abre o cierra el diálogo de usuario --------------------
     async toogleDialog() {
       this.openDialog = !this.openDialog;
     },
@@ -28,6 +32,7 @@ export const useUsersStore: any = defineStore({
       }
     },
 
+    // -------------------- Crea un usuario y recarga la lista --------------------
     async add(data: any) {
       let response = await UsersService.add({
         username: data.username,
@@ -48,6 +53,7 @@ export const useUsersStore: any = defineStore({
       }
     },
 
+    // -------------------- Consulta una página de usuarios --------------------
     async getPaginatedUsers() {
       try {
         let response = await UsersService.getPaginated(
@@ -75,6 +81,7 @@ export const useUsersStore: any = defineStore({
       }
     },
 
+    // -------------------- Actualiza la lista con la página actual --------------------
     async loadPaginatedList() {
       let response: any = await this.getPaginatedUsers();
       this.list = response.list;
@@ -86,6 +93,7 @@ export const useUsersStore: any = defineStore({
       };
     },
 
+    // -------------------- Alterna el estado activo del usuario seleccionado --------------------
     async delete() {
       let is_active = !this.selectedItem.is_active;
       try {
@@ -103,6 +111,7 @@ export const useUsersStore: any = defineStore({
       }
     },
 
+    // -------------------- Cambia el nombre de usuario --------------------
     async updateUsername(id: string, data: any) {
       let response = await UsersService.editUsername(id, {
         username: data.username,
@@ -121,6 +130,7 @@ export const useUsersStore: any = defineStore({
       }
     },
 
+    // -------------------- Cambia la contraseña --------------------
     async updatePassword(id: string, data: any) {
       let response = await UsersService.editPassword(id, {
         current_password: data.currentPassword,

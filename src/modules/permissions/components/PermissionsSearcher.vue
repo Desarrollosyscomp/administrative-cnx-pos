@@ -96,6 +96,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: PermissionsSearcher (plantilla generada) ====================
+// Búsqueda avanzada sobre el store de permisos.
 import { reactive, ref } from "vue-demi";
 import { usePermissionsStore } from "../stores/permissions.store";
 // import * as Yup from "yup";

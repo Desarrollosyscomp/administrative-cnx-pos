@@ -16,6 +16,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== VISTA: NotFound ====================
+// Página 404 para rutas inexistentes.
 
 //import { ref } from "vue";
 

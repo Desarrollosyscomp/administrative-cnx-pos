@@ -71,6 +71,8 @@
   </v-card>
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE: ClientCommercialActivities ====================
+// Búsqueda paginada y selección de actividades económicas (CIIU) del cliente.
 // import { useAppStore } from "../../../stores/app-store"; 
 import { onMounted, ref, watch } from "vue";
 import { useClientsStore } from "../store/useClientsStore";

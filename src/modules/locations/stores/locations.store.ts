@@ -1,3 +1,5 @@
+// ==================== STORE: locations-store ====================
+// Listas de ubicaciones cargadas desde la API.
 import { defineStore } from "pinia";
 import { LocationsService } from "../services/locations.services";
 import {

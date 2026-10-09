@@ -1,3 +1,6 @@
+// ==================== SERVICIO DE USUARIOS ====================
+// Llamadas a {API}/users con el Bearer token del store de auth
+// (el token se toma al cargar el módulo).
 import { Http as axios } from "../../../utils/http/http";
 import { getApiUrl } from "../../../utils/http/get-api-url";
 import { useAuthStore } from "../../auth/store/useStoreAuth";

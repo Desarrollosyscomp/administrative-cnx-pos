@@ -15,6 +15,8 @@
   </v-card>
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE: BigButton ====================
+// Botón grande con estado seleccionado y color configurable.
 import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({

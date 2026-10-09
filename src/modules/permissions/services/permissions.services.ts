@@ -1,3 +1,6 @@
+// ==================== SERVICIO DE PERMISOS (plantilla generada) ====================
+// Apunta a {API}/permissions/*, rutas que la API administrativa no publica actualmente.
+// Usa VITE_NEST_API_URL directamente en lugar de getApiUrl().
 import { useAuthStore } from "../../../modules/auth/store/useStoreAuth";
 import { Http as axios } from "../../../utils/http/http";
 //import axios from "axios";

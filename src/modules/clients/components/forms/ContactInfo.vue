@@ -85,6 +85,8 @@
   </v-card>
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE: ContactInfo ====================
+// Resumen del primer correo y teléfono del cliente.
 import { computed, ref } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
 

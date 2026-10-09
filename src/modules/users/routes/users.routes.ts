@@ -1,3 +1,5 @@
+// ==================== RUTAS DEL MÓDULO USERS ====================
+// /users/list y /users/table.
 export const UsersRouter = [
   {
     path: "/users/list",

@@ -20,6 +20,8 @@
 </template>
 <!-- ******************** JS ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: LocationsList (plantilla generada) ====================
+// Reenvía eventos de edición/desactivación y el cambio de página.
 import { EmitInterface } from "../../../interfaces/Emit.interface";
 
 

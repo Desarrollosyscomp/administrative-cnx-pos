@@ -1,3 +1,5 @@
+// ==================== ESQUEMAS YUP DEL FORMULARIO DE CLIENTE ====================
+// Tipos de documento DIAN 31 y 50 se tratan como empresa; el resto, como persona.
 import * as Yup from "yup";
 export const COMPANY_DIAN_IDS: Array<string> = ["50", "31"];
 export const isCompanyDocumentType = (documentType: string) => {

@@ -1,3 +1,5 @@
+// ==================== CONSTRUCCIÓN DE QUERY STRING ====================
+// Convierte un objeto en '?a=1&b=2'; los arreglos se envían separados por comas.
 export const buildQueryString = (params: any = {}) => {
   if (Object.keys(params).length === 0) {
     return "";

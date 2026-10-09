@@ -1,3 +1,8 @@
+// ==================== STORE: clients ====================
+// Estado central del módulo: listado y filtros, formulario de cliente (persistido en
+// localStorage como 'form' para conservar borradores), catálogos, servicios del sistema,
+// datos del tenant/Taxxa y del acceso a herramientas web.
+// Cada acción llama a ClientsService y devuelve { error, data } a los componentes.
 import { defineStore } from "pinia";
 import { TTaxSchema } from "../interfaces/tax-schema.type";
 import { TFiscalObligation } from "../interfaces/fiscal-obligation.type";
@@ -93,10 +98,12 @@ export const useClientsStore: any = defineStore({
   }),
 
   actions: {
+    // -------------------- Abre o cierra el diálogo activo --------------------
     async toogleDialog() {
       this.openDialog = !this.openDialog;
     },
 
+    // -------------------- Limpia el formulario de cliente --------------------
     initialiceForm() {
       this.form = {
         user_warehouse: "0",
@@ -121,6 +128,7 @@ export const useClientsStore: any = defineStore({
         neighborhood_id: 0,
       };
     },
+    // -------------------- Carga los catálogos del formulario --------------------
     async loadInitialData() {
       const { taxSchemas, fiscalObligations, documentTypes, regimes } =
         await this.getInitialData();
@@ -148,6 +156,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Nombre visible del cliente (persona o empresa) --------------------
     getFullName() {
       return `${this.form.first_name ?? ""} 
       ${this.form.second_name ?? ""} 
@@ -196,6 +205,7 @@ export const useClientsStore: any = defineStore({
       return `${res?.name}`;
     },
 
+    // -------------------- Convierte el formulario al DTO de la API y crea el cliente --------------------
     async addClient(data: any) {
       const country_dian_id = this.selectedCountry?.dian_id;
       const department_dian_id = this.selectedDepartment?.dian_id;
@@ -247,6 +257,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Subconjuntos del formulario usados por cada validación por pasos --------------------
     getFiscalInfoForm() {
       return {
         tax_schema: this.form.tax_schema_dian_id,
@@ -339,6 +350,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Consulta una página de clientes --------------------
     async getPaginatedClients() {
       try {
         let response = await ClientsService.getPaginateClients(
@@ -367,6 +379,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Actualiza la lista con la página y filtros actuales --------------------
     async loadPaginatedList() {
       let response: any = await this.getPaginatedClients();
       this.list = response.list;
@@ -378,6 +391,7 @@ export const useClientsStore: any = defineStore({
       };
     },
 
+    // -------------------- Detalle de un cliente --------------------
     async getOneClient(id: string) {
       let response = await ClientsService.getClientById(id);
       if (response.status == 200) {
@@ -393,6 +407,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Alterna el estado activo del cliente --------------------
     async delete(client_id: number) {
       let is_active = !this.selectedItem?.is_active;
       let response = await ClientsService.deleteClient(client_id, is_active);
@@ -410,6 +425,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Actualiza el cliente --------------------
     async edit(id: string, data: any) {
       const financial_activities_dian_ids =
         this.selectedFinancialActivities.map((financialActivity) => {
@@ -460,6 +476,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Servicios contratables (paginados) --------------------
     async loadSystemServices() {
       let response = await ClientsService.getPaginatedSystemServices(
         this.system_services_paginator.page,
@@ -488,6 +505,7 @@ export const useClientsStore: any = defineStore({
         return { error: true };
       }
     },
+    // -------------------- Servicios asignados al cliente --------------------
     async loadClientSystemServices(id: string) {
       let response = await ClientsService.getClientSystemServices(id);
       if (response.status == 200) {
@@ -501,6 +519,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Tenant y credenciales Taxxa del cliente --------------------
     async loadTenantDetails(id: string) {
       let response = await ClientsService.getTenantInfo(+id);
       if (response.status == 200) {
@@ -508,6 +527,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Registra credenciales Taxxa --------------------
     async saveTaxxaInfo(data: any) {
       let response = await ClientsService.saveTaxxaInfo(
         this.selectedItem.id,
@@ -532,6 +552,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Crea el esquema/tenant del cliente en el POS --------------------
     async createSchema() {
       let response = await ClientsService.createClientSchema(
         this.selectedItem.id
@@ -555,6 +576,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Actualiza credenciales Taxxa --------------------
     async editCredentials(id: string, data: TCredentials) {
       let response = await ClientsService.editCredentials(+id, {
         email: data.email,
@@ -575,6 +597,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Crea la licencia del POS --------------------
     async createLicense(data: any) {
       let response = await ClientsService.createLicense(data);
       if (response.status == 201) {
@@ -589,6 +612,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Licencia activa del POS --------------------
     async getLicense(tenant_id: number) {
       let response = await ClientsService.getLicense(tenant_id);
       if (response.status == 201) {
@@ -603,6 +627,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Crea el usuario del web reporter --------------------
     async createAuthWebUtilities(data: any) {
       let response = await ClientsService.createAuthWebUtilities({
         client_id: this.selectedItem.id,
@@ -623,6 +648,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Registra la base MySQL del web reporter --------------------
     async sendDatabaseName(data: any) {
       let response = await ClientsService.sendDatabaseName({
         client_id: this.selectedItem.id,
@@ -642,6 +668,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Carga el usuario web del cliente --------------------
     async setAuthWebUtilities(client_id: number) {
       let response = await ClientsService.getAuthWebUtilities(client_id);
       if (response.status == 201) {
@@ -657,6 +684,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Carga la base web del cliente --------------------
     async setDatabaseWebUtilities(client_id: number) {
       let response = await ClientsService.getDatabaseWebUtilities(client_id);
       if (response.status == 201) {
@@ -733,6 +761,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Activa o desactiva el usuario web --------------------
     async inactiveWebUtilities(is_active: boolean) {
       let response = await ClientsService.inactiveWebUtilities(
         this.selectedItem.id,
@@ -768,6 +797,7 @@ export const useClientsStore: any = defineStore({
       }
     },
 
+    // -------------------- Fija las fechas de la licencia web --------------------
     async addLicenseWebUtilities(data: any) {
       console.log(data);
       let response = await ClientsService.createLicenseWebUtilities({
@@ -787,6 +817,7 @@ export const useClientsStore: any = defineStore({
         };
       }
     },
+    // -------------------- Licencia web de la base --------------------
     async getLicenseWebUtilities(database_id: number) {
       console.log(database_id);
       let response = await ClientsService.getLicenseWebUtilities(database_id);

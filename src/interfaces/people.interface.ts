@@ -1,3 +1,4 @@
+// ==================== INTERFAZ: PersonInterface ====================
 // import { AddressInterface } from "./address.interface";
 import { TEmail } from "./email.interface";
 import { Identification } from "./identification-types.interface";

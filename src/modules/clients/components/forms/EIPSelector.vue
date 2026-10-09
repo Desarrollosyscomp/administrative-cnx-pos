@@ -36,6 +36,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: EIPSelector ====================
+// Selector de proveedor de facturación electrónica.
 // import { computed, inject, onMounted, reactive, ref } from "vue-demi";
 import { useClientsStore } from "../../store/useClientsStore";
 import { onMounted } from "vue";

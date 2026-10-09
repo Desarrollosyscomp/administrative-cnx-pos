@@ -83,6 +83,7 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: LocationsTable (plantilla generada) ====================
 import { useLocationsStore } from "../stores/locations.store";
 
 const locationsStore = useLocationsStore();

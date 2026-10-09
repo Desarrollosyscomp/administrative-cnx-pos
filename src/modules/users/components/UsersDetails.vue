@@ -16,6 +16,7 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup>
+// ==================== COMPONENTE: UsersDetails (plantilla generada, sin uso) ====================
 import { useUsersStore } from "../stores/index";
 
 const usersStore = useUsersStore();

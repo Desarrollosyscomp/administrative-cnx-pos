@@ -96,6 +96,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersSearcher ====================
+// Búsqueda avanzada de usuarios.
 import { reactive, ref } from "vue-demi";
 import { useUsersStore } from "../stores/users.store";
 // import * as Yup from "yup";

@@ -1,0 +1,62 @@
+%% ==================== MAPA DE FUNCIONES DEL FRONT ADMINISTRATIVO ====================
+%% Proyecto: administrative-cnx-pos
+%% Para cada ruta: vista → acciones del store → endpoint de la API que se invoca.
+
+flowchart TB
+
+    %% ==================== AUTH ====================
+    subgraph AUTH["Autenticación"]
+        direction LR
+        R_LOGIN["/login<br/>PageLogin → LoginForm"] --> A_LOGIN["authStore.login"] --> E_LOGIN["POST /auth/login"]
+        A_LOGOUT["authStore.logout"] --> E_LOGOUT["limpia localStorage y va a /login"]
+    end
+
+    %% ==================== HOME ====================
+    subgraph HOME["Inicio"]
+        direction LR
+        R_HOME["/home<br/>HelloWorld"] --> H_BTN["Crear usuario / Crear cliente"]
+    end
+
+    %% ==================== USERS ====================
+    subgraph USERS["Usuarios administrativos"]
+        direction LR
+        R_USERS["/users/list<br/>UsersIndex"] --> US_LIST["usersStore.loadPaginatedList"] --> E_U_LIST["GET /users/find/pagination"]
+        R_USERS --> US_ADD["UsersForm → usersStore.add"] --> E_U_ADD["POST /users"]
+        R_USERS --> US_NAME["UsersEdit → usersStore.updateUsername"] --> E_U_NAME["PATCH /users/update-username/:id"]
+        R_USERS --> US_PASS["UsersEdit → usersStore.updatePassword"] --> E_U_PASS["PATCH /users/update-password/:id"]
+        R_USERS --> US_DEL["usersStore.delete"] --> E_U_DEL["DELETE /users/:id"]
+    end
+
+    %% ==================== CLIENTS ====================
+    subgraph CLIENTS["Clientes"]
+        direction LR
+        R_CLIST["/client/list<br/>ClientsMain + ClientTable"] --> CS_LIST["clientsStore.loadPaginatedList"] --> E_C_LIST["GET /clients/find/pagination"]
+        R_CLIST --> CS_DEL["clientsStore.delete"] --> E_C_DEL["DELETE /clients/:id"]
+
+        R_CFORM["/client/form · /client/form/:id<br/>ClientsMainForm + Form*Info"] --> CS_INIT["loadInitialData"] --> E_C_INIT["GET /clients/form/initial-data"]
+        R_CFORM --> CS_LOC["LocationsComponent"] --> E_C_LOC["GET /clients/get/countries<br/>/get-departments/:id · /get-municipalities/:id"]
+        R_CFORM --> CS_ACT["ClientCommercialActivities"] --> E_C_ACT["GET /clients/financial-activities/pagination"]
+        R_CFORM --> CS_SAVE["addClient · edit"] --> E_C_SAVE["POST /clients · PUT /clients/:id"]
+
+        R_CDET["/client/:id/details<br/>ClientsDetails"] --> CS_TEN["loadTenantDetails"] --> E_C_TEN["GET /clients/:id/tenant-info"]
+        R_CDET --> CS_TAXXA["saveTaxxaInfo · editCredentials"] --> E_C_TAXXA["POST · PUT /clients/:id/taxxa-credentials"]
+        R_CDET --> CS_SCHEMA["createSchema"] --> E_C_SCHEMA["POST /clients/:id/create-schema"]
+        R_CDET --> CS_LIC["createLicense · getLicense"] --> E_C_LIC["POST /licenses · GET /licenses/find-last/:tenant_id"]
+
+        R_CDET --> W_TAB["Pestaña Herramientas web<br/>ClientsDetailsWebUtilities"]
+        W_TAB --> W_AUTH["create/edit/resetPassword/inactiveWebUtilities"] --> E_W_AUTH["/conxpos-utilities/auth/*"]
+        W_TAB --> W_DB["sendDatabaseName · editDatabaseName ·<br/>inactiveWebUtilitiesDatabase"] --> E_W_DB["/conxpos-utilities/database/*"]
+        R_CDET --> W_LIC["addLicenseWebUtilities · getLicenseWebUtilities"] --> E_W_LIC["POST /conxpos-utilities/clients/license<br/>GET /conxpos-utilities/find-last/:database_id"]
+
+        R_CPERM["/client/:id/permissions<br/>PermissionsList"] --> CS_SRV["loadSystemServices · loadClientSystemServices"] --> E_C_SRV["GET /clients/paginate/services<br/>GET /clients/:id/system-services"]
+        R_CPERM --> CS_SYNC["syncSystemServices"] --> E_C_SYNC["POST /clients/:id/attach-system-services"]
+    end
+
+    %% ==================== PERMISSIONS ====================
+    subgraph PERMS["Permisos"]
+        direction LR
+        R_PERM["/permissions/list<br/>PermissionsIndex → PermissionsTable"] --> P_MOCK["datos de ejemplo en el componente<br/>(sin llamada a la API)"]
+    end
+
+    %% Enlaces invisibles: apilan los módulos en vertical
+    AUTH ~~~ HOME ~~~ USERS ~~~ CLIENTS ~~~ PERMS

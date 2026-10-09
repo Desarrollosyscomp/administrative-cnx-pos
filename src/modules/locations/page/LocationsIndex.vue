@@ -65,6 +65,8 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== VISTA: LocationsIndex (/locations/add — ruta no registrada en el router) ====================
+// Selectores encadenados de ubicación. Llama a acciones de creación/edición que el store no implementa.
 import { onMounted, reactive, ref, watch } from "vue-demi";
 
 import LocationsSelect from "../components/LocationsSelect.vue";

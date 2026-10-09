@@ -161,6 +161,8 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== VISTA: PermissionsList (/client/:id/permissions) ====================
+// Servicios del sistema contratables; permite marcarlos y sincronizarlos con el tenant del cliente.
 import { ref, onMounted, inject, computed } from "vue";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import { useClientsStore } from "../store/useClientsStore";
@@ -198,6 +200,7 @@ const loadSystemServices = async () => {
   await clientsStore.loadSystemServices();
 };
 
+// -------------------- Envía los servicios seleccionados (reemplaza los actuales) --------------------
 const syncSystemServices = async () => {
   const selected_system_services_ids = clientsStore.client_system_services.map(
     (system_service: any) => system_service.id
@@ -233,6 +236,7 @@ const loadClientSystemServices = async () => {
   await clientsStore.loadClientSystemServices(route.params.id);
 };
 
+// -------------------- Indica si el cliente ya tiene el servicio --------------------
 const clientHasSystemService = (system_service_id: number) => {
   return clientsStore.client_system_services.some(
     (system_service: any) => system_service.id == system_service_id

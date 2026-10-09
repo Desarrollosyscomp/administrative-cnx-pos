@@ -518,6 +518,10 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== VISTA: ClientsDetails (/client/:id/details) ====================
+// Detalle del cliente en dos pestañas:
+// 1) Proveedor de facturación electrónica: credenciales Taxxa, creación del esquema y licencia del POS.
+// 2) Herramientas web: componente ClientsDetailsWebUtilities y licencia del web reporter.
 import { useRoute } from "vue-router";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import router from "../../../router";
@@ -708,6 +712,7 @@ const setForm = () => {
   formDataTaxxa.login_url = credentialsObject.value?.taxxaTenant?.login_url;
 };
 
+// -------------------- Crea o actualiza las credenciales Taxxa --------------------
 const submitForm = async () => {
   await validationSchema.validate(formDataTaxxa);
   const addMode = clientsStore.moduleMode == "add";
@@ -793,6 +798,7 @@ const goToEdit = () => {
   router.push("/client/form/" + route.params.id);
 };
 
+// -------------------- Confirma y alterna el estado activo del cliente --------------------
 const unableItem = (item: TThirdParty) => {
   const action = !item?.is_active ? "Restaurar" : "Desactivar";
   const successMessage = !item?.is_active
@@ -842,6 +848,7 @@ const personOrCompany = () => {
   }
 };
 
+// -------------------- Confirma y crea el esquema/tenant del cliente --------------------
 const openCreateSchemaSwal = async () => {
   const { value: username, isConfirmed } = await swal.fire({
     title: "Crear base de datos",
@@ -944,6 +951,7 @@ let clickLicenseWebUtilities = ref<boolean>(false);
 let formOriginLicense = ref<string>("");
 let formOriginLicenseWebUtilities = ref<string>("");
 
+// -------------------- Crea la licencia del POS para el tenant --------------------
 const sendLicense = async () => {
   try {
     await validationSchemaLicense.validate(licenseForm);
@@ -985,6 +993,7 @@ const sendLicense = async () => {
     showValidationErrors.value = true;
   }
 };
+// -------------------- Carga la licencia del POS (si el cliente no tiene tenant el id es undefined) --------------------
 const setLicense = async () => {
   const response = await clientsStore.getLicense(
     clientsStore.selectedItemTaxxaInfo?.data?.tenantWithClient.id
@@ -1010,6 +1019,7 @@ watch(message, () => {
 });
 const disbledFormWebUtilities = ref(false);
 const idDatabaseWebUtilities = ref();
+// -------------------- Obtiene el id de la base web del cliente --------------------
 const setDatabaseId = async () => {
   const response = await clientsStore.setDatabaseWebUtilities(route.params.id);
   if (!response.data) return;
@@ -1021,6 +1031,7 @@ const setDatabaseId = async () => {
   console.log(idDatabaseWebUtilities.value);
 };
 
+// -------------------- Guarda las fechas de la licencia web --------------------
 const submitLicenceWebUtilities = async () => {
   try {
     await validationSchemaLicense.validate(licenceWebUtilities);
@@ -1072,6 +1083,7 @@ const parseDate = (date: string | null): Date | null => {
     Number(day)
   );
 };
+// -------------------- Carga la licencia web (sin base registrada el id es undefined y la API responde 400) --------------------
 const setLicenseWebUtilities = async () => {
   const response = await clientsStore.getLicenseWebUtilities(
     idDatabaseWebUtilities.value
@@ -1089,6 +1101,7 @@ const isFormChangedLicenseWebUtilities = computed((): boolean => {
   return formOriginLicenseWebUtilities.value !== value;
 });
 
+// -------------------- Carga inicial de tenant, licencias, proveedores y cliente --------------------
 onMounted(async () => {
   await loadTenantDetails();
   await setLicense();

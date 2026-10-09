@@ -1,3 +1,5 @@
+// ==================== INTERFACES DE UBICACIÓN ====================
+// País, departamento, municipio y barrio con su código DIAN.
 export interface CountryInterface {
     id:        number;
     name:      string;

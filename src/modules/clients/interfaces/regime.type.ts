@@ -1,3 +1,4 @@
+// ==================== TIPO: TRegime ====================
 export type TRegime = {
   id?: number;
   name: string;

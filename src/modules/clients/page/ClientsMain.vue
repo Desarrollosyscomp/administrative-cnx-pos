@@ -98,6 +98,9 @@
 </template>
 
 <script setup lang="ts">
+// ==================== VISTA: ClientsMain (/client/list) ====================
+// Listado paginado de clientes con búsqueda, filtro por estado de licencia
+// (por vencer, vencida, con herramientas web) y activación/inactivación.
 // import { EmitInterface } from "../../../interfaces/Emit.interface";
 import { inject, onBeforeMount, onMounted, ref, watch } from "vue";
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
@@ -136,6 +139,7 @@ const onEdit = (emitted: EmitInterface) => {
   clientsStore.selectedItem = emitted.data;
 };
 
+// -------------------- Confirma y alterna el estado activo del cliente --------------------
 const unableItem = (emitted: EmitInterface) => {
   const action = !emitted.data.item.is_active ? "Restaurar" : "Desactivar";
   const successMessage = !emitted.data.item.is_active
@@ -176,6 +180,7 @@ const unableItem = (emitted: EmitInterface) => {
     });
 };
 
+// -------------------- Búsqueda por nombre o documento --------------------
 const simpleSearch = async () => {
   clientsStore.page = 1;
   clientsStore.is_active = switchValue.value;
@@ -197,6 +202,7 @@ const onCloseDialog = async () => {
 
 const selectFilter = ref(null)
 
+// -------------------- Aplica el filtro client_status y recarga desde la primera página --------------------
 const filterSubmit = async () => {
   clientsStore.page = 1;
   clientsStore.client_status = selectFilter.value

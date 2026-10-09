@@ -58,6 +58,7 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: PermissionsCards (plantilla generada) ====================
 import { usePermissionsStore } from "../stores/permissions.store";
 import { PermissionsInterface } from "../interfaces/permissions.interface";
 

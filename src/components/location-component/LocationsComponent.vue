@@ -57,6 +57,9 @@
 </template>
 <!-- ******************** JS ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: LocationsComponent ====================
+// Selectores encadenados país → departamento → municipio y campo de dirección.
+// Emite onUpdate (ubicación) y on-update-address (dirección).
 import { onMounted, reactive, ref, watch } from "vue";
 import LocationsSelect from "../../modules/locations/components/LocationsSelect.vue"; 
 import { useLocationsComponentStore } from "./stores/locations-component.store"; 
@@ -154,6 +157,7 @@ const loadMunicipalities = async (department_id: number) => {
 //   neighborhoods.value = await locationsComponentStore.getNeighborhoods(municipality_id);
 // };
 
+// -------------------- Al cambiar el país se reinician departamento y municipio --------------------
 const onUpdatedCountry = async (emitted: EmitInterface) => {
   defaultDepartmentId.value = 0;
   defaultMunicipalityId.value = 0;
@@ -173,6 +177,7 @@ const onUpdatedCountry = async (emitted: EmitInterface) => {
 
 };
 
+// -------------------- Al cambiar el departamento se reinicia el municipio --------------------
 const onUpdateDepartment = async (emitted: EmitInterface) => {
   defaultMunicipalityId.value = 0;
   // defaultNeighborhoodId.value = 0;
@@ -224,6 +229,7 @@ const emitAddress = () => {
   });
 };
 
+// -------------------- Carga los valores iniciales (edición de un cliente existente) --------------------
 const setForm = () => {
   defaultCountryId.value = props.defaultSelected.country?.id ?? 0;
   defaultDepartmentId.value = props.defaultSelected.department?.id ?? 0;

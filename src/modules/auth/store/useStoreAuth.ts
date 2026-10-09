@@ -1,3 +1,6 @@
+// ==================== STORE: auth ====================
+// Sesión del usuario guardada en localStorage ('auth'): token, nombre y expiración.
+// Nota: exp llega en milisegundos y authCheck lo compara con segundos.
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 import { loginService } from "../services/Auth.services";
@@ -25,6 +28,7 @@ export const useAuthStore: any = defineStore({
   }),
 
   actions: {
+    // -------------------- Limpia la sesión y vuelve al login --------------------
     logout() {
       this.user = {
         token: "",
@@ -35,6 +39,7 @@ export const useAuthStore: any = defineStore({
       window.location.assign("/login");
     },
 
+    // -------------------- Inicia sesión y decodifica el JWT para guardar usuario y expiración --------------------
     async login(data: loginType) {
         const response = await loginService.logIn({
           username: data.user,
@@ -59,6 +64,7 @@ export const useAuthStore: any = defineStore({
         }
     },
 
+    // -------------------- Verifica si la sesión guardada sigue vigente --------------------
     authCheck() {
       if (this.user.token.length > 1) {
         var current_time = new Date().getTime() / 1000;

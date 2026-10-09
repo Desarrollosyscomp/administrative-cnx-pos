@@ -1,3 +1,5 @@
+// ==================== INTERFACES DEL CLIENTE HTTP ====================
+// Mensajes personalizados por código y códigos excluidos de notificación.
 export interface HttpErrors {
   code: number;
   message: string;

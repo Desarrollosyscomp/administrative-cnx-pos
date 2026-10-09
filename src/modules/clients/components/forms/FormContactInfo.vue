@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== FORMULARIO: FormContactInfo ====================
+// Sección de teléfonos y correos.
 import SyncThirdPartiesContact from '../SyncThirdPartiesContact.vue';
 import { EmitInterface } from '../../../../interfaces/Emit.interface';
 import { useClientsStore } from '../../store/useClientsStore';

@@ -1,3 +1,5 @@
+// ==================== STORE GLOBAL: app-store ====================
+// Estado de la pantalla de carga; afterLoading la muestra mientras se ejecuta una función.
 import { defineStore } from "pinia";
 // import { PermissionsService } from "../services/permissions.service";
 
@@ -8,6 +10,7 @@ export const useAppStore: any = defineStore({
     showSplashScreen: false,
   }),
   actions: {
+    // -------------------- Muestra la pantalla de carga mientras se ejecuta f --------------------
     async afterLoading(f: Function) {
       this.showLoadingScreen = true;
       await f()

@@ -21,6 +21,8 @@
 </template>
 <!-- ******************** JS ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersList ====================
+// Contenedor de la tabla/tarjetas; reenvía eventos y gestiona el cambio de página.
 import EmptyLottie from "../../../assets/lotties/empty.json";
 
 import { EmitInterface } from "../../../interfaces/Emit.interface";

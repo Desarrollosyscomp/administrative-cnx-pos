@@ -32,6 +32,8 @@
     </v-row>
 </template>
 <script setup lang="ts">
+// ==================== FORMULARIO: FormCompanyInfo ====================
+// Datos de la empresa.
 
 
 </script>

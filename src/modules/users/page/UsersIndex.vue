@@ -62,6 +62,9 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== VISTA: UsersIndex (/users/list) ====================
+// Listado de usuarios administrativos con búsqueda, filtro de estado y diálogos
+// de creación, edición y activación/inactivación.
 import { ref, onMounted, inject, watch } from "vue-demi";
 import UsersForm from "../components/UsersForm.vue";
 import UsersList from "../components/UsersList.vue";
@@ -78,11 +81,13 @@ const swal: any = inject("swal");
 
 let switchValue = ref(true);
 
+// -------------------- Abre el diálogo en modo creación --------------------
 const openModalCreateUser = () => {
   usersStore.toogleDialog();
   usersStore.moduleMode = "add";
 };
 
+// -------------------- Abre el diálogo en modo edición --------------------
 const onEdit = (emitted: EmitInterface) => {
   usersStore.moduleMode = "edit";
   usersStore.selectedItem = emitted.data.users;
@@ -101,6 +106,7 @@ const changeValue = (value: boolean) => {
   usersStore.selectedItem = {};
 };
 
+// -------------------- Confirma y alterna el estado activo del usuario --------------------
 const unableItem = (emitted: EmitInterface) => {
   const action = !emitted.data.item.is_active ? "Restaurar" : "Desactivar";
   const successMessage = !emitted.data.item.is_active
@@ -141,6 +147,7 @@ const unableItem = (emitted: EmitInterface) => {
     });
 };
 
+// -------------------- Búsqueda por nombre desde la primera página --------------------
 const simpleSearch = async () => {
   usersStore.page = 1;
   usersStore.is_active = switchValue.value;

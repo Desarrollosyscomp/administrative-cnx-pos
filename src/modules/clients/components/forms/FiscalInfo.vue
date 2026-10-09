@@ -33,6 +33,8 @@
   </v-card>
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE: FiscalInfo ====================
+// Resumen del esquema tributario y la obligación fiscal.
 // import { onMounted, ref } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
 

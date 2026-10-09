@@ -51,6 +51,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== LAYOUT PRINCIPAL ====================
+// Barra superior y menú lateral de navegación con cierre de sesión. Envuelve las vistas privadas.
 import { ref } from 'vue';
 import router from '../router';
 import { useAuthStore } from '../modules/auth/store/useStoreAuth';

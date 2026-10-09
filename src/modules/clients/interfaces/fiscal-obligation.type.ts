@@ -1,3 +1,4 @@
+// ==================== TIPO: TFiscalObligation ====================
 export type TFiscalObligation = {
   id?: number;
   dian_id: string;

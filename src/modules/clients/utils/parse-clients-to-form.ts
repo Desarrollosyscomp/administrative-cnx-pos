@@ -1,3 +1,5 @@
+// ==================== CONVERSIÓN CLIENTE → FORMULARIO ====================
+// Transforma la respuesta de GET /clients/:id en la estructura del formulario de edición.
 import { TEmail } from "../../../interfaces/email.interface";
 import { TPhone } from "../../../interfaces/phone.interface";
 import { TFinancialActivities } from "../interfaces/financial-activity.type";

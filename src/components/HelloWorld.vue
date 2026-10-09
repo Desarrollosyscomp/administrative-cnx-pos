@@ -39,12 +39,15 @@
 </template>
 
 <script setup lang="ts">
+// ==================== VISTA: Inicio (/home) ====================
+// Bienvenida con accesos rápidos para crear usuario o cliente.
 import WelcomeLottie from "../assets/lotties/welcome.json";
 import Layout from "../Layouts/LayoutOne.vue";
 import router from "../router";
 import { useUsersStore } from "../modules/users/stores/users.store";
 const usersStore = useUsersStore();
 
+// -------------------- Abre la lista de usuarios con el formulario de creación --------------------
 const openModalCreateUser = () => {
   router.push("/users/list");
   usersStore.toogleDialog()

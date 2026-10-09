@@ -17,6 +17,9 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script lang="ts" setup>
+// ==================== COMPONENTE: LocationsSelect ====================
+// Selector de una ubicación (país, departamento o municipio). Emite update:modelValue
+// con el objeto completo de la ubicación elegida.
 
 import { ref, onMounted } from "vue";
 const props = defineProps({

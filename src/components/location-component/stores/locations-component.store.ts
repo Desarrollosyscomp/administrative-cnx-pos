@@ -1,3 +1,5 @@
+// ==================== STORE: locations-component-store ====================
+// Carga países, departamentos, municipios y barrios desde la API (/clients/get...).
 import { defineStore } from "pinia";
 
 import { LocationsService } from "../../../modules/locations/services/locations.services"; 

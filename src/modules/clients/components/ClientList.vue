@@ -15,6 +15,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== COMPONENTE: ClientList ====================
+// Contenedor de la tabla de clientes; reenvía acciones y cambio de página.
 import { EmitInterface } from '../../../interfaces/Emit.interface';
 import { useClientsStore } from '../store/useClientsStore';
 import ClientsCards from './ClientsCards.vue';

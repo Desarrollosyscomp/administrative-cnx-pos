@@ -4,6 +4,8 @@
   <router-view />
 </template>
 <script setup lang="ts">
+// ==================== COMPONENTE RAÍZ: App ====================
+// Muestra la vista activa del router y las pantallas de carga; inyecta SweetAlert2 como 'swal'.
 import Swal from "sweetalert2";
 import { provide } from "vue";
 import { useAppStore } from "./stores/app-store";

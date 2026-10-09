@@ -1,3 +1,4 @@
+// ==================== INTERFACES DE PERMISOS ====================
 export interface PermissionsInterface {
     module_id: number,
     action_id: number

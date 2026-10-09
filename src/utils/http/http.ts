@@ -1,8 +1,13 @@
+// ==================== CLIENTE HTTP (envoltorio de axios) ====================
+// Métodos post, patch, put, delete y get. Agregan el query string y, ante un error,
+// muestran la notificación y devuelven { status, data } en lugar de lanzar la excepción.
+// Cada servicio de módulo arma la URL con getApiUrl() y el encabezado Authorization.
 import axios, { AxiosRequestConfig } from "axios";
 import { showNotification } from "./http-notifications";
 import { HttpErrors, HttpErrorsAndExceptions } from "./interfaces";
 import { buildQueryString } from "./helpers"; 
 export const Http = {
+  // -------------------- POST --------------------
   async post(
     params: {
       url: string;
@@ -36,6 +41,7 @@ export const Http = {
       };
     }
   },
+  // -------------------- PATCH --------------------
   async patch(
     params: {
       url: string;
@@ -68,6 +74,7 @@ export const Http = {
       };
     }
   },
+  // -------------------- PUT --------------------
   async put(
     params: {
       url: string;
@@ -100,6 +107,7 @@ export const Http = {
       };
     }
   },
+  // -------------------- DELETE --------------------
   async delete(
     params: {
       url: string;
@@ -130,6 +138,7 @@ export const Http = {
       };
     }
   },
+  // -------------------- GET --------------------
   async get(
     params: {
       url: string;

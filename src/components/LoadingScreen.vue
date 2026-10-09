@@ -1,3 +1,5 @@
+<!-- COMPONENTE: LoadingScreen -->
+<!-- Pantalla de carga mostrada mientras app-store.showLoadingScreen es verdadero. -->
 <template>
   <div id="loading-screen-progress" align="center">
     <v-progress-circular

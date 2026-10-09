@@ -1,4 +1,7 @@
 <script setup>
+// ==================== COMPONENTE GLOBAL: Paginator ====================
+// Botones de paginación; calcula cuántos mostrar a cada lado de la página actual
+// y emite onChangePage con la página elegida.
 import { computed, onMounted, reactive, ref, watch } from "vue-demi";
 
 const props = defineProps({
@@ -61,6 +64,7 @@ const createSideButtonArray = (buttons_count, invert) => {
   return arr;
 };
 
+// -------------------- Reparte los botones visibles a izquierda y derecha de la página actual --------------------
 const calculateSideButtons = () => {
   let more_pages_than_buttons = props.maxButtons < props.totalPages;
   if (more_pages_than_buttons) {
@@ -92,6 +96,7 @@ const calculateSideButtons = () => {
   }
 };
 
+// -------------------- Notifica al padre el cambio de página --------------------
 const onChangePage = (page) => {
   emit("onChangePage", {
     name: "Paginator.onChangePage",

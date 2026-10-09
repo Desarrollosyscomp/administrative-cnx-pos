@@ -48,6 +48,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== FORMULARIO: FormFiscalInfo ====================
+// Sección de esquema tributario y obligación fiscal (catálogos DIAN).
 import { fiscalValidations } from "../../validations/validations";
 import {  computed, inject,  onMounted,  reactive, ref, } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";

@@ -1,3 +1,4 @@
+// ==================== RUTAS DEL MÓDULO LOCATIONS (no incluidas en router/index.ts) ====================
 export const LocationsRouter = [
   {
     path: "/locations/add",

@@ -148,6 +148,9 @@
 </template>
 
 <script setup lang="ts">
+// ==================== FORMULARIO: FormMainInfo ====================
+// Sección principal: tipo y número de documento, régimen y nombres (persona)
+// o razón social (empresa, tipos de documento DIAN 31 y 50).
 import { inject, onMounted, reactive, computed, ref } from "vue";
 import { useClientsStore } from "../../store/useClientsStore";
 import {

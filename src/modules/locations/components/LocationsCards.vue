@@ -58,6 +58,7 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: LocationsCards (plantilla generada, sin lógica) ====================
 import { useLocationsStore } from "../stores/locations.store";
 // import { LocationsInterface } from "../interfaces/locations.interface";
 

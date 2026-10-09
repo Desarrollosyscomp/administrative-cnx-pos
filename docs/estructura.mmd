@@ -1,0 +1,41 @@
+%% ==================== ESTRUCTURA DEL PROYECTO ====================
+%% Proyecto: administrative-cnx-pos
+%% Carpetas principales y su responsabilidad. Cada módulo de src/modules sigue el patrón:
+%% page/ (vista de ruta) → components/ → store(s)/ (Pinia) → services/ (API) → interfaces/ → route(s)/
+
+flowchart LR
+    ROOT["administrative-cnx-pos/"]
+
+    %% ==================== RAÍZ ====================
+    ROOT --> SRC["src/"]
+    ROOT --> GEN["generator/<br/>generate.js + plantillas basic-crud<br/>(npm run generate)"]
+    ROOT --> PUB["public/<br/>recursos estáticos"]
+    ROOT --> DOCS["docs/<br/>documentación y diagramas"]
+    ROOT --> CFG["vite.config.ts, tsconfig*.json,<br/>package.json, .env"]
+
+    %% ==================== SRC ====================
+    SRC --> MAIN["main.ts · App.vue · style.css"]
+    SRC --> ROUTER["router/<br/>index.ts (guard), helpers.ts,<br/>aditional-routes.ts"]
+    SRC --> LAYOUT["Layouts/<br/>LayoutOne.vue"]
+    SRC --> STORES["stores/<br/>app-store.ts"]
+    SRC --> COMP["components/<br/>Paginator, BigButton, HelloWorld (inicio),<br/>LoadingScreen, SplashScreen, NotFound,<br/>location-component/"]
+    SRC --> UTILS["utils/<br/>http/ (axios, URL, notificaciones),<br/>date/, app-helpers/"]
+    SRC --> IFACES["interfaces/<br/>tipos compartidos (persona, identificación,<br/>correo, teléfono, eventos)"]
+    SRC --> ASSETS["assets/<br/>imágenes y animaciones Lottie"]
+    SRC --> MODS["modules/"]
+
+    %% ==================== MÓDULOS ====================
+    MODS --> M_AUTH["auth/<br/>page, form, components,<br/>store (useStoreAuth), services, routes"]
+    MODS --> M_USERS["users/<br/>page, components, stores,<br/>services, interfaces, routes"]
+    MODS --> M_CLI["clients/"]
+    MODS --> M_PERM["permissions/<br/>maqueta con datos de ejemplo"]
+    MODS --> M_LOC["locations/<br/>servicio y selectores de ubicación<br/>(ruta propia no registrada)"]
+
+    M_CLI --> C_PAGE["page/ClientsMain.vue"]
+    M_CLI --> C_COMP["components/<br/>ClientTable, ClientsMainForm, ClientsDetails,<br/>ClientsDetailsWebUtilities, PermissionsList,<br/>ClientCommercialActivities, SyncThirdPartiesContact"]
+    M_CLI --> C_FORMS["components/forms/<br/>FormMainInfo, FormFiscalInfo, FormAddressInfo,<br/>FormContactInfo, TaxxaForm, EIPSelector, resúmenes"]
+    M_CLI --> C_STORE["store/useClientsStore.ts"]
+    M_CLI --> C_SVC["services/clients.service.ts"]
+    M_CLI --> C_VAL["validations/<br/>esquemas Yup y reglas adicionales"]
+    M_CLI --> C_UTIL["utils/<br/>parse-clients-to-form, parse-location"]
+    M_CLI --> C_ROUTE["route/router.ts"]

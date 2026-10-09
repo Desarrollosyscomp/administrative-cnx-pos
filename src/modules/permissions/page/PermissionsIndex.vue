@@ -28,6 +28,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== VISTA: PermissionsIndex (/permissions/list) ====================
+// Listado de permisos (datos de ejemplo).
 // import { ref, } from "vue-demi";
 // Components
 

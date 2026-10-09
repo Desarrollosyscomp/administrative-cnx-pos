@@ -36,6 +36,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: ClientsPermissions ====================
+// Vista de permisos del cliente (maqueta).
 import { ref } from "vue";
 import { useClientsStore } from "../store/useClientsStore"; 
 

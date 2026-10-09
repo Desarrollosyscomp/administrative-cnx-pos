@@ -1,3 +1,6 @@
+// ==================== RUTAS DEL MÓDULO CLIENTS ====================
+// /client/list (listado), /client/form y /client/form/:id (crear/editar),
+// /client/:id/permissions (servicios contratados) y /client/:id/details (detalle).
 export const ClientsRouter = [
   {
     path: "/client/list",

@@ -1,3 +1,5 @@
+<!-- COMPONENTE: SplashScreen -->
+<!-- Pantalla de bienvenida inicial. -->
 <template>
   <div id="loading-screen-progress" align="center">
     <v-img width="150px" src="src/assets/logos/logo.jpg"></v-img>

@@ -114,6 +114,9 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== VISTA: ClientsMainForm (/client/form y /client/form/:id) ====================
+// Formulario de cliente por secciones (principal, fiscal, ubicación, contacto, actividades).
+// Valida cada sección y crea o actualiza el cliente; avisa si hay un borrador guardado.
 import LayoutOne from "../../../Layouts/LayoutOne.vue";
 import FiscalInfo from "./forms/FiscalInfo.vue";
 import MainInfo from "./forms/MainInfo.vue";
@@ -159,6 +162,7 @@ const clientsStore = useClientsStore();
 // );
 
 const draftMode = ref(false);
+// -------------------- En edición carga el cliente y llena el formulario --------------------
 const loadThirdParty = async () => {
   let id = route.params.id;
   if (!id) return;
@@ -180,6 +184,7 @@ const loadThirdParty = async () => {
   }, 50);
 };
 
+// -------------------- Valida todas las secciones y guarda (POST o PUT) --------------------
 const submitTotalForm = async () => {
   try {
     clientsStore.isValidFormMainInfo = true;
@@ -273,6 +278,7 @@ const loadInitialData = async () => {
   await clientsStore.loadInitialData();
 };
 
+// -------------------- Detecta un borrador pendiente en localStorage --------------------
 const draftMessage = computed((): boolean => {
   return (
     clientsStore.form.first_name == "" &&

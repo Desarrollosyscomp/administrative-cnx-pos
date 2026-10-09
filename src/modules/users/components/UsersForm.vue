@@ -54,6 +54,8 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: UsersForm ====================
+// Diálogo de creación de usuario (nombre, contraseña de 6 a 20 caracteres y confirmación).
 import { computed, inject, onMounted, reactive, ref } from "vue-demi";
 import * as Yup from "yup";
 import { useUsersStore } from "../stores/users.store";
@@ -154,6 +156,7 @@ const setForm = () => {
   // formData.password = usersStore.selectedItem.password;
 };
 
+// -------------------- Valida y crea el usuario (POST /users) --------------------
 const submit = async () => {
   try {
     await validationSchema.validate(formData);

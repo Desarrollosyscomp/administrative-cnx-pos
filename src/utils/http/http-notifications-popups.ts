@@ -1,3 +1,5 @@
+// ==================== NOTIFICACIONES DE ERROR HTTP ====================
+// Mensajes emergentes (Notiflix) para 403, 409 y 401; fuera de desarrollo se antepone el código.
 import Notiflix from "notiflix/build/notiflix-aio";
 const defaultParams = {
   position: "right-bottom",

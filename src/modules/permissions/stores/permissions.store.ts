@@ -1,3 +1,5 @@
+// ==================== STORE: permissions-store (plantilla generada) ====================
+// Paginación y CRUD de permisos sobre PermissionsService.
 import { defineStore } from "pinia";
 import { PermissionsService } from "../services/permissions.services";
 import { PermissionsInterface } from "../interfaces/permissions.interface";

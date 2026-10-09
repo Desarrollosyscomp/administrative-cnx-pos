@@ -1,3 +1,5 @@
+// ==================== INTERFACES DE IDENTIFICACIÓN ====================
+// Documento, régimen y ubicación de una persona o empresa.
 import { TRegime } from "../modules/clients/interfaces/regime.type";
 import { CountryInterface, DepartmentInterface, MunicipalityInterface, NeighborhoodInterface } from "../modules/locations/interfaces/locations.interface";
 

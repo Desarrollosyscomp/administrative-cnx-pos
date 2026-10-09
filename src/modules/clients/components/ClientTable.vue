@@ -166,6 +166,8 @@
 </template>
 
 <script setup lang="ts">
+// ==================== COMPONENTE: ClientTable ====================
+// Tabla de clientes con estado calculado de licencia y accesos a detalle y edición.
 import { onMounted } from "vue";
 import router from "../../../router";
 import { useClientsStore } from "../store/useClientsStore";
@@ -231,6 +233,7 @@ const resetForm = () => {
   clientsStore.selectedNeighborhood = {};
 };
 
+// -------------------- Estado mostrado: Inactivo, Vencido, Por vencer (< 10 días) o Activo --------------------
 const changeState = (pendingDays: number, is_active: boolean, license: any) => {
   if (is_active == false) {
     return "Inactivo"
@@ -245,6 +248,7 @@ const changeState = (pendingDays: number, is_active: boolean, license: any) => {
   }
 }
 
+// -------------------- Color del estado --------------------
 const getColor = (pendingDays: number, is_active: boolean, license: any) => {
   const state = changeState(pendingDays, is_active, license);
   if (state === "Inactivo") return "#841811ff";

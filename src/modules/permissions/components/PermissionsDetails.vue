@@ -16,6 +16,7 @@
 
 <!-- ******************** JavaScript ******************** -->
 <script setup>
+// ==================== COMPONENTE: PermissionsDetails (plantilla generada, sin uso) ====================
 import { usePermissionsStore } from "../stores/index";
 
 const permissionsStore = usePermissionsStore();

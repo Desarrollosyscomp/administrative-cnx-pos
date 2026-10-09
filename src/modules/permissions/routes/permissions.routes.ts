@@ -1,3 +1,5 @@
+// ==================== RUTAS DEL MÓDULO PERMISSIONS ====================
+// /permissions/list y /permissions/table.
 export const PermissionsRouter = [
   {
     path: "/permissions/list",

@@ -1,5 +1,8 @@
+// ==================== AYUDANTES DEL ROUTER ====================
+// Deciden si una ruta se permite según el token y los módulos habilitados del usuario.
 import { additionalPrivateRoutes, notAuthRoutes } from "./aditional-routes";
 
+// -------------------- Rutas que no requieren validar permisos de módulo --------------------
 const isIgnoredRoute = (path: string, token: string) => {
   let aditionalRoutes: Array<any> = notAuthRoutes;
   if (token) {
@@ -15,6 +18,7 @@ const isIgnoredRoute = (path: string, token: string) => {
   return false;
 };
 
+// -------------------- Resultado: 'next' (permitir), 'out' (al login) o 'forbidden' (sin acceso) --------------------
 const verifyRouteAccess = (
   authStore: any,
   toPathSegments: any

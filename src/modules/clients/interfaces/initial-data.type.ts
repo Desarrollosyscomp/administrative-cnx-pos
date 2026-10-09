@@ -1,3 +1,5 @@
+// ==================== TIPO: TInitialData ====================
+// Catálogos que carga el formulario de cliente.
 import { IdentificationTypeInterface } from "../../../interfaces/identification-types.interface";
 import { TFinancialActivities } from "./financial-activity.type";
 import { TFiscalObligation } from "./fiscal-obligation.type";

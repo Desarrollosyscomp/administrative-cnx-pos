@@ -1,0 +1,68 @@
+%% ==================== FLUJO DE DATOS DEL FRONT ADMINISTRATIVO ====================
+%% Proyecto: administrative-cnx-pos
+%% Recorridos: 1) inicio de sesión, 2) navegación protegida y carga de una lista,
+%% 3) detalle de un cliente (varias llamadas en paralelo a la API).
+
+sequenceDiagram
+    autonumber
+    actor U as Usuario
+    participant V as Vista / componente
+    participant R as Router (beforeEach)
+    participant ST as Store Pinia
+    participant SV as Servicio del módulo
+    participant H as Http (axios)
+    participant LS as localStorage
+    participant API as API administrativa
+
+    %% -------------------- 1. INICIO DE SESIÓN --------------------
+    rect rgba(120, 160, 220, 0.12)
+    Note over U,API: 1. Login (/login)
+    U->>V: usuario y contraseña en LoginForm
+    V->>ST: authStore.login({ user, password })
+    ST->>SV: loginService.logIn
+    SV->>H: post(URL/auth/login)
+    H->>API: POST /auth/login
+    API-->>H: 200 { response: { token } } o 401
+    H-->>ST: respuesta (los errores no lanzan excepción)
+    ST->>ST: jwtDecode → username, exp
+    ST->>LS: guarda 'auth' { token, isLogged, typeUser, exp }
+    ST-->>V: { isLogged }
+    V->>R: router.push(Home)
+    end
+
+    %% -------------------- 2. NAVEGACIÓN PROTEGIDA --------------------
+    rect rgba(120, 200, 140, 0.12)
+    Note over U,API: 2. Abrir /client/list
+    U->>R: navegar a /client/list
+    R->>ST: ¿hay token en authStore?
+    alt sin token
+        R-->>U: redirige a /login
+    else con token
+        R->>V: monta ClientsMain
+        V->>ST: appStore.afterLoading(clientsStore.loadPaginatedList)
+        ST->>SV: ClientsService.getPaginateClients(page, limit, search, ...)
+        SV->>H: get(URL/clients/find/pagination, Bearer)
+        H->>API: GET con Authorization
+        API-->>H: 200 { response: { list, count, totalPages } }
+        H-->>ST: datos
+        ST-->>V: list, itemsCount, totalPages (reactivos)
+        V-->>U: tabla + Paginator
+    end
+    end
+
+    %% -------------------- 3. DETALLE DE CLIENTE --------------------
+    rect rgba(230, 170, 90, 0.12)
+    Note over U,API: 3. Abrir /client/:id/details
+    U->>V: ClientsDetails (onMounted)
+    V->>ST: loadTenantDetails, getLicense, loadElectronicInvoiceProviders,<br/>loadClient, setDatabaseWebUtilities, getLicenseWebUtilities
+    ST->>H: GET /clients/:id/tenant-info
+    ST->>H: GET /licenses/find-last/:tenant_id
+    ST->>H: GET /clients/find-all/electronic-invoice-providers
+    ST->>H: GET /clients/:id
+    ST->>H: GET /conxpos-utilities/database/:id
+    ST->>H: GET /conxpos-utilities/find-last/:database_id
+    H->>API: peticiones con Bearer
+    API-->>H: datos o 400 cuando el id es undefined
+    H-->>U: notificación si hubo 401 / 403 / 409
+    ST-->>V: pestañas Facturación electrónica y Herramientas web
+    end

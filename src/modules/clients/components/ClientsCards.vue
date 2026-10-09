@@ -42,6 +42,8 @@
 </template>
 <!-- ******************** JavaScript ******************** -->
 <script setup lang="ts">
+// ==================== COMPONENTE: ClientsCards ====================
+// Vista en tarjetas de los clientes.
 import { TThirdParty } from '../interfaces/third-party.interface';
 import { useClientsStore } from '../store/useClientsStore';
 

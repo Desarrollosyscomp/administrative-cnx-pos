@@ -1,3 +1,5 @@
+// ==================== EXTRACCIÓN DE UBICACIÓN ====================
+// Obtiene país, departamento, municipio y barrio según sea persona o empresa.
 import { TThirdParty } from "../interfaces/third-party.interface"; 
 import { THIRD_PARTY_TYPES } from "../../../utils/app-helpers/thirdTypes"; 
 
